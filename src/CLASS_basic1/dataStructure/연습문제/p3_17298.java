@@ -5,8 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -54,85 +54,83 @@ import java.util.Stack;
 	이 경우일 때는 안돼. -1 8 8 -1 이게 안나온다.
 	대가리 안돌아가서 못풀겠다 효율 개안남 5시간동안 이것만 보고 있었는 듯ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 	
+	
+	0303 remind 하고 다 지우고 다시 풀 예정.
+	-정리
+	오큰수 : Ai보다 큰 수 중에 가장 작은 수.
+	
+	
+	
+	
+	
+	
+	
+	
+	
 */
 public class p3_17298 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader br = new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
-		/*
-		 4
-		3 5 2 7
-		-> 5 7 7 -1
 		
-		4
-		9 5 4 8
-		-> -1 8 8 -1
-		 */
-		int				cnt = Integer.parseInt( br.readLine() ); //총 수
-		String[] 		seq = br.readLine().split(" "); // 문자열..
-		Stack<Integer> stack= new Stack<Integer>();
-		Queue<Integer>	nge	= new LinkedList<Integer>();
-		int 			i = 0;
+		int				cnt = Integer.parseInt( br.readLine() );
 		
-		while( nge.size()!=cnt ) {
-			int currentNum = Integer.parseInt( seq[i] ); // 수열의 기준 수 - 3, 5, 2, 7
-			if( i==0 ) {
-				stack.push(i++); // 0
+		String[]		arr = br.readLine().split(" ");
+		List<Integer>	nge = new ArrayList<Integer>();
+		Stack<Integer>	stk = new Stack<Integer>();
+		int				i	= 0;
+		
+		while( nge.size() != cnt ) {
+			int curNum = Integer.parseInt( arr[i] );
+			if( stk.isEmpty() ) {
+				stk.push( i++ );
 			}else {
-				int beforeNum = Integer.parseInt( seq[stack.peek()] );  // 그 인덱스에 해당되는 실제 수 - 3, 5, 2 
-				if( beforeNum < currentNum ) { // 3<5 , 5>2, 2<7
-					stack.pop();
-					nge.offer( currentNum ); // 5
-					//nge[beforeIdx] = currentNum;  //nge[0]=5, num[2]=7,
-					if( stack.isEmpty() ) {
-						if( i==cnt-1 ) {
-							nge.offer( -1 );
-						}else {
-							stack.push( i ); // 스택 - 1
+				if( Integer.parseInt(arr[stk.peek()]) < curNum ) {
+					stk.pop();
+					nge.add( curNum );
+					if( stk.isEmpty() ) {
+						i++;
+						if( i!=cnt ) {
+							stk.push( i );
 						}
 					}
 				}else {
-					stack.push( i ); // 2.. 그럼 스택에는 지금까지 1,2가 있음
+					stk.push( i++ );
 				}
 				
-				if( i!=cnt-1) {
-					i++;
-				}
-			}
-		}
-		
-		while( !nge.isEmpty() ) {
-			bw.write( String.valueOf(nge.poll())+" " );
-		}
-		
-		
-		/*
-		while( cnt-->0 ) {
-			int currentNum = Integer.parseInt( seq.nextToken() ); //수열의 기준 수
-			if( cnt+1==size ){
-				seq.nextToken();
-				stack.push(1);
-			}else {
-				big = Integer.parseInt( seq.nextToken() );
-				if( stack.peek() < big ) { //
-					stack.pop();
-					nge.push( big );
-					if( stack.isEmpty() ) {
-						stack.push( size-cnt );
+				if( i==cnt ) {
+					nge.add(-1);
+					if( !stk.isEmpty() ) {
+						nge.add(0, -1);
 					}
-				}else {
-					stack.push( size-cnt );
 				}
 			}
 		}
-		*/
 		
+		for( int j=0;j<nge.size();j++ ) {
+			bw.write( String.valueOf(nge.get(j))+" " );
+		}
 		
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
