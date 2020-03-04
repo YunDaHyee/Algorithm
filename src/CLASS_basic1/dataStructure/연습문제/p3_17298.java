@@ -130,7 +130,7 @@ public class p3_17298 {
 						i++;
 						if( i!=cnt ) {
 							stk.push( i-1 );
-						}
+						} 
 					}
 					*/
 				}else {
