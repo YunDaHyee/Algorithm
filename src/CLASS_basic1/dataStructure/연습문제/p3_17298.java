@@ -61,10 +61,42 @@ import java.util.Stack;
 	
 	
 	
+	- 생각 못했던 점 :
+	1. 자릿수를 0으로 초기화 하지않은 것.
+	2. pop한 자리의 인덱스를 뽑아서 그 자리에 curNum을 넣었어야 했는데 그러지 못한 것.
+	3. 출력할 때에 -1로 나오게끔 했어야 했는데 그러지 못한 것. 
+	
+	1.
+	처음에는 자릿수를 cnt만큼 채워넣는단 생각을 못하고
+	List<Integer>	nge = new ArrayList<Integer>(cnt); 이런식으로 해버림..
+	while문 떄려서 cnt 만큼 0으로 초기화 해줌
+	
+	2.
+	걍 최종적으로 값만 채워넣으면 된단 생각으로 pop한 자리의 index를 이용안하고 걍 add()함수로 추가해버림.
+	그러고 나서 set()함수로 pop한 인덱스의 위치에다가 0을 curNum값으로 바꿔 넣는것으로 바꿈
+	
+	3.
+	-1을 실제 nge에다가 넣어야 된다는 생각으로
+	i가 cnt수가 되면 처리하게끔 짠거였는데 이상하게 이클립스에서는 맞는데 백준에서는 틀리다고만 나왔음..
+	
+	아래와 같은 로직들을 추가했었었다
+	if( i==cnt ) {
+		while( !stk.isEmpty() ) {
+			nge.set( stk.pop(), -1 );
+		}
+	}
+	if( stk.isEmpty() ) {
+		i++;
+		if( i!=cnt ) {
+			stk.push( i-1 );
+		}
+	}
 	
 	
+	여러가지 수정을 거치다가 넣어야된다는 집착을 버리고 (ㅋㅋ)
+	출력할 때에 -1이 출력되도록 바꿈
 	
-	
+				이거 마무리하기~~
 	
 	
 */
@@ -80,37 +112,60 @@ public class p3_17298 {
 		Stack<Integer>	stk = new Stack<Integer>();
 		int				i	= 0;
 		
-		while( nge.size() != cnt ) {
+		while( nge.size()<cnt ) {
+			nge.add(0);
+		}
+		
+		while( i < cnt ) {
 			int curNum = Integer.parseInt( arr[i] );
 			if( stk.isEmpty() ) {
 				stk.push( i++ );
 			}else {
-				if( Integer.parseInt(arr[stk.peek()]) < curNum ) {
+				int topIdx = stk.peek();
+				if( Integer.parseInt(arr[topIdx]) < curNum ) {
 					stk.pop();
-					nge.add( curNum );
+					nge.set( topIdx,curNum );
+					/*
 					if( stk.isEmpty() ) {
 						i++;
 						if( i!=cnt ) {
-							stk.push( i );
+							stk.push( i-1 );
 						}
 					}
+					*/
 				}else {
 					stk.push( i++ );
 				}
 				
+				/*
 				if( i==cnt ) {
-					nge.add(-1);
-					if( !stk.isEmpty() ) {
-						nge.add(0, -1);
+					while( !stk.isEmpty() ) {
+						nge.set( stk.pop(), -1 );
 					}
 				}
+				*/
 			}
 		}
 		
 		for( int j=0;j<nge.size();j++ ) {
-			bw.write( String.valueOf(nge.get(j))+" " );
+			int each = nge.get(j);
+			if( each==0 ) {
+				bw.write( String.valueOf(-1) );
+			}else {
+				bw.write( String.valueOf(nge.get(j)) ); 
+			}
+			bw.write(" ");
+			bw.flush();
 		}
-		
+/*
+ * 배열에 할당된 크기를 넘어서 접근했을 때
+전역 배열의 크기가 메모리 제한을 초과할 때
+지역 배열의 크기가 스택 크기 제한을 넘어갈 때
+0으로 나눌 떄
+라이브러리에서 예외를 발생시켰을 때
+재귀 호출이 너무 깊어질 때
+이미 해제된 메모리를 또 참조할 때
+ */
 		br.close();
 		bw.flush();
 		bw.close();
