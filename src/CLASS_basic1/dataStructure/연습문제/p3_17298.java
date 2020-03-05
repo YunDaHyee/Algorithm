@@ -108,7 +108,7 @@ import java.util.Stack;
 	- 타인 코드 보고 고친 점
 	StringTokenizer
 	int형 배열(not a List Class)
-	
+	나도 int형 배열로 해봐야겠다..
 */
 public class p3_17298 {
 	public static void main(String args[]) throws IOException {
