@@ -62,6 +62,8 @@ import java.util.Stack;
 	
 	
 	- 생각 못했던 점 :
+	0. 런타임 에러 발생 - 첨에 두번째 while문인 while( i < cnt )에서 nge.size() < cnt로 했었다. nge가 점점 차니까 cnt만큼 돌면 되는 것이라고 했는데 첨에 nge의 사이즈를 지정안하구 했어서 그런 듯..
+	   이거 고치고 나니까 딱 런타임에러가 안났다.
 	1. 자릿수를 0으로 초기화 하지않은 것.
 	2. pop한 자리의 인덱스를 뽑아서 그 자리에 curNum을 넣었어야 했는데 그러지 못한 것.
 	3. 출력할 때에 -1로 나오게끔 했어야 했는데 그러지 못한 것. 
@@ -96,8 +98,16 @@ import java.util.Stack;
 	여러가지 수정을 거치다가 넣어야된다는 집착을 버리고 (ㅋㅋ)
 	출력할 때에 -1이 출력되도록 바꿈
 	
-				이거 마무리하기~~
+
+	드디어 맞췄다...하ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ
+	근데 생각보다 메모리가 매우매우 많이 나오는 것 같다.ㅠ
+	시간복접도는 초기화 하느라 n이 나오고
+	while문 안에서 아무래도 인덱스로 접근하는 것이다 보니까 n^2이 나오니까
+	n^2라고 할 수 있겠다.
 	
+	- 타인 코드 보고 고친 점
+	StringTokenizer
+	int형 배열(not a List Class)
 	
 */
 public class p3_17298 {
@@ -149,23 +159,16 @@ public class p3_17298 {
 		
 		for( int j=0;j<nge.size();j++ ) {
 			int each = nge.get(j);
+			bw.write( each==0 ? "-1 " : String.valueOf(nge.get(j)) + " " );
+			/*
 			if( each==0 ) {
 				bw.write( String.valueOf(-1) );
 			}else {
 				bw.write( String.valueOf(nge.get(j)) ); 
 			}
-			bw.write(" ");
-			bw.flush();
+			*/
 		}
-/*
- * 배열에 할당된 크기를 넘어서 접근했을 때
-전역 배열의 크기가 메모리 제한을 초과할 때
-지역 배열의 크기가 스택 크기 제한을 넘어갈 때
-0으로 나눌 떄
-라이브러리에서 예외를 발생시켰을 때
-재귀 호출이 너무 깊어질 때
-이미 해제된 메모리를 또 참조할 때
- */
+		
 		br.close();
 		bw.flush();
 		bw.close();
