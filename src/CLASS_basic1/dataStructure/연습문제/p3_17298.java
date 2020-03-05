@@ -5,9 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 /**
 @문제
@@ -117,6 +116,8 @@ public class p3_17298 {
 		
 		int				cnt = Integer.parseInt( br.readLine() );
 		
+		/*
+		1. List 클래스 이용
 		String[]		arr = br.readLine().split(" ");
 		List<Integer>	nge = new ArrayList<Integer>();
 		Stack<Integer>	stk = new Stack<Integer>();
@@ -135,38 +136,50 @@ public class p3_17298 {
 				if( Integer.parseInt(arr[topIdx]) < curNum ) {
 					stk.pop();
 					nge.set( topIdx,curNum );
-					/*
-					if( stk.isEmpty() ) {
-						i++;
-						if( i!=cnt ) {
-							stk.push( i-1 );
-						} 
-					}
-					*/
 				}else {
 					stk.push( i++ );
 				}
-				
-				/*
-				if( i==cnt ) {
-					while( !stk.isEmpty() ) {
-						nge.set( stk.pop(), -1 );
-					}
-				}
-				*/
 			}
 		}
 		
 		for( int j=0;j<nge.size();j++ ) {
 			int each = nge.get(j);
 			bw.write( each==0 ? "-1 " : String.valueOf(nge.get(j)) + " " );
-			/*
-			if( each==0 ) {
-				bw.write( String.valueOf(-1) );
-			}else {
-				bw.write( String.valueOf(nge.get(j)) ); 
+		}
+		
+		*/
+		// 2. StringTokenizer + int형 배열
+		StringTokenizer st	= new StringTokenizer( br.readLine() );
+		int[]			nge = new int[cnt];
+		Stack<Integer>	stk = new Stack<Integer>();
+		int				i	= 0;
+		boolean			flag=true;
+		int				curNum = 0;
+		
+		while( i < cnt ) {
+			if( flag==true ) {
+				curNum = Integer.parseInt( st.nextToken() );
 			}
-			*/
+			
+			if( stk.isEmpty() ) {
+				flag = true;
+				stk.push( i++ );
+			}else {
+				int topIdx = stk.peek();
+				if( Integer.parseInt(arr[topIdx]) < curNum ) {
+					flag = false;
+					stk.pop();
+					nge.set( topIdx,curNum );
+				}else {
+					flag = true;
+					stk.push( i++ );
+				}
+			}
+		}
+		
+		for( int j=0;j<nge.size();j++ ) {
+			int each = nge.get(j);
+			bw.write( each==0 ? "-1 " : String.valueOf(nge.get(j)) + " " );
 		}
 		
 		br.close();
