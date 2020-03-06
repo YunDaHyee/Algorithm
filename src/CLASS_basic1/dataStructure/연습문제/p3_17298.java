@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 /**
 @문제
@@ -110,9 +111,12 @@ import java.util.Stack;
 		-> 해본 결과 : String
 	 				   StringTokenizer : 이걸 이용하면 해당 배열에 접근하는 걸 할 수가 없어서 기존에 내가 쓰던 String 문자열로 함.
 	 				   int형 배열	   : 기존에 List Class를 통해 구현한 것을 int형 배열로 바꿔서 했다. 그랬더니 왠지 더 빠를 것 같은 예감이 든다~~~~
-					   근데 메모리가 아직도 상당한 수준..ㅠ 아무래도 StirngTokenizer를 써야하나 싶다..
+					   근데 메모리가 아직도 상당한 수준..ㅠ 
 					   String 문자열로 하더라도 인덱스로 접근하는 방식이기 때문에 아무래도 시간복잡도가 N으로 나오는 것 같다. 끝에 있다면 n번 순회해야할테니까
-					   
+					   -의문점
+					   1. 0일 때 -1로 출력 : 쫌 야매인가..?ㅠ 출력 전에 스택 다 빌 때까지 팝한 인덱스에 해당되는 자리에 -1로 채워넣는 작업을 안하면 그것보다 메모리가 덜 나와야될 것 같은데 왜때문에 더 나올까..?
+					   -> 이건 물어봐야겠다. 이런식으로 짜도 되는 것인지..
+					   2. StrinTokenizer 한 것을 반복문 써서 다시 Array에다가 넣는 작업 : 이게 진짜 의문임.. 메모리가 더 나오면 더 나왔찌 어케 덜 나오냐고요ㅠ
 	
 */
 public class p3_17298 {
@@ -165,7 +169,6 @@ public class p3_17298 {
 		
 		while( i < cnt ) {
 			//if( flag==true ) {
-				//curNum = Integer.parseInt( st.nextToken() );
 				curNum = Integer.parseInt( arr[i] );
 			//}
 			
@@ -194,7 +197,12 @@ public class p3_17298 {
 		*/
 		for( int j=0;j<nge.length;j++ ) {
 			int each = nge[j];
-			bw.write( each==0 ? "-1 " : String.valueOf(each) + " " );
+			if( each==0 ) {
+				bw.write( "-1 " );
+			}else {
+				bw.write( String.valueOf(each)+" " );
+			}
+			//bw.write( each==0 ? "-1 " : String.valueOf(each) + " " ); // 이 방법보다 위에서 저렇게 나누는 게 메모리가 덜 나오긴 함.
 		}
 		
 		
