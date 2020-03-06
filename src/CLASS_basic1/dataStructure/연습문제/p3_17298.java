@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 /**
 @문제
@@ -105,9 +104,16 @@ import java.util.StringTokenizer;
 	n^2라고 할 수 있겠다.
 	
 	- 타인 코드 보고 고친 점
-	StringTokenizer
-	int형 배열(not a List Class)
-	나도 int형 배열로 해봐야겠다..
+		StringTokenizer
+		int형 배열(not a List Class)
+		나도 int형 배열로 해봐야겠다..
+		-> 해본 결과 : String
+	 				   StringTokenizer : 이걸 이용하면 해당 배열에 접근하는 걸 할 수가 없어서 기존에 내가 쓰던 String 문자열로 함.
+	 				   int형 배열	   : 기존에 List Class를 통해 구현한 것을 int형 배열로 바꿔서 했다. 그랬더니 왠지 더 빠를 것 같은 예감이 든다~~~~
+					   근데 메모리가 아직도 상당한 수준..ㅠ 아무래도 StirngTokenizer를 써야하나 싶다..
+					   String 문자열로 하더라도 인덱스로 접근하는 방식이기 때문에 아무래도 시간복잡도가 N으로 나오는 것 같다. 끝에 있다면 n번 순회해야할테니까
+					   
+	
 */
 public class p3_17298 {
 	public static void main(String args[]) throws IOException {
@@ -148,39 +154,49 @@ public class p3_17298 {
 		}
 		
 		*/
-		// 2. StringTokenizer + int형 배열
-		StringTokenizer st	= new StringTokenizer( br.readLine() );
+		// 2. StringTokenizer + int형 배열 -> String 문자열 + int형 배열
+		//StringTokenizer st	= new StringTokenizer( br.readLine() );
+		String[]		arr = br.readLine().split(" ");
 		int[]			nge = new int[cnt];
 		Stack<Integer>	stk = new Stack<Integer>();
 		int				i	= 0;
-		boolean			flag=true;
+		//boolean			flag=true;
 		int				curNum = 0;
 		
 		while( i < cnt ) {
-			if( flag==true ) {
-				curNum = Integer.parseInt( st.nextToken() );
-			}
+			//if( flag==true ) {
+				//curNum = Integer.parseInt( st.nextToken() );
+				curNum = Integer.parseInt( arr[i] );
+			//}
 			
 			if( stk.isEmpty() ) {
-				flag = true;
+				//flag = true;
 				stk.push( i++ );
 			}else {
 				int topIdx = stk.peek();
 				if( Integer.parseInt(arr[topIdx]) < curNum ) {
-					flag = false;
+					//flag = false;
 					stk.pop();
-					nge.set( topIdx,curNum );
+					nge[topIdx] = curNum;
+					//nge.set( topIdx,curNum );
 				}else {
-					flag = true;
+					//flag = true;
 					stk.push( i++ );
 				}
 			}
 		}
 		
+		/*
 		for( int j=0;j<nge.size();j++ ) {
 			int each = nge.get(j);
 			bw.write( each==0 ? "-1 " : String.valueOf(nge.get(j)) + " " );
 		}
+		*/
+		for( int j=0;j<nge.length;j++ ) {
+			int each = nge[j];
+			bw.write( each==0 ? "-1 " : String.valueOf(each) + " " );
+		}
+		
 		
 		br.close();
 		bw.flush();
