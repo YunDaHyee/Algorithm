@@ -58,8 +58,6 @@ import java.util.StringTokenizer;
 	-정리
 	오큰수 : Ai보다 큰 수 중에 가장 작은 수.
 	
-	
-	
 	- 생각 못했던 점 :
 	0. 런타임 에러 발생 - 첨에 두번째 while문인 while( i < cnt )에서 nge.size() < cnt로 했었다. nge가 점점 차니까 cnt만큼 돌면 되는 것이라고 했는데 첨에 nge의 사이즈를 지정안하구 했어서 그런 듯..
 	   이거 고치고 나니까 딱 런타임에러가 안났다.
