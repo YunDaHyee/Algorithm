@@ -17,7 +17,7 @@ import java.util.Stack;
 	Ai가 수열 A에서 등장한 횟수를 F(Ai)라고 했을 때, Ai의 오등큰수는 오른쪽에 있으면서 수열 A에서 등장한 횟수가 F(Ai)보다 큰 수 중에서 가장 왼쪽에 있는 수를 의미한다.
 	그러한 수가 없는 경우에 오등큰수는 -1이다.
 	예를 들어, A = [1, 1, 2, 3, 4, 2, 1]인 경우 F(1) = 3, F(2) = 2, F(3) = 1, F(4) = 1이다. -> 1은 3번, 2는 2번, 3은 1번,4는 1번
-	A1의 오른쪽에 있으면서 등장한 횟수가 3보다 큰 수는 없기 때문에, NGF(1) = -1이다. A3의 경우에는 A7이 오른쪽에 있으면서 F(A3=2) < F(A7=1) 이기 때문에, NGF(3) = 1이다.
+	A1의 오른쪽에 있으면서 등장한 횟수가 3보다 큰 수는 없기 때문에, NGF(1) = -1이다. A3의 경우에는 A7이 오른쪽에 있으면서 F(A3=2->2) < F(A7=1->3) 이기 때문에, NGF(3) = 1이다.
 	NGF(4) = 2, NGF(5) = 2, NGF(6) = 1 이다.
 	
 @입력
@@ -64,40 +64,50 @@ public class p4_17299 {
 		int[]			f	= new int[cnt];
 		int[]			ngf = new int[cnt];
 		Stack<Integer>	stack= new Stack<Integer>(); // 횟수를 저장하는 스택
+		int				totalCnt = 0;
+		int				nmg = cnt%totalCnt;
 		
-		// 1. f 구하기 --- 이거 다시 해야함. ㅠ
-		for( int i=0;i<arr.length;i++ ){
+		// 1. f 구하기
+		for( int i=0;i<arr.length;i++ ) {
 			int curNum = Integer.parseInt( arr[i] );
-			
-			if( i == 0 ) {
-				f[i]++;
-				continue;
-			}
-			
-			for( int j=0;j<arr.length;j++ ) {
-				if( i==j ) {
-					continue;
-				}
-				
+			for( int j=0;j<=i;j++ ) {
 				int forNum = Integer.parseInt( arr[j] );
 				if( curNum == forNum ) {
-					f[j]++;
+					f[j==0?j:j-1]++;
 					break;
 				}
 			}
 		}
 		
+		for( int i=0;i<f.length;i++ ) {
+			if( f[i]!=0 ) {
+				totalCnt++;
+			}
+		}
+		
+/*
+7
+1 1 2 3 4 2 1
+-1 -1 1 2 2 1 -1
+*/
+
+		
 		// 2. ngf 구하기
-		for( int i=0;i<cnt; ){
-			int curCnt = f[i];
+		for( int i=0;i<nmg+cnt;i++ ){
 			
+			// 0 1 2 3 4 5 6 -> 7-3=4 , 7-2=5, 7-1=6 ..7-3=4, 8-3=5, 9-3=6
+			int curNum = Integer.parseInt(arr[ i >= cnt ? i-nmg : i]); // 해당 수
+			int curNumCntIdx = (totalCnt*curNum-totalCnt)/totalCnt; // 해당 수의 해당개수에 해당되는 인덱스
+		
 			if( stack.isEmpty() ) {
-				stack.push( i++ );
+				stack.push( curNumCntIdx );
 			}else {
-				if( curCnt < f[stack.peek()] ) {
-					ngf[ stack.pop() ] = curCnt;
-				}else {
-					stack.push( i++ );
+				int curNumCnt = f[curNumCntIdx]; // 해당 수의 해당개수
+				
+				if( f[stack.peek()] < curNumCnt ) {
+					ngf[  i >= cnt ? i-nmg-1 : stack.pop() ] = curNum;
+				}else{
+					stack.push( curNumCntIdx );
 				}
 			}
 		}
