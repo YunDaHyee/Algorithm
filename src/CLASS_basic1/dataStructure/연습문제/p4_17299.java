@@ -53,11 +53,22 @@ import java.util.Stack;
 	" N번 조회 후 중복 cnt 세리고 그 다음에 Stack push,pop 하며 오등큰수 처리 "
 	After N count inquiry, count duplicated num. and then solve 5thBigNum with Stack push and pop
 
+	2차 수정 - 이유 : 시간초과
+	어떻게든 풀었는데 (cnt만큼 돌게 하려고 마지막에 어거지로 푼 게 있었긴 함) 시간초과가 났다.
+	어거지로 푼 것 때문에 풀이가 '아씨 이건 스파게티다'라고 느껴서 엎고 다시 풀고팠는데 마침 시간초과가 났네ㅠ
+	그래서 엎구 다시 풀었다.
+	
+	
+	
  */	
 public class p4_17299 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader 	br = new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw = new BufferedWriter( new OutputStreamWriter(System.out) );
+		
+		/*
+		
+		// 1차로 푼 것
 		
 		int				cnt = Integer.parseInt( br.readLine() );
 		String[]		arr = br.readLine().split(" "); // 1 1 2 3 4 2 1
@@ -65,7 +76,6 @@ public class p4_17299 {
 		int[]			ngf = new int[cnt];
 		Stack<Integer>	stack= new Stack<Integer>(); // 횟수를 저장하는 스택
 		int				totalCnt = 0;
-		int				nmg = cnt%totalCnt;
 		
 		// 1. f 구하기
 		for( int i=0;i<arr.length;i++ ) {
@@ -85,12 +95,7 @@ public class p4_17299 {
 			}
 		}
 		
-/*
-7
-1 1 2 3 4 2 1
--1 -1 1 2 2 1 -1
-*/
-
+		int				nmg = cnt%totalCnt;
 		
 		// 2. ngf 구하기
 		for( int i=0;i<nmg+cnt;i++ ){
@@ -120,6 +125,9 @@ public class p4_17299 {
 				bw.write( String.valueOf(each)+" " );
 			}
 		}
+		*/
+		
+		
 		
 		br.close();
 		bw.flush();
