@@ -5,7 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
 
@@ -30,22 +31,20 @@ import java.util.Stack;
 	-1 -1 1 2 2 1 -1
 	
 @HISTORY
-	f(A숫자) = 수열 A에서 등장한 횟수.
-	등장횟수가 젤 크면 -1
-	A1의 오른쪽에 있으면서 등장한 횟수가 3보다 큰 수는 없기 때문에, NGF(1) = -1이다. A3의 경우에는 A7이 오른쪽에 있으면서 F(A3=2) < F(A7=1) 이기 때문에, NGF(3) = 1이다.
-																	  												A3의 등장횟수2  < A7의 등장횟수 3.
-																	  												3에는 A7가 1이니까. NGF는 해당 해당수를 넣는거야.
-												스택 : 1 1 2 3 4 2 1
-												NGF : 
-												f(A1)=3. 인데 아무것도 이것보다 더 큰 수는 없었으니까 NGF(1) = -1, NGF(2) = -1.
-												F(A3=2) < F(A7=1) 이기 때문에, NGF(3) = 1,
-												F(A3=2->2) >  F(A5=4->1)     , NGF(4) = 2,
-												F(A5=4->1)  =  F(A4=3->1)	 , NGF(5) = 2. 똑같으니까 걍 똑가티.
-												
-												누저수..
-												how do i compare between a maximum num and a current num? 
-												i think, it has to need a variable that save a temporary num.
-												
+	* 1차 풀이
+	f(A숫자) = 수열 A에서 등장한 횟수. :  등장횟수가 젤 크면 -1
+	A3의 경우에는 A7이 오른쪽에 있으면서 F(A3=2) < F(A7=1) 이기 때문에, NGF(3) = 1이다. : A3의 등장횟수2  < A7의 등장횟수 3.
+																	  					  3에는 A7가 1이니까. NGF는 해당 해당수를 넣는거야.
+	스택 : 1 1 2 3 4 2 1
+	NGF : 
+	f(A1)=3. 인데 아무것도 이것보다 더 큰 수는 없었으니까 NGF(1) = -1, NGF(2) = -1.
+	F(A3=2) < F(A7=1) 이기 때문에, NGF(3) = 1,
+	F(A3=2->2) >  F(A5=4->1)     , NGF(4) = 2,
+	F(A5=4->1)  =  F(A4=3->1)	 , NGF(5) = 2. 똑같으니까 걍 똑가티.
+	
+	how do i compare between a maximum num and a current num? 
+	i think, it has to need a variable that save a temporary num.
+	
 	=======================
 	분명 오큰수와 같은 방법으로 풀 수 있다고 했다. 근데 아무리 생각해도 stack을 단순히 횟수만을 더하기엔 같은 수의 중복인지 다른 수의 중복인지 구별할 길이 없었다.
 	온전히 오큰수 풀이와 같은 방법으로 풀 수 없다고 판단했음.
@@ -53,10 +52,11 @@ import java.util.Stack;
 	" N번 조회 후 중복 cnt 세리고 그 다음에 Stack push,pop 하며 오등큰수 처리 "
 	After N count inquiry, count duplicated num. and then solve 5thBigNum with Stack push and pop
 
-	2차 수정 - 이유 : 시간초과
+	* 2차 풀이 - 이유 : 시간초과
 	어떻게든 풀었는데 (cnt만큼 돌게 하려고 마지막에 어거지로 푼 게 있었긴 함) 시간초과가 났다.
-	어거지로 푼 것 때문에 풀이가 '아씨 이건 스파게티다'라고 느껴서 엎고 다시 풀고팠는데 마침 시간초과가 났네ㅠ
-	그래서 엎구 다시 풀었다.
+	어거지로 푼 것 때문에 '아씨 이건 스파게티다'라고 느껴서 엎고 다시 풀고팠는데 푼 게 있기 때문에 아까워서 그냥 끝까지 풀었다.
+	근데 마침 시간초과가 나서 엎구 다시 풀었다.
+	1차 풀이 했을 땐, 문제 자체가 이해되지 않아서 벅벅 댔는데 지금은 이해가 된 상태라 생각만 잘 하면 쉽게 풀리지 않을까 생각함.
 	
 	
 	
@@ -127,13 +127,95 @@ public class p4_17299 {
 		}
 		*/
 		
+		/**
+		 
+		 // 2차로 푼 것
+		 
+		 */
 		
+		/*
+		 * 7
+	1 1 2 3 4 2 1
+	-1 -1 1 2 2 1 -1
+		 */
+		int				cnt = Integer.parseInt( br.readLine() ); //총 개수
+		String[]		arr = br.readLine().split(" "); // 1 1 2 3 4 2 1
+		int[]			f	= new int[cnt]; // 중복개수. 인덱스 = 해당 숫자-1
+		int[]			ngf = new int[cnt];
+		Queue<Integer>	stack= new LinkedList<Integer>(); // f의 인덱스 담음
+		
+		// 1. f 구하기
+		for( int i=0;i<arr.length;i++ ) {
+			f[ Integer.parseInt(arr[i])-1 ]++;
+		}
+		// f = 3 2 1 1
+		// 2.ngf 구하기
+		// F(A3=2->2) < F(A7=1->3) 이기 때문에, NGF(3) = 1이다.
+		boolean flag = false;
+		int IdxNgf = 0;
+		for( int i=0;i<cnt; ) {
+			int curCntIdxOfNum	= Integer.parseInt(arr[i])-1; // cnt의 인덱스
+			
+			if( stack.isEmpty() ) {
+				i++;
+				stack.offer( curCntIdxOfNum );
+			}else{
+				if( f[stack.peek()] < f[curCntIdxOfNum] ){ //  f[top인덱스] 와 현재수의cnt배열에 있는 인덱스
+					flag = true;
+					stack.poll();
+					ngf[i] = Integer.parseInt(arr[i]);
+					i++;
+				}else {
+					i++;
+					stack.offer( curCntIdxOfNum );
+				}
+			}
+			
+			if( i==7 && !flag ) {
+				ngf[IdxNgf++] = -1;
+				i = IdxNgf;
+				stack.clear();
+			}
+		}
+		
+		for( int i=0;i<ngf.length;i++ ) {
+			bw.write( String.valueOf(ngf[i]) );
+		}
 		
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
