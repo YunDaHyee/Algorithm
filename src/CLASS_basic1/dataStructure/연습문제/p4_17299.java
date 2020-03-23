@@ -65,184 +65,22 @@ import java.util.Stack;
 	반복문 안에 반복문을 넣을 생각을 못했다.
 	하긴 했지만 생각만 해보다 그친 듯 하다...
 	반복분을 넣었으면 됐었을까?ㅠ 아무튼 됨!
+	
+	* 4차 풀이 - 이유 : 런타임 에러^^.. 그냥 다 지우고 다시 처음부터 풀기로 다짐함.
  */	
 public class p4_17299 {
 	public static void main(String args[]) throws IOException {
-		BufferedReader 	br = new BufferedReader( new InputStreamReader(System.in) );
-		BufferedWriter	bw = new BufferedWriter( new OutputStreamWriter(System.out) );
-		
-		/*
-		
-		// 1차로 푼 것
+		BufferedReader 	br	= new BufferedReader( new InputStreamReader(System.in) );
+		BufferedWriter	bw	= new BufferedWriter( new OutputStreamWriter(System.out) );
 		
 		int				cnt = Integer.parseInt( br.readLine() );
-		String[]		arr = br.readLine().split(" "); // 1 1 2 3 4 2 1
-		int[]			f	= new int[cnt];
-		int[]			ngf = new int[cnt];
-		stack2<Integer>	stack2= new stack2<Integer>(); // 횟수를 저장하는 스택
-		int				totalCnt = 0;
-		
-		// 1. f 구하기
-		for( int i=0;i<arr.length;i++ ) {
-			int curNum = Integer.parseInt( arr[i] );
-			for( int j=0;j<=i;j++ ) {
-				int forNum = Integer.parseInt( arr[j] );
-				if( curNum == forNum ) {
-					f[j==0?j:j-1]++;
-					break;
-				}
-			}
-		}
-		
-		for( int i=0;i<f.length;i++ ) {
-			if( f[i]!=0 ) {
-				totalCnt++;
-			}
-		}
-		
-		int				nmg = cnt%totalCnt;
-		
-		// 2. ngf 구하기
-		for( int i=0;i<nmg+cnt;i++ ){
-			
-			// 0 1 2 3 4 5 6 -> 7-3=4 , 7-2=5, 7-1=6 ..7-3=4, 8-3=5, 9-3=6
-			int curNum = Integer.parseInt(arr[ i >= cnt ? i-nmg : i]); // 해당 수
-			int curNumCntIdx = (totalCnt*curNum-totalCnt)/totalCnt; // 해당 수의 해당개수에 해당되는 인덱스
-		
-			if( stack2.isEmpty() ) {
-				stack2.push( curNumCntIdx );
-			}else {
-				int curNumCnt = f[curNumCntIdx]; // 해당 수의 해당개수
-				
-				if( f[stack2.peek()] < curNumCnt ) {
-					ngf[  i >= cnt ? i-nmg-1 : stack2.pop() ] = curNum;
-				}else{
-					stack2.push( curNumCntIdx );
-				}
-			}
-		}
-		
-		for( int i=0;i<ngf.length;i++ ) {
-			int each = ngf[i];
-			if( each==0 ) {
-				bw.write( "-1 " );
-			}else {
-				bw.write( String.valueOf(each)+" " );
-			}
-		}
-		*/
-		
-		/**
-		 
-		 // 2차로 푼 것
-		 
-		 */
-		/*
-
-		/*
-		int				cnt = Integer.parseInt( br.readLine() ); //총 개수
-		String[]		arr = br.readLine().split(" "); // 1 1 2 3 4 2 1
-		int[]			f	= new int[cnt]; // 중복개수. 인덱스 = 해당 숫자-1
-		int[]			ngf = new int[cnt];
-		Stack<Integer>	stack= new Stack<Integer>(); // f의 인덱스 담음
-		
-		// 1. f 구하기
-		for( int i=0;i<arr.length;i++ ) {
-			f[ Integer.parseInt(arr[i])-1 ]++;
-		}
-		// f = 3 2 1 1
-		// 2.ngf 구하기
-		// F(A3=2->2) < F(A7=1->3) 이기 때문에, NGF(3) = 1이다.
-		boolean flag = false;
-		int IdxNgf = 0;
-		
-		for( int i=0;i<cnt; ) {
-			int curCntIdxOfNum	= Integer.parseInt(arr[i])-1; // cnt의 인덱스
-			
-			if( stack.isEmpty() ) {
-				i++;
-				stack.push( curCntIdxOfNum );
-			}else{
-				
-				if( f[stack.peek()] < f[curCntIdxOfNum] ){ 
-					flag = true;
-					stack.pop();
-					ngf[i] = Integer.parseInt(arr[i]);
-				}else {
-					i++;
-					stack.push( curCntIdxOfNum );
-				}
-			}
-			
-			if( i==7 && !flag ) {
-				flag = false;
-				ngf[IdxNgf++] = -1;
-				i = IdxNgf;
-				stack.clear();
-			}
-		}
-		
-		for( int i=0;i<ngf.length;i++ ) {
-			bw.write( String.valueOf(ngf[i]) );
-		}
-		
-		br.close();
-		bw.flush();
-		bw.close();
-
-		 */
-		
-		
-		/*
-		 * 7
-	1 1 2 3 4 2 1
-	-1 -1 1 2 2 1 -1
-		 */
-		int				cnt = Integer.parseInt( br.readLine() ); //총 개수
-		String[]		arr = br.readLine().split(" "); // 1 1 2 3 4 2 1 = 6
-		int[]			f	= new int[cnt]; // 중복개수. 인덱스 = 해당 숫자-1
-		int[]			ngf = new int[cnt];
-		Stack<Integer>	stack= new Stack<Integer>();
-		
-		// 1. f 구하기
-		for( int i=0;i<cnt;i++ ) {
-			f[ Integer.parseInt(arr[i])-1 ]++;
-		}
-		// f = 3 2 1 1
-		
-		// 2.ngf 구하기
-		// F(A3=2->2) < F(A7=1->3) 이기 때문에, NGF(3) = 1이다.
-		
-		// 처음에는 스택에 담긴 것이 없어서 스택에 담기고 시작하는데 비교해야할 대상이 곧 자기이기 때문에 0은 걍 삽입 하고 1부터 시작해야 런티암 에러가 안남
-		stack.push(0);
-		
-		for( int i=1;i<cnt;i++ ) {
-			int curCntIdxOfNum	= Integer.parseInt(arr[i])-1; // cnt의 인덱스
-			
-			if( stack.isEmpty() ) {
-				stack.push( i );
-			}else{
-				while( !stack.isEmpty() && f[ Integer.parseInt(arr[stack.peek()])-1 ] < f[curCntIdxOfNum] ) { // //  f[top인덱스] 와 현재수의cnt배열에 있는 인덱스
-					ngf[stack.pop()] = Integer.parseInt(arr[i]);
-				}
-				stack.push( i );
-			}
-		}
-		
-		/*
-			반복문이 모두 끝난 후에도 stack에 값이 있다면 빌 때까지 해당 인덱스에 -1을 넣는다.
-			한번 더 반복문 돌면서 하기엔 메모리가 낭비되는 느낌이라
-			출력할 때 나는 그냥 -1으로 출력하는 것으로 처리함.
-		*/
-		/*
-		while (!stack.isEmpty()) {
-            ngf[stack.pop()] = -1;
-        }
-        */
+		Stack<Integer>	stk = new Stack<Integer>();
+		String[]		arr = br.readLine().split(" "); // 문자열
+		int[]			f	= new int[cnt];			// 중복횟수 배열
+		int[]			ngf = new int[cnt];			// ngf
 		
 		for( int i=0;i<cnt;i++ ) {
-			int num = ngf[i];
-			bw.write( num==0 ? -1+" " : num +" " );
+			f[ Integer.parseInt(arr[i] ]
 		}
 		
 		br.close();
