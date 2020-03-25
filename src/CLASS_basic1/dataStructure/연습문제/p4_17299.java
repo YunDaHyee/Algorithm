@@ -67,6 +67,9 @@ import java.util.Stack;
 	반복분을 넣었으면 됐었을까?ㅠ 아무튼 됨!
 	
 	* 4차 풀이 - 이유 : 런타임 에러^^.. 그냥 다 지우고 다시 처음부터 풀기로 다짐함.
+	
+	==
+	시간복잡도는 1억 안넘으면 돼
  */	
 public class p4_17299 {
 	public static void main(String args[]) throws IOException {
@@ -76,11 +79,36 @@ public class p4_17299 {
 		int				cnt = Integer.parseInt( br.readLine() );
 		Stack<Integer>	stk = new Stack<Integer>();
 		String[]		arr = br.readLine().split(" "); // 문자열
-		int[]			f	= new int[cnt];			// 중복횟수 배열
-		int[]			ngf = new int[cnt];			// ngf
+		int[]			f1	= new int[cnt];				// 값에 따른 중복횟수 배열 3 2 1 1
+		int[]			f2	= new int[cnt];				// 각각의 중복횟수 할당 배열 3 3 2 1 1 2 3
+		int[]			ngf = new int[cnt];
 		
 		for( int i=0;i<cnt;i++ ) {
-			f[ Integer.parseInt(arr[i] ]
+			f1[ Integer.parseInt(arr[i])-1 ]++; //
+		}
+		
+		for( int i=0;i<cnt;i++ ) {
+			f2[i] = f1[ Integer.parseInt(arr[i]) -1 ];
+		}
+		
+		for( int i=0;i<cnt;i++) {
+			if( stk.isEmpty() ) {
+				stk.push( i );
+			}else {
+				if( f2[ stk.peek() ] < f2[i] ){
+					ngf[ stk.pop() ] = Integer.parseInt(arr[i]);
+				}else {
+					stk.push( i++ );
+				}
+			}
+		}
+		
+		while( !stk.empty() ){
+			ngf[ stk.pop() ] = -1;
+		}
+		
+		for( int i=0;i<cnt;i++ ){
+			bw.write( String.valueOf(ngf[i])+" " );
 		}
 		
 		br.close();
