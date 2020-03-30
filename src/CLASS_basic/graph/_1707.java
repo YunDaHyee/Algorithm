@@ -71,14 +71,14 @@ public class _1707 {
 			// aList : [null, [2], [1, 3, 4], [2, 4], [3, 2]]
 			
 			// DFS
-			// (1) 그룹번호 부여 작업
+			// 그룹번호 부여 작업
 			for( int j=1;j<=V;j++ ) {
 				if( check[j]==0 ) {
 					dfs( aList, check, j, 1 ); // 맨 첨의 그룹번호는 1이기 땜에 1넣음
 				}
 			}
 			
-			// (2) 겹치는 그룹번호 구분 작업
+			// 겹치는 그룹번호 구분 작업
 			for( int j=1;j<=V;j++ ) {
 				for( int k : aList[j] ) {
 					if( check[j]==check[k] ) { //[0, 1, 2, 1, 2]
