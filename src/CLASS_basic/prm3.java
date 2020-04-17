@@ -45,19 +45,33 @@ public class prm3 {
 		
 		int maxDivisor = 0;		// 최대공약수
 		int minMultiple = 0;	// 최소공배수
+		
+		int big, small;
+		
+		if( n<m ) {
+			big		= m;
+			small	= n;
+		}else {
+			big		= n;
+			small	= m;
+		}
+		
 		while(true){
-			int nmg = n<m ? m/n : n/m;
+			int nmg = big%small;
 			if( nmg==0 ) {
-				maxDivisor	= n<m ? n : m;
-				minMultiple = (n*m)/maxDivisor;
+				maxDivisor	= small;
+				minMultiple = (big*small)/maxDivisor;
 				break;
 			}else {
-				
-				continue;
+				big		= small;  // 작은 수가 큰 수
+				small	= nmg; // 나머지가 작은 수
+				continue;							
 			}
 		}
 		
+		int[] answer = { small, big };
 		
+		//Developer.D
 		
 		br.close();
 		bw.flush();
