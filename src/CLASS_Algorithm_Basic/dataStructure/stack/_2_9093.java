@@ -1,7 +1,7 @@
 /**
  * 
  */
-package dataStructure;
+package dataStructure.stack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,7 +39,7 @@ import java.util.Stack;
 			  그래서 안되는 줄 알고 String으로 받아서 valueOf까지 일일이 해줬는데
 		-> 이 두가지만 했더니 코드가 훠얼~씬 깔끔해지고 메모리도 반이나 줄어듦,,
  */
-public class stackMain_2 {
+public class _2_9093 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader	br		= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw		= new BufferedWriter( new OutputStreamWriter(System.out) );

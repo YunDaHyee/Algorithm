@@ -1,7 +1,7 @@
 /**
  * 
  */
-package dataStructure;
+package dataStructure.stack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,7 +37,7 @@ import java.util.StringTokenizer;
 		남들 코드 본 뒤 수정한 점 : StringTokenizer, clean code
  */
 
-public class stackMain_1 {
+public class _1_10828 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader	br			= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw			= new BufferedWriter( new OutputStreamWriter(System.out) );

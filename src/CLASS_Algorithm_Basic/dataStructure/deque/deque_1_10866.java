@@ -1,4 +1,4 @@
-package dataStructure;
+package dataStructure.deque;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
-@문제
+@Question
 	정수를 저장하는 덱(Deque)를 구현한 다음, 입력으로 주어지는 명령을 처리하는 프로그램을 작성하시오.
 	
 	명령은 총 여덟 가지이다.
@@ -24,8 +24,11 @@ import java.util.StringTokenizer;
 	empty: 덱이 비어있으면 1을, 아니면 0을 출력한다.
 	front: 덱의 가장 앞에 있는 정수를 출력한다. 만약 덱에 들어있는 정수가 없는 경우에는 -1을 출력한다.
 	back: 덱의 가장 뒤에 있는 정수를 출력한다. 만약 덱에 들어있는 정수가 없는 경우에는 -1을 출력한다.
-@입력
-	첫째 줄에 주어지는 명령의 수 N (1 ≤ N ≤ 10,000)이 주어진다. 둘쨰 줄부터 N개의 줄에는 명령이 하나씩 주어진다. 주어지는 정수는 1보다 크거나 같고, 100,000보다 작거나 같다. 문제에 나와있지 않은 명령이 주어지는 경우는 없다.
+	@Input
+		첫째 줄에 주어지는 명령의 수 N (1 ≤ N ≤ 10,000)이 주어진다.
+		둘쨰 줄부터 N개의 줄에는 명령이 하나씩 주어진다.
+		주어지는 정수는 1보다 크거나 같고, 100,000보다 작거나 같다.
+		문제에 나와있지 않은 명령이 주어지는 경우는 없다.
 	15
 	push_back 1
 	push_front 2
@@ -171,7 +174,7 @@ class deque {
 		this.deque	= new LinkedList<Integer>();
 		this.front	= 0;
 		this.back	= 0;
-		this.idx	= 0;
+		this.idx	= 0; // 새로운 dt가 들어갈 idx (포인터역할)
 	}
 	
 	public void push_front(int x) {
@@ -184,7 +187,7 @@ class deque {
 	}
 	
 	public void push_back(int x) {
-		deque.add( idx++,x );
+		deque.add( idx++, x );// idx= 1. idx%size= 1/15 = 1 -> 뒤에서추가되어야하는인덱스
 		back = x;
 		if( front==0 ) {
 			front = x;
