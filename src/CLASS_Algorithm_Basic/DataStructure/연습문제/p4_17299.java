@@ -1,4 +1,4 @@
-package dataStructure.연습문제;
+package DataStructure.연습문제;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package dataStructure.stack;
+package DataStructure.Stack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

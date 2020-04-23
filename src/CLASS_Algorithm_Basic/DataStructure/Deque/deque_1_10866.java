@@ -1,4 +1,4 @@
-package dataStructure.deque;
+package DataStructure.Deque;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
