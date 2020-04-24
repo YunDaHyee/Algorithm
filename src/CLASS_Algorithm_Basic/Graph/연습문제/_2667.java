@@ -73,7 +73,7 @@ public class _2667 {
 		for( int i=0;i<cnt;i++ ){
 			for( int j=0;j<cnt;j++ ){
 				if( matrix[i][j]==1 && visit[i][j] == 0) { // 집 O , 방문 X
-					bfs( i, j, ++groupN );
+					bfs( matrix, visit, i, j, ++groupN );
 				}
 			}
 		}
@@ -85,6 +85,5 @@ public class _2667 {
 	
 	static void bfs( int i, int j, int groupN ) {
 		Queue<Integer> queue = new LinkedList<Integer>();
-		
 	}
 }
