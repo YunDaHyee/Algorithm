@@ -79,12 +79,12 @@ public class _11724 {
 
 		for( int i=1;i<=N;i++ ) {
 			if( !check[i] ) {
-				// BFS
-				// bfs( aList, check, i ); // 한번 넘겼을 때, 그 한번에 담겨져 있는 정점들의 연결고리들을 다 탐색하다가 돌아오는거지
-
 				// DFS
 				dfs( aList, check, i );
 				cnt++;
+				
+				// BFS
+				// bfs( aList, check, i ); // 한번 넘겼을 때, 그 한번에 담겨져 있는 정점들의 연결고리들을 다 탐색하다가 돌아오는거지
 			}
 		}
 		
@@ -93,6 +93,22 @@ public class _11724 {
 		br.close();
 		bw.flush();
 		bw.close();
+	}
+	
+	// DFS - 인접리스트 구현
+	static void dfs( List<Integer>[] aList, boolean[] check, int N ) {
+		if( check[N] ) {
+			return;
+		}
+		
+		check[N] = true;
+		
+		for( int i=0;i<aList[N].size();i++ ) { // 1. [2,5]->[1, 5]->[2, 1].......... 2.  3:[4]->4:[3, 6]->6:[4]
+			int next = aList[N].get(i);
+			if( !check[next] ) {
+				dfs( aList, check, next );
+			}
+		}
 	}
 	
 	// BFS - 인접리스트 구현
@@ -116,19 +132,4 @@ public class _11724 {
 		}
 	}
 	*/
-	// DFS - 인접리스트 구현
-	static void dfs( List<Integer>[] aList, boolean[] check, int N ) {
-		if( check[N] ) {
-			return;
-		}
-		
-		check[N] = true;
-		
-		for( int i=0;i<aList[N].size();i++ ) { // 1. [2,5]->[1, 5]->[2, 1].......... 2.  3:[4]->4:[3, 6]->6:[4]
-			int next = aList[N].get(i);
-			if( !check[next] ) {
-				dfs( aList, check, next );
-			}
-		}
-	}
 }
