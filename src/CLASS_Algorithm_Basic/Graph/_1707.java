@@ -82,7 +82,9 @@ public class _1707 {
 			// 겹치는 그룹번호 구분 작업
 			for( int j=1;j<=V;j++ ) {
 				for( int k : aList[j] ) {
-					if( check[j]==check[k] ) { //[0, 1, 2, 1, 2]
+					// 1: [0, 1, 2, 1, 2] , 2: [0,1,1,2] 일 때, aList는 3 3 1,2인데
+					// check[1]과 check[3], check[2]과 check[3], check[3]과 check[1] & check[3]과 check[2]가 그룹번호가 같은지 알아보는 것임
+					if( check[j]==check[k] ) { 
 						flag = false;
 						break;
 					}
@@ -107,8 +109,8 @@ public class _1707 {
 		check[V] = groupNum;
 		// aList : [null, [2], [1, 3, 4], [2, 4], [3, 2]]
 		// 1: [2] ->2:[1, 3, 4]->3:[2, 4]->4:[3, 2]
-		for( int next : aList[V] ) { // for( int i=0;i<aList[V].size();i++ ) { //foreach로 사용하기!
-			if( check[next]==0 ) { // 아직 방문안했으면 재귀
+		for( int next : aList[V] ){ // for( int i=0;i<aList[V].size();i++ ) { //foreach로 사용하기!
+			if( check[next]==0 ){ // 아직 방문안했으면 재귀
 				dfs(aList, check, next, 3-groupNum);
 				// 처음엔 1로 들어왔으면 그 다음 번호는 2가 되어야 하니까(2+1=3인 점을 이용)
 				// 정점이 똑같은 게 들어오면 번호가 다르게 매겨지겠지..??
