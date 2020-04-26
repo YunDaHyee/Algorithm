@@ -61,10 +61,10 @@ import java.util.Stack;
  */
 public class _1260 {
 
-	static List<Integer>[] aList;								// 인접리스트. 0은 걍 바로 넣는 것이기 떔에
+	static List<Integer>[]	aList;								// 인접리스트. 0은 걍 바로 넣는 것이기 떔에
 	static Boolean[]		check;								// 방문 체크 배열
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static BufferedReader	br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter	bw = new BufferedWriter(new OutputStreamWriter(System.out));
 	
 	public static void main(String args[]) throws IOException {
 
@@ -211,9 +211,20 @@ public class Main {
     static Edge[] edge;
     static int[] cnt;
     static boolean[] check;
+    
     static void dfs(int node) {
         check[node] = true;
         System.out.print(node + " ");
+        
+        // ▼
+        // 어떤 정점이 몇번째인덱스부터 저장되어있는지를 모두 구할 수 있게 되는 과정
+        // node와 연결된 간선은 edge 배열에서 어디서부터 어디까지 시작되는지 알 수 있음. cnt[i-1]부터 cnt[i]-1임.
+        // i		0 1 2 3 4 5 6
+		// cnt[i]	0 2 6 8 12 15 16 이고
+		// E[0] = 1 2
+		// E[1] = 1 5
+		// E[2] = 2 1 이면
+        // ex) node==1일 때, cnt[0]부터 cnt[1]-1=2-1=1임. 즉, E[0]부터 E[1]까지야..신기..
         for (int i=cnt[node-1]; i<cnt[node]; i++) {
             int next = edge[i].to;
             if (check[next] == false) {
@@ -221,30 +232,36 @@ public class Main {
             }
         }
     }
+    
     static void bfs(int start) {
         Queue<Integer> q = new LinkedList<>();
         q.add(start);
         check[start] = true;
-        while (!q.isEmpty()) {
-            int node = q.remove();
+        
+        // 이것도 마찬가지로 어떤 정점이 몇번째인덱스부터 저장되어있는지를 모두 구할 수 있게 됨
+        while (!q.isEmpty()) { // 1 -> 2 5
+            int node = q.remove(); // 빔.node=1 -> 5. node=2
             System.out.print(node + " ");
+            // ex) queue에 담겨져있는 정점에 따라 node가 달라짐. node==1일 때, i=cnt[0];i<(cnt[1]=)2
             for (int i=cnt[node-1]; i<cnt[node]; i++) {
-                int next = edge[i].to;
+                int next = edge[i].to; // 해당 시작점. edge[0]의 끝점은 2임. edge[1]의 끝점은 5임.
                 if (check[next] == false) {
                     check[next] = true;
-                    q.add(next);
+                    q.add(next); // queue : 2 5
                 }
             }
         }
     }
+    
     public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int start = sc.nextInt();
-        edge = new Edge[2*m];
+        int n = sc.nextInt();	// 정점
+        int m = sc.nextInt();	// 간선
+        int start = sc.nextInt(); // 시작점
+        edge = new Edge[2*m]; // 양방향이니까 두배
         cnt = new int[n+1];
         check = new boolean[n+1];
+        // 초기화
         for (int i=0; i<m; i++) {
             int from = sc.nextInt();
             int to = sc.nextInt();
@@ -254,10 +271,10 @@ public class Main {
         m *= 2;
         Arrays.sort(edge);
         for (int i=0; i<m; i++) {
-            cnt[edge[i].from] += 1;
+            cnt[edge[i].from] += 1; // 각 간선마다 특정 시작점이 몇갠지 세어서 각 특정 시작점의 cnt 배열에 저장. 1로 시작되는 정점은 몇개, 2는 몇개~, N 
         }
         for (int i=1; i<=n; i++) {
-            cnt[i] += cnt[i-1];
+            cnt[i] += cnt[i-1]; // 각 cnt 정점을 앞에 있는 것과 누적함.
         }
         dfs(start);
         System.out.println();
