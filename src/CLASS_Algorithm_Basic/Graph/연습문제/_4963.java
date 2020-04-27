@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -60,7 +62,8 @@ import java.util.StringTokenizer;
 		9
 		
 	@history
-		경로 얘기 있으니까 '그래프구나?' 하는 생각 가져보기.
+		1. 경로 얘기 있으니까 '그래프구나?' 하는 생각 가져보기.
+		2. 2667과 달랐던 점 : 정사각형이 아닌 것, 8방위라는 것, 0 0 입력 받아야 종료되는 것
 		
  */
 public class _4963 {
@@ -72,23 +75,67 @@ public class _4963 {
 		BufferedReader br = new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
 		
-		StringTokenizer st = new StringTokenizer( br.readLine() );
-		int w = Integer.parseInt(st.nextToken()), h = Integer.parseInt(st.nextToken());
+		int	ISLAND	= 0;
 		
-		int[][] mapMatrix = new int[h][h];
+		while( true ) {
+			ISLAND	= 0; // 누적값이 아닌, 각 케이스마다의 섬 개수이므로 초기화 처리
+			StringTokenizer st = new StringTokenizer( br.readLine() );
+			int w = Integer.parseInt(st.nextToken()), h = Integer.parseInt(st.nextToken());
+			
+			if( w==0 && h==0 ) { // 마지막 입력을 0 0으로 받았을 때, 종료하는 것이므로 처리
+				break;
+			}else {
+				int[][] mapMatrix	= new int[h][w]; //세로가로
+				int[][] groupMatrix	= new int[h][w];
 		
-		// 값 초기화
-		for( int i=0;i<h;i++ ){
-			String line = br.readLine();
-			for( int j=0;j<h;j++ ){
-				mapMatrix[i][j] = Integer.parseInt( String.valueOf(line.charAt(i)) );
+				// 값 초기화
+				for( int i=0;i<h;i++ ){
+					String[] line = br.readLine().split(" ");
+					for( int j=0;j<w;j++ ){
+						if( Integer.parseInt(line[j])!=0 ) {
+							mapMatrix[i][j] = 1;
+						}
+					}
+				}
+				
+				// 섬 탐색
+				for( int i=0;i<h;i++ ) {
+					for( int j=0;j<w;j++ ) {
+						if( mapMatrix[i][j]==1 && groupMatrix[i][j]==0 ) {
+							BFS( mapMatrix, groupMatrix, i, j, ++ISLAND, h, w );
+						}
+					}
+				}
 			}
+			bw.write( String.valueOf(ISLAND)+"\n" );
 		}
-		
-		
 		
 		br.close();
 		bw.flush();
 		bw.close();
 	}
+	
+	public static void BFS( int[][] mapMatrix, int[][] groupMatrix, int i, int j, int ISLAND, int h, int w ) {
+		Queue<COORDINATE> queue = new LinkedList<COORDINATE>();
+		// 값 초기화
+		queue.add( new COORDINATE(i, j) );
+		groupMatrix[i][j] = ISLAND;
+		
+		// 큐 빌 때까지 8방위 탐색
+		while( !queue.isEmpty() ) {
+			COORDINATE c = queue.remove();
+			i = c.x;
+			j = c.y;
+			for( int k=0;k<8;k++ ) {
+				int realX = i+dx[k], realY = j+dy[k];
+				if( realX>= 0 && realX<h && realY>=0 && realY<w ) {
+					if( mapMatrix[realX][realY]==1 && groupMatrix[realX][realY]==0 ) {
+						queue.add( new COORDINATE(realX, realY) );
+						groupMatrix[realX][realY] = ISLAND;
+					}
+				}
+			}
+		}
+	}
 }
+
