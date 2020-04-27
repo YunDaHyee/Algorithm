@@ -50,8 +50,8 @@ import java.util.Queue;
  */
 public class _2667 {
 	// x,y 좌표 - 좌우상하
-	public static final int[] dx = {0,0,-1,1};
-	public static final int[] dy = {1,-1,0,0}; // 위에가 1임.
+	public static final int[] dx = {-1,1,0,0};
+	public static final int[] dy = {0,0,1,-1}; // 위에가 1임.
 	
 	public static void main(String args[]) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
