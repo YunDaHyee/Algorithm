@@ -182,7 +182,7 @@ public class _1260 {
 }
 
 /*
- 	간선리스트로 푸는 법. cnt 함수 이용하는 걸 내가 13023에서 안해봤었는데 시간나면 해보기 꼭
+ 	// 간선리스트로 푸는 법. cnt 함수 이용하는 걸 내가 13023에서 안해봤었는데 시간나면 해보기 꼭
  	
  	import java.util.*;
 class Edge implements Comparable<Edge> {
