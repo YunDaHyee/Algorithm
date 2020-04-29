@@ -115,7 +115,7 @@ public class _2178 {
 	}
 	
 	public static int BFS(/* int[][] mazeMatrix, int[][] groupMatrix, int i, int j, int minCnt, */int N, int M ){
-		Queue<COORDINATE>	queue			= new LinkedList<COORDINATE>();
+		Queue<POSITION>		queue			= new LinkedList<POSITION>();
 		int[][]				incrementMatrix = new int[N][M]; // BFS 진행 단게에 따른 +1 증가 배열
 		
 		// int minCnt = 1; // ▣
@@ -137,12 +137,12 @@ public class _2178 {
 		// 값 초기화
 		flagMatrix[0][0]		= true;
 		incrementMatrix[0][0]	= 1;
-		queue.add( new COORDINATE(0, 0) );
+		queue.add( new POSITION(0, 0) );
 		
 		while( !queue.isEmpty() ){
-			COORDINATE c = queue.remove();
-			int i = c.x;
-			int j = c.y;
+			POSITION P = queue.remove();
+			int i = P.x;
+			int j = P.y;
 			
 			// int originalMinCnt = minCnt; // ▣ 
 			/* 
@@ -157,7 +157,7 @@ public class _2178 {
 					if( mazeMatrix[realX][realY]==1 && flagMatrix[realX][realY]==false ){
 						// minCnt = originalMinCnt+1; // ▣
 						flagMatrix[realX][realY] = true;
-						queue.add( new COORDINATE(realX, realY) );
+						queue.add( new POSITION(realX, realY) );
 						incrementMatrix[realX][realY] = incrementMatrix[i][j]+1; // 4방위의 중심축(주인공)의 거리수에서 +1을 해줌
 					}
 				}

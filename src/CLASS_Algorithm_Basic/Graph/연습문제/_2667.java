@@ -104,22 +104,22 @@ public class _2667 {
 	}
 	
 	static void BFS( int[][] matrix, int[][] group, int i, int j, int groupN, int size ) {
-		Queue<COORDINATE> queue = new LinkedList<COORDINATE>(); // 방문한 집의 좌표를 담는 Queue
+		Queue<POSITION> queue = new LinkedList<POSITION>(); // 방문한 집의 좌표를 담는 Queue
 
 		// 값 초기화
-		queue.add( new COORDINATE(i,j) );
+		queue.add( new POSITION(i,j) );
 		group[i][j] = groupN;
 		
 		// 주위에 집이 있/없 구분
 		while( !queue.isEmpty() ){
-			COORDINATE C = queue.remove();
-			i = C.x;
-			j = C.y;
+			POSITION P = queue.remove();
+			i = P.x;
+			j = P.y;
 			for( int k=0;k<4;k++ ){ // 방향은 4개에
 				int realX = i+dx[k], realY = j+dy[k]; // 현재 방향에 맞춰서 주어진 좌표의 상하좌우를 탐색.
 				if( realX >= 0 && realX < size && realY >= 0 && realY < size ){ // 매트릭스 사이즈 안에 있으면서
 					if( matrix[realX][realY]==1 && group[realX][realY]==0 ){ // 집O, 방문X
-						queue.add( new COORDINATE(realX, realY) );
+						queue.add( new POSITION(realX, realY) );
 						group[realX][realY] = groupN; // 해당 좌표에 해당 그룹번호 부여
 					}
 				}
@@ -129,10 +129,10 @@ public class _2667 {
 }
 
 // 방문한 집의 좌표
-class COORDINATE{
+class POSITION{
 	int x, y;
 	
-	COORDINATE(int x, int y){
+	POSITION(int x, int y){
 		this.x = x;
 		this.y = y;
 	}

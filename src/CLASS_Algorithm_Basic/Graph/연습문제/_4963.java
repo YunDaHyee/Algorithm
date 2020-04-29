@@ -116,21 +116,21 @@ public class _4963 {
 	}
 	
 	public static void BFS( int[][] mapMatrix, int[][] groupMatrix, int i, int j, int ISLAND, int h, int w ) {
-		Queue<COORDINATE> queue = new LinkedList<COORDINATE>();
+		Queue<POSITION> queue = new LinkedList<POSITION>();
 		// 값 초기화
-		queue.add( new COORDINATE(i, j) );
+		queue.add( new POSITION(i, j) );
 		groupMatrix[i][j] = ISLAND;
 		
 		// 큐 빌 때까지 8방위 탐색
 		while( !queue.isEmpty() ) {
-			COORDINATE c = queue.remove();
-			i = c.x;
-			j = c.y;
+			POSITION P = queue.remove();
+			i = P.x;
+			j = P.y;
 			for( int k=0;k<8;k++ ) {
 				int realX = i+dx[k], realY = j+dy[k];
 				if( realX>= 0 && realX<h && realY>=0 && realY<w ) {
 					if( mapMatrix[realX][realY]==1 && groupMatrix[realX][realY]==0 ) {
-						queue.add( new COORDINATE(realX, realY) );
+						queue.add( new POSITION(realX, realY) );
 						groupMatrix[realX][realY] = ISLAND;
 					}
 				}
