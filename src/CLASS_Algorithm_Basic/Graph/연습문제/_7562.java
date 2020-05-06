@@ -46,6 +46,7 @@ import java.util.StringTokenizer;
 		좌우상하 좌상대/우상대/좌하대/우하대
 		dx = -1,1,0,0,-1,1,-1,1
 		dy = 0,0,1,-1 ,1,1,-1,-1
+
 		즉, 아래의 위치로만 움직임 가능..
 		상왼왼대,상왼위대,상오위대,상오오대,하왼왼대,하왼밑대,하오밑대,하오오대ㅋㅋㅋㅋ.... 
 		좌상대일 때는	왼,위	: -1,1 후에		-1,0랑 0,1	=> -2,1 과 -1,2		상왼왼대 상왼위대 -'
@@ -60,12 +61,11 @@ import java.util.StringTokenizer;
 		그렇게 완성된 chessMatrix를 기반으로 bfs를 해야할 것 같다.
 		
 		아니다..최단경로 찾으면서 어쨌든 목적지까지 가는 걸 카운트 하면 돼...
-				
 */
 public class _7562 {
 	private static int[] dx = { -2, -1,1,2, -2,-1, 1 ,2 }; 
 	private static int[] dy = { 1 , 2 ,2,1, -1,-2,-2 ,-1 };
-	
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
