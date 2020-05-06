@@ -96,6 +96,7 @@ public class _7562 {
 		int[][]			incrementMatrix = new int[size][size];			// 증가 행렬. 최단거리 구하기 위함.
 		
 		int	moveCnt = -1;
+		chessMatrix[curX][curY] = 1;
 		checkMatrix[curX][curY] = true;
 		queue.add( new POSITION(curX, curY) );
 		
@@ -108,18 +109,19 @@ public class _7562 {
 				int realX = dx[curX]+i;
 				int realY = dy[curY]+i;
 				if( realX>=0 && realX<size && realY>=0 && realY<size ){
-					if( !checkMatrix[realX][realY] ){
-						moveCnt++;
+					if( chessMatrix[realX][realY]==1 && !checkMatrix[realX][realY] ){
+						//moveCnt++;
 						checkMatrix[realX][realY] = true;
-						queue.add( new POSITION(realX, realY) );
+						queue.add( new POSITION(realX, realY) ); // TODO 몰겠따 토마토문제처럼 해야하는건지..하ㅠ
+						incrementMatrix[realX][realY] = incrementMatrix[curX][curY]+1;
 						if( realX==goalX && realY==goalY ) { //if( realX==goalX && realY==goalY ) { 맞으면 멈추는거로
-							return moveCnt;
+							return incrementMatrix[size-1][size-1];
 						}
 					}
 				}
 			}
 		}
 		
-		return moveCnt;
+		return incrementMatrix[size-1][size-1];
 	}
 }
