@@ -55,6 +55,31 @@ import java.util.Stack;
 	=> 의외로 1번이 시간복잡도가 꽤 클 줄 알았는데 오히려 2번보다 시간이 덜 걸린다..
 	근데 눈으로 봤을 때, 2번 방법이 더 가독성이 좋아서 2번으로 하는 걸로..!
 	
+	++20200501
+	중첩 반복문을 썼기 때문에 O(N^2)인 줄 알았는데 백준 강의를 듣다보니 이게 O(N)라는 것을 알게 됨..
+	이해가 안돼서 알고리즘 방에다가 물어봄..
+	"																			"
+		n번당 print라는게 n^2만큼 일어나는건 아니잖아요
+		무조건 반복문 중첩이라고 n^2라고 하지는않아요
+		
+		For문에서 n
+		print에서 n
+		더해서 2n
+		표현하면 O(n) 인거같네요
+		
+		스택에 들어가면 한번씩만 사용되기 때문에
+		push가 몇번 이뤄지는지 보시면 될 것 같아요
+		
+		문자열 길이가 n이라고 하면 print에서 출력량만큼 pop되니까
+		print 함수들의 비용의 합이 amortized O(n)이 되겠죠
+		s.push가 모두 합쳐서 O(n)번 밖에 안 일어나니까 print도 합쳐서 O(n)
+		
+	"																			"
+		push가 일어나고 print 함수 호출할 때만 while문 더 도는거니까 N^2는 아닌가보다..
+		시간복잡도가 최악의 경우일 때에 걸리는 시간 아닌가..?
+		다 푸시 일어난다는 전제면 N^2인 것 같은데 아닌가 봄 ..ㅠ
+
+	
 */
 public class p1_17413 {
 	public static void main(String args[]) throws IOException {
@@ -72,10 +97,10 @@ public class p1_17413 {
 			if( each == '<' ) {
 				bw.write('<');
 				while( true ) {
-					char each2 = str[++idx]; //1
-					bw.write(each2);
-					if( each2 == '>' ){
-						idx++; //2
+					char each2 = str[++idx]; // 중첩 while문 중 처음 while문에서 idx의 값의 증감이 없기 떄문에 여기서 선증가 해줘야함.
+					bw.write(each2); // 뒤집기 없이 출력
+					if( each2 == '>' ){ // >이면 태그를 닫는 것이므로 
+						idx++; //2 // 후증가 처리 해주고 태그 빠져나감.
 						break;
 					}
 				}
@@ -85,17 +110,17 @@ public class p1_17413 {
 				while( str.length>idx ) {
 					char each2 = str[idx++];
 					if( each2 == '<' ){
-						idx--;
+						idx--; // 중첩 while문 중 처음 while문에서 idx의 값의 증감이 없기 떄문에 여기서 처리해주고 넘어가야함.
 						break;
 					}else {
-						if( each2 == ' ' ) {
-							while( !stack.isEmpty() ) {
-								bw.write( stack.pop() );
+						if( each2 == ' ' ) { // 스페이스는 단어 간의 구분이므로 스페이스가 나오면 한 단어가 끝났다는 것임. 
+							while( !stack.isEmpty() ) { // 문자열의 시작과 끝은 공백이 아니기땜에 스택에 무조건 담겨있을 거라는 전제 하에 일케 한 것임.
+								bw.write( stack.pop() ); // 그래서 스택이 빌 떄까지 출력
 								bw.flush();
 							}
 							bw.write(" ");
 						}else {
-							stack.push(each2);
+							stack.push(each2); // 그냥 보통의 문자이므로 걍 스택에 쌓음.
 						}
 					}
 				}
@@ -116,32 +141,32 @@ public class p1_17413 {
 			
 			if( each == '<' ) {
 				flag = true;
-				while( !stack.isEmpty() ) {
+				while( !stack.isEmpty() ) { // 어차피 큐는 비어있으면 여기 못들어감.
 					bw.write( stack.pop() );
 					bw.flush();
 				}
 			}
 			
-			if( flag ) {
-				bw.write( each );
-				if( each == '>' ) {
+			if( flag ) { // < 여는 태그일 때,
+				bw.write( each ); // 일단 출력
+				if( each == '>' ) { // 닫는 태그면 - flag가 true인 상태에서 다음 인덱스로 넘어가기 땜에 each가 > 일 수 있음. 
 					flag = false;
 				}
 				bw.flush();
 			}else {
-				if( each == ' ' ) {
-					while( !stack.isEmpty() ) {
-						bw.write( stack.pop() );
+				if( each == ' ' ) { // 스페이스는 단어 간의 구분이므로 스페이스가 나오면 한 단어가 끝났다는 것임. 
+					while( !stack.isEmpty() ) { // 문자열의 시작과 끝은 공백이 아니기땜에 스택에 무조건 담겨있을 거라는 전제 하에 일케 한 것임.
+						bw.write( stack.pop() ); // 그래서 스택이 빌 떄까지 출력
 						bw.flush();
 					}
 					bw.write(" ");
 				}else {
-					stack.push( each );
+					stack.push( each ); // 그냥 보통의 문자이므로 걍 스택에 쌓음.
 				}
 			}
 		}
 		
-		while( !stack.isEmpty() ) {
+		while( !stack.isEmpty() ) { // 최종적으로 스택에 남아있는 것들까지 출력
 			bw.write( stack.pop() );
 			bw.flush();
 		}

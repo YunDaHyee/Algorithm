@@ -79,9 +79,9 @@ public class p2_10799 {
 		Stack<Integer>stack2	= new Stack<Integer>();
 		String			bracket = br.readLine();
 		
-		int				total	= 0;
-		int				idx		= -1;
-		int				top		= -1;
+		int				total	= 0;	// 잘려진 조각의 수
+		int				idx		= -1;	// 현 위치
+		int				top		= -1;	// top
 		
 		//for( char each : bracket ) { //원 
 		while( ++idx<bracket.length() ) {
@@ -92,7 +92,7 @@ public class p2_10799 {
 				//stack.push(each);//원
 				stack2.push(idx);
 			
-			}else{
+			}else{ // )일 경우
 				//stack.pop();//원 
 				stack2.pop();
 				//if( idx-top == 1 ){//원
