@@ -56,6 +56,8 @@ import java.util.StringTokenizer;
 		(최종목적지까지 가는 최단경로를 찾아야 할 듯.. 그래서 그거를 카운트 하는 거로.. 단순히 체크배열 써서 하면됨)
 		그렇게 완성된 chessMatrix를 기반으로 bfs를 해야할 것 같다.
 		
+		아니다..최단경로 찾으면서 어쨌든 목적지까지 가는 걸 카운트 하면 돼...
+		
 */
 public class _7562 {
 	private static int[] dx = {-1,-2,-2,-1,1,2,2,1}; //왼위위오 
@@ -69,8 +71,6 @@ public class _7562 {
 		
 		for( int i=0;i<cnt;i++ ) {
 			int		size		= Integer.parseInt( br.readLine() );	// 체스 한 변의 길이
-			int[][] chessMatrix = new int[size][size];					// 정사각형 행렬
-			boolean[][] checkMatrix = new boolean[size][size];					// 방문 여부 행렬
 			StringTokenizer st = new StringTokenizer( br.readLine() );
 			int curX = Integer.parseInt( st.nextToken() ); // TODO POSITION 클래스로 하는 게 낫나? 그거는 BFS 구현하면서 판단해보기..일단은 이러케 int형으로 놔둠.
 			int curY = Integer.parseInt( st.nextToken() );
@@ -78,7 +78,7 @@ public class _7562 {
 			int goalX = Integer.parseInt( st.nextToken() );
 			int goalY = Integer.parseInt( st.nextToken() );
 			
-			bw.write( String.valueOf(BFS( chessMatrix, checkMatrix, curX, curY, goalX, goalY, size )) );
+			bw.write( String.valueOf(BFS( curX, curY, goalX, goalY, size )) );
 		}
 		
 		br.close();
@@ -86,9 +86,11 @@ public class _7562 {
 		bw.close();
 	}
 
-	private static int BFS(int[][] chessMatrix, boolean[][] checkMatrix, int curX, int curY, int goalX, int goalY, int size) {
-		Queue<POSITION> queue = new LinkedList<POSITION>();
-		int[][]			incrementMatrix = new int[size][size];
+	private static int BFS( int curX, int curY, int goalX, int goalY, int size) {
+		Queue<POSITION> queue			= new LinkedList<POSITION>();
+		int[][]			chessMatrix		= new int[size][size];			// 정사각형 행렬
+		boolean[][]		checkMatrix		= new boolean[size][size];		// 방문 여부 행렬
+		int[][]			incrementMatrix = new int[size][size];			// 증가 행렬. 최단거리 구하기 위함.
 		
 		int	moveCnt = -1;
 		checkMatrix[curX][curY] = true;
