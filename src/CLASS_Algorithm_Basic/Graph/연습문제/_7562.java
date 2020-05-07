@@ -98,7 +98,30 @@ public class _7562 {
 		int	moveCnt = -1;
 		chessMatrix[curX][curY] = 1;
 		checkMatrix[curX][curY] = true;
-		queue.add( new POSITION(curX, curY) );
+		queue.add( new POSITION(curX, curY) ); // 지금 출발점 기준으로 끝점까지 가는 데에 걸리는 이동수
+		
+		while( !queue.isEmpty() ) {
+			POSITION P = queue.poll();
+			curX = P.x;
+			curY = P.y;
+			incrementMatrix[curX][curY]=1;
+			for( int i=0;i<8;i++ ) {
+				int realX = dx[curX]+i;
+				int realY = dy[curY]+i;
+				if( realX>=0 && realX<size && realY>=0 && realY<size ){
+					if( chessMatrix[realX][realY]== 1 && !checkMatrix[realX][realY] ){
+						//moveCnt++;
+						chessMatrix[realX][realY] = 1;
+						checkMatrix[realX][realY] = true;
+						queue.add( new POSITION(realX, realY) ); // TODO 몰겠따 토마토문제처럼 해야하는건지..하ㅠ
+						incrementMatrix[realX][realY] = incrementMatrix[curX][curY]+1;
+						if( realX==goalX && realY==goalY ) { //if( realX==goalX && realY==goalY ) { 맞으면 멈추는거로
+							return incrementMatrix[size-1][size-1];
+						}
+					}
+				}
+			}
+		}
 		
 		while( !queue.isEmpty() ) {
 			POSITION P = queue.poll();
