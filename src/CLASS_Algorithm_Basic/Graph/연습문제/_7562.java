@@ -96,20 +96,11 @@ public class _7562 {
 		int[][]			incrementMatrix = new int[size][size];			// 증가 행렬. 최단거리 구하기 위함.
 		
 		int	moveCnt = -1;
-		chessMatrix[curX][curY] = 1;
-		checkMatrix[curX][curY] = true;
+		//처음에 출발점(curX,Y)은 방문한 게 아니라 그냥 그 점 자체야.
+		//chessMatrix[curX][curY] = 1;
+		//checkMatrix[curX][curY] = true;
 		// TODO 처음위치에서 갈 수 있는 초기값 세팅 해줘야할 듯.
-		for( int i=0;i<8;i++ ) {
-			int realX = dx[i]+curX;
-			int realY = dy[i]+curY;
-			if( realX>=0 && realX<size && realY>=0 && realY<size ){
-				if( !checkMatrix[realX][realY] ){
-					chessMatrix[realX][realY] = 1;
-					checkMatrix[realX][realY] = true;
-					queue.add( new POSITION(realX, realY) ); // TODO 몰겠따 토마토문제처럼 해야하는건지..하ㅠ // 지금 출발점 기준으로 끝점까지 가는 데에 걸리는 이동수
-				}
-			}
-		}
+		queue.add( new POSITION(curX, curY) );
 		
 		while( !queue.isEmpty() ) {
 			POSITION P = queue.poll();
@@ -119,9 +110,45 @@ public class _7562 {
 				int realX = dx[i]+curX;
 				int realY = dy[i]+curY;
 				if( realX>=0 && realX<size && realY>=0 && realY<size ){
-					if( chessMatrix[curX][curY]==1 && !checkMatrix[realX][realY] ){ // 새로운 조건 :  chessMatrix[curX][curY]==1 &
-						//moveCnt++;
+					// 갈 수 있는 곳 길 만들어주기
+					if( !checkMatrix[realX][realY] ){
+						checkMatrix[realX][realY] = true;
+						queue.add( new POSITION(realX, realY) ); // TODO 몰겠따 토마토문제처럼 해야하는건지..하ㅠ // 지금 출발점 기준으로 끝점까지 가는 데에 걸리는 이동수
+						incrementMatrix[realX][realY] = incrementMatrix[curX][curY]+1;
+					}
+					/*
+					if( !checkMatrix[realX][realY] ){
 						chessMatrix[realX][realY] = 1;
+						//checkMatrix[realX][realY] = true; //첨에 갈 수 있는곳이니까 이걸 체크해버리면 안될 듯.
+						queue.add( new POSITION(realX, realY) ); // TODO 몰겠따 토마토문제처럼 해야하는건지..하ㅠ // 지금 출발점 기준으로 끝점까지 가는 데에 걸리는 이동수
+					}
+					*/
+				}
+			}
+		}
+		
+		//incre 안에 있는 숫자들(i)은 x,y가 i번쨰에 갈 수 있는 곳들. 해당 i번쨰에 
+		for( int i=0;i<size;i++ ) {
+			for( int j=0;j<size;j++ ) {
+				int value = (size+i)-size+1;
+				if( incrementMatrix[i][j] == value ) {
+					moveCnt++; // 의미있나 모르겠다
+				}
+			}
+		}
+		
+		
+		while( !queue.isEmpty() ) {
+			POSITION P = queue.poll();
+			curX = P.x;
+			curY = P.y;
+			for( int i=0;i<8;i++ ) {
+				int realX = dx[i]+curX;
+				int realY = dy[i]+curY;
+				if( realX>=0 && realX<size && realY>=0 && realY<size ){ // 1이면 초기값에서 갈 수 있는 곳. 2면 방문했따는 것.
+					if( chessMatrix[realX][realY]==1 && !checkMatrix[realX][realY] ){ // 새로운 조건 :  chessMatrix[curX][curY]==1 &
+						//moveCnt++;
+						chessMatrix[realX][realY] = 2;
 						checkMatrix[realX][realY] = true;
 						queue.add( new POSITION(realX, realY) ); // TODO 몰겠따 토마토문제처럼 해야하는건지..하ㅠ
 						incrementMatrix[realX][realY] = incrementMatrix[curX][curY]+1;
@@ -137,6 +164,7 @@ public class _7562 {
 		}
 		// 첨엔 토마토 문제처럼 했는데 생각해보니까 이렇게 푸는 게 아니 ㄴ것 같아ㅓㅅ 여러 고민ㅇ르 함.
 		
-		return incrementMatrix[goalX][goalY]!=0 ? incrementMatrix[goalX][goalY]+1 : 0;
+		return incrementMatrix[goalX][goalY];
+		//return incrementMatrix[goalX][goalY]!=0 ? incrementMatrix[goalX][goalY]+1 : 0;
 	}
 }
