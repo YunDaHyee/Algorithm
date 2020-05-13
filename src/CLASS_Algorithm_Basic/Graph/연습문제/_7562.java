@@ -61,6 +61,34 @@ import java.util.StringTokenizer;
 		그렇게 완성된 chessMatrix를 기반으로 bfs를 해야할 것 같다.
 		
 		아니다..최단경로 찾으면서 어쨌든 목적지까지 가는 걸 카운트 하면 돼...
+		
+		// 20200513 최종
+		일단은 어렵게 느껴졌던/어렵게 꼬였던 문제다라고 생각한 이유 :
+		움직일 수 있는 거리가 특이하게 되어있었다는 점 : 내 주변 말고 내 주변에 있는 왼오위/왼오아래
+		
+		단순하게 이동하는 게 아니라 특이한 방향성으로 움직여야 했던 점이
+		뭔가 어렵게 풀어야한다고 느껴졌던 것 같다.
+			1. 이떄까지와는 다르게 전체 행렬이 주어지지 않고 오로지 출발점과 도착점만을 줬기 때문에
+				내가 전체행렬을 채워야 한다고 생각함.
+				따라서 갈 수 있는 길에 대한 BFS를 작업하여 chessMatrix를 완성해서
+				다시 BFS를 처리 해주려고 한 점 
+			2. 처음에 출발점(curX,Y)은 방문한 게 아니라 그냥 그 점 자체였는데 체크한 점
+			3. moveCnt를 써서 뭔가 증가 변수를 따로 두려고 한 점
+			4. 출발점과 도착점이 같아졌을 때 반복문을 중단시키고 아래와 같이 증가배열의 해당 인덱스의 값을 리턴해주려고 한 점
+				// 맞으면 멈추는 거로 했는데 이게 딱히 필요 없는 것 같음. 어차피 일로 들어오지도 않아.
+				if( realX==goalX && realY==goalY ) { //if( realX==goalX && realY==goalY ) { 맞으면 멈추는거로
+					return incrementMatrix[goalX][goalY];
+				}
+			5. incrementMatrix 증가배열을 채우는 것은 완성했지만
+				그 자체의 리턴값이 아니라 단계별로 채워진 값에 따라서 출발점과 도착점이 같아졌을 떄의 뭔가 처리를 해주려 한 점
+				(4번과의 혼종이다..)
+			6. 이게 맞는데 왜 틀리지 하는 찰나에, 출발점과 도착점이 같다..는 건 뭔가 예외처리..!!?!?
+				했는데도 틀리길래 뭐지 했는데 개행 안해줘서
+				어쩄든 둘 다 처리 안해줘서 틀린거였다.
+				
+			이러한 시행착오 끝에 완성한 7562
+			시간복잡도는 N^2
+		
 */
 public class _7562 {
 	private static int[] dx = { -2, -1,1,2, -2,-1, 1 ,2 }; 
@@ -70,7 +98,7 @@ public class _7562 {
 		BufferedReader br = new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
 		
-		int		cnt			= Integer.parseInt( br.readLine() );	// 테스트 케이스 횟수
+		int		cnt			= Integer.parseInt( br.readLine() );		// 테스트 케이스 횟수
 		
 		for( int i=0;i<cnt;i++ ) {
 			int		size		= Integer.parseInt( br.readLine() );	// 체스 한 변의 길이
@@ -81,7 +109,12 @@ public class _7562 {
 			int goalX = Integer.parseInt( st.nextToken() );
 			int goalY = Integer.parseInt( st.nextToken() );
 			
-			bw.write( String.valueOf(BFS( curX, curY, goalX, goalY, size ))+"\n" );
+			// 출발점==도착점일 떄 예외처리를 해줬어야했다!!!! 난 마지막 테케는 왜 안맞지 했더니...ㅠ 바부..
+			if( curX==goalX && curY==goalY ) {
+				bw.write( "0\n" ); // 마지막에 틀렸다고 잠깐 나왔었는데 개행을 안해줘서 그럼
+			}else {
+				bw.write( String.valueOf(BFS( curX, curY, goalX, goalY, size ))+"\n" );
+			}
 		}
 		
 		br.close();
@@ -95,7 +128,7 @@ public class _7562 {
 		boolean[][]		checkMatrix		= new boolean[size][size];		// 방문 여부 행렬
 		int[][]			incrementMatrix = new int[size][size];			// 증가 행렬. 최단거리 구하기 위함.
 		
-		int	moveCnt = -1;
+		int	moveCnt = -1; // 이걸 만들어줘서 체크해줘야하나 했는데 그럴 필요 없었고 내가 생각했떤 것보다 훨씬 간단...ㅠ 내가 넘 어렵게 생각했다.
 		//처음에 출발점(curX,Y)은 방문한 게 아니라 그냥 그 점 자체야.
 		//chessMatrix[curX][curY] = 1;
 		//checkMatrix[curX][curY] = true;
@@ -128,6 +161,7 @@ public class _7562 {
 		}
 		
 		//incre 안에 있는 숫자들(i)은 x,y가 i번쨰에 갈 수 있는 곳들. 해당 i번쨰에 
+		/*
 		for( int i=0;i<size;i++ ) {
 			for( int j=0;j<size;j++ ) {
 				int value = (size+i)-size+1;
@@ -136,8 +170,8 @@ public class _7562 {
 				}
 			}
 		}
-		
-		
+		*/
+		/*
 		while( !queue.isEmpty() ) {
 			POSITION P = queue.poll();
 			curX = P.x;
@@ -157,11 +191,12 @@ public class _7562 {
 						if( realX==goalX && realY==goalY ) { //if( realX==goalX && realY==goalY ) { 맞으면 멈추는거로
 							return incrementMatrix[goalX][goalY];
 						}
-						*/
+						*
 					}
 				}
 			}
 		}
+		*/
 		// 첨엔 토마토 문제처럼 했는데 생각해보니까 이렇게 푸는 게 아니 ㄴ것 같아ㅓㅅ 여러 고민ㅇ르 함.
 		
 		return incrementMatrix[goalX][goalY];
