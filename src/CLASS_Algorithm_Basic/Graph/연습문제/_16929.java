@@ -5,10 +5,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.StringTokenizer;
 /**
 	Two Dots
@@ -76,9 +76,9 @@ import java.util.StringTokenizer;
 		위아래양옆의 방향을 써야 하는 거는 다 dx,dy를 써야하는 듯.
 */
 public class _16929 {
-	private static int[][]	checkMatrix;	// 방문배열
 	private static int[] dx = { -1,1,0,0 },
 						 dy = { 0,0,1,-1 };
+	//private static boolean[][]	checkMatrix; // 방문배열
 	
 	public static void main(String args[]) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -87,62 +87,73 @@ public class _16929 {
 		StringTokenizer st= new StringTokenizer( br.readLine() );
 		int				N = Integer.parseInt( st.nextToken() ),
 						M = Integer.parseInt( st.nextToken() );
-
-		List<Character>	numList	= new ArrayList<Character>();
+		Set<Character>	numSet	= new HashSet<Character>();
 		char[][]	BOARD		= new char[N][M];					// 세로가로
-		checkMatrix				= new int[N][M];				// 방문 배열
 		
 		for( int i=0;i<N;i++ ){
 			String line = br.readLine();
 			for( int j=0;j<M;j++ ){
 				char each	= line.charAt(j);
 				BOARD[i][j] = line.charAt(j);
-				numList.add(each);
+				numSet.add(each);
 			}
 		}
 		
-		BFS( BOARD, numList, N, M );
-		
-		for( int i=0;i<numList.size();i++ ){
-			BFS( BOARD, numList.get(i), N, M );
+		for( Character each : numSet ) {
+			int value = 0;
+			for( int i=0;i<N;i++ ){
+				for( int j=0;j<M;j++ ){
+					if( !checkMatrix[i][j] ){
+						value += BFS( BOARD, each, N, M, i, j );
+					}
+				}
+			}
+			if( value >= 4 && value%2==0 ){
+				bw.write("Yes");
+				bw.flush();
+				System.exit(0);
+			}
 		}
+		bw.write("No");
 		
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 
-	private static String BFS(char[][] BOARD, Character each, int N, int M ) {
+	private static int BFS(char[][] BOARD, Character each, int N, int M, int i, int j ){
 		Queue<POSITION>	queue		= new LinkedList<POSITION>();
-		//int[][]			checkMatrix	= new int[N][M]; // 방문 배열
-
-		checkMatrix[0][0] = 1;
-		queue.add( new POSITION(0, 0) );
+		int cnt;
+		if( i==0 && j==0 ) {
+			cnt = 1;
+		}else {
+			cnt = 0;
+		}
+		
+		boolean[][]	checkMatrix[i][j] = true;
+		queue.add( new POSITION(i, j) );
 		
 		//for( int i=0;i<numList.size();i++ ) {
 			//char		each		= numList.get(i);
 			
 			while( !queue.isEmpty() ){
-				boolean		cycleFlag	= false;
-				POSITION 	P			= queue.poll();
+				POSITION P = queue.poll();
+				int curX = P.x,
+					curY = P.y;
 				
-				int curX = P.x, curY = P.y;
-				for( int j=0;j<N;j++ ){
-					for( int k=0;k<M;k++ ){
-						if( BOARD[curX][curY]==BOARD[j][k] && checkMatrix[j][k]<2 ){
-							checkMatrix[j][k]++;
-							queue.add( new POSITION(curX, curY) );
-						}else{
-							cycleFlag = true;
+				for( int k=0;k<4;k++ ){
+					int realX = dx[k]+curX,
+						realY = dy[k]+curY;
+					if( realX>=0 && realX<N && realY>=0 && realY<M ) {
+						if( each==BOARD[realX][realY] && !checkMatrix[realX][realY] ){
+								cnt++;
+								checkMatrix[realX][realY] = true;
+								queue.add( new POSITION(curX, curY) );
 						}
 					}
 				}
-				
-				if( cycleFlag ){
-					return "Yes";
-				}
 			}
 		//}
-		return "No";
+		return cnt;
 	}
 }
