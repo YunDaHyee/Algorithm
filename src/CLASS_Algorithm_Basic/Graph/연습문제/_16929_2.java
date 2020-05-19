@@ -5,10 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
 import java.util.StringTokenizer;
 /**
 	Two Dots
@@ -79,24 +75,32 @@ import java.util.StringTokenizer;
 		재귀로 풀어야 하는 듯 하다..
 		=> 재귀로 푼 것
 		
-		재귀로 바꿔야함..
+		아이디어가 생각이 안나서.. 백준 거를 보고 했는데 디버깅을 통해 이해는 함.
+		주석 달기 이따가...지금은 멍해서 걍 문제풀고만 싶다ㅠ..
 */
 public class _16929_2 {
-	private static int[] dx = { -1,1,0,0 },
-						 dy = { 0,0,1,-1 };
-	private static boolean[][]	checkMatrix; // 방문배열
-	private static char[][]	BOARD; // 방문배열
+	private static int[]		dx = { -1,1,0,0 }, dy = { 0,0,1,-1 };
+	private static boolean[][]	checkMatrix;// 방문배열
+	private static char[][]		BOARD;		// 게임판
+	private static int			N,M;		// 세로가로
 	
 	public static void main(String args[]) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		BufferedReader	br	= new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter	bw	= new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st	= new StringTokenizer( br.readLine() );
 		
-		StringTokenizer st= new StringTokenizer( br.readLine() );
-		int				N = Integer.parseInt( st.nextToken() ),
-						M = Integer.parseInt( st.nextToken() );
-		BOARD		= new char[N][M];					// 세로가로
+		N			= Integer.parseInt( st.nextToken() );
+		M			= Integer.parseInt( st.nextToken() );
+		BOARD		= new char[N][M];
 		checkMatrix	= new boolean[N][M];
-		
+
+		// 게임판 입력받기
+        /*
+		이렇게 하면 한번에 입력 가능함.
+		for(int i=0; i<N; i++) {
+            BOARD[i] = br.readLine().toCharArray();
+        }
+         */
 		for( int i=0;i<N;i++ ){
 			String line = br.readLine();
 			for( int j=0;j<M;j++ ){
@@ -107,8 +111,8 @@ public class _16929_2 {
 		for( int i=0;i<N;i++ ){
 			for( int j=0;j<M;j++ ){
 				if( !checkMatrix[i][j] ){
-					if( BFS( BOARD[i][j], N, M, i, j ) ){
-						bw.write("Yes\n");
+					if( BFS( i, j, -1, -1, BOARD[i][j] ) ){
+						bw.write("Yes");
 						bw.flush();
 						System.exit(0);
 					}
@@ -116,48 +120,35 @@ public class _16929_2 {
 			}
 		}
 		
-		bw.write("No\n");
+		bw.write("No");
 		
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 
-	//private static int BFS(char[][] BOARD, char each, int N, int M, int i, int j ){
-	private static boolean BFS( char each, int N, int M, int i, int j ){
-		/*
-		Queue<POSITION>	queue	= new LinkedList<POSITION>();
-		int				cnt		= 0;
+	// 출발점 X,Y 와 도착점 X,Y 와 그 char 값
+	private static boolean BFS( int fromPointX, int fromPointY, int toPointX, int toPointY, char each ){
+		if( checkMatrix[fromPointX][fromPointY] ){
+			return true;
+		}
 		
-		queue.add( new POSITION(i, j) );
-		while( !queue.isEmpty() ){
-			POSITION P = queue.poll();
-			int curX = P.x,
-				curY = P.y;
-		 */
-			if( checkMatrix[i][j] ){
-				return true;
-			}
-			
-			checkMatrix[i][j] = true;
-			
-			for( int k=0;k<4;k++ ){
-				int realX = dx[k]+i,
-					realY = dy[k]+j;
-				if( realX>=0 && realX<N && realY>=0 && realY<M ) {
-					if( each==BOARD[realX][realY] && !checkMatrix[realX][realY] ){
-						/*
-						cnt++;
-						checkMatrix[realX][realY] = true;
-						queue.add( new POSITION(realX, realY) );
-						*/
-						if( BFS( each,N,M,realX,realY,) )
+		checkMatrix[fromPointX][fromPointY] = true;
+		
+		for( int k=0;k<4;k++ ){
+			int realX = dx[k]+fromPointX,
+				realY = dy[k]+fromPointY;
+			if( realX>=0 && realX<N && realY>=0 && realY<M ) {
+				if( !(realX==toPointX && realY==toPointY) ){
+					if( each==BOARD[realX][realY] ){
+						if( BFS(realX, realY, fromPointX, fromPointY, each) ){
+							return true;
+						}
 					}
 				}
 			}
-		/*
 		}
-		*/
+		
 		return false;
 	}
 	
