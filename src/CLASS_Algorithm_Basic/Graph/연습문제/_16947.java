@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 /**
 	서울 지하철 2호선
@@ -164,76 +166,47 @@ import java.util.StringTokenizer;
 */
 public class _16947 {
 	private static int[]		dx = { -1,1,0,0 }, dy = { 0,0,1,-1 };
-	private static boolean[][]	checkMatrix;// 방문배열
-	private static char[][]		BOARD;		// 게임판
-	private static int			N,M;		// 세로가로
+	private static boolean[]	checkM;
 	
 	public static void main(String args[]) throws IOException{
-		BufferedReader	br	= new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter	bw	= new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st	= new StringTokenizer( br.readLine() );
-		
-		N			= Integer.parseInt( st.nextToken() );
-		M			= Integer.parseInt( st.nextToken() );
-		BOARD		= new char[N][M];
-		checkMatrix	= new boolean[N][M];
-
-		// 게임판 입력받기
-        /*
-		이렇게 하면 한번에 입력 가능함.
-		for(int i=0; i<N; i++) {
-            BOARD[i] = br.readLine().toCharArray();
-        }
-         */
-		for( int i=0;i<N;i++ ){
-			String line = br.readLine();
-			for( int j=0;j<M;j++ ){
-				BOARD[i][j] = line.charAt(j);
-			}
+		BufferedReader	br		= new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter	bw		= new BufferedWriter(new OutputStreamWriter(System.out));
+		int				cnt		= Integer.parseInt( br.readLine() );
+		boolean[]		lineM	= new boolean[cnt+1];
+		checkM					= new boolean[cnt+1];
+		// 선 연결하기
+		for( int i=1;i<=cnt;i++ ) {
+			StringTokenizer st	= new StringTokenizer( br.readLine() );
+			lineM[Integer.parseInt(st.nextToken())] = true;
 		}
 		
-		for( int i=0;i<N;i++ ){
-			for( int j=0;j<M;j++ ){
-				if( !checkMatrix[i][j] ){
-					if( BFS( i, j, -1, -1, BOARD[i][j] ) ){
-						bw.write("Yes");
-						bw.flush();
-						System.exit(0);
-					}
-				}
-			}
+		for( int i=1;i<=cnt;i++ ) {
+			BFS()
 		}
-		
-		bw.write("No");
-		
+		BFS()
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 
-	// 출발점 X,Y 와 도착점 X,Y 와 그 char 값
-	private static boolean BFS( int fromPointX, int fromPointY, int toPointX, int toPointY, char each ){
-		if( checkMatrix[fromPointX][fromPointY] ){
+	private static int cyclePoint = 0;
+	
+	private static boolean BFS( boolean[] lineM, int cnt, int fromPointX, int fromPointY ){
+		if( checkM[fromPointX] ) {
 			return true;
 		}
+		Queue<POSITION> queue = new LinkedList<POSITION>();
+		queue.add( new POSITION(fromPointX, fromPointY) );
+		checkM[fromPointX]=true;
 		
-		checkMatrix[fromPointX][fromPointY] = true;
-		
-		for( int k=0;k<4;k++ ){
-			int realX = dx[k]+fromPointX,
-				realY = dy[k]+fromPointY;
-			if( realX>=0 && realX<N && realY>=0 && realY<M ) {
-				if( !(realX==toPointX && realY==toPointY) ){
-					if( each==BOARD[realX][realY] ){
-						if( BFS(realX, realY, fromPointX, fromPointY, each) ){
-							return true;
-						}
-					}
-				}
+		while( !queue.isEmpty() ){
+			if( lineM[realX] && !checkM[realX] ){
+				queue.add( new POSITION(realX, realY) );
+				checkM[realX][realY] = true;
+				
 			}
 		}
 		
 		return false;
 	}
-	
 }
