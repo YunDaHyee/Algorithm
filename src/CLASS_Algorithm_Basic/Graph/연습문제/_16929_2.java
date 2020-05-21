@@ -111,7 +111,7 @@ public class _16929_2 {
 		for( int i=0;i<N;i++ ){
 			for( int j=0;j<M;j++ ){
 				if( !checkMatrix[i][j] ){
-					if( BFS( i, j, -1, -1, BOARD[i][j] ) ){
+					if( BFS(  -1, -1, i, j, BOARD[i][j] ) ){
 						bw.write("Yes");
 						bw.flush();
 						System.exit(0);
@@ -128,7 +128,7 @@ public class _16929_2 {
 	}
 
 	// 출발점 X,Y 와 도착점 X,Y 와 그 char 값
-	private static boolean BFS( int fromPointX, int fromPointY, int toPointX, int toPointY, char each ){
+	private static boolean BFS( int toPointX, int toPointY, int fromPointX, int fromPointY, char each ){
 		if( checkMatrix[fromPointX][fromPointY] ){
 			return true;
 		}
@@ -141,7 +141,7 @@ public class _16929_2 {
 			if( realX>=0 && realX<N && realY>=0 && realY<M ) {
 				if( !(realX==toPointX && realY==toPointY) ){
 					if( each==BOARD[realX][realY] ){
-						if( BFS(realX, realY, fromPointX, fromPointY, each) ){
+						if( BFS(fromPointX, fromPointY, realX, realY, each) ){
 							return true;
 						}
 					}
