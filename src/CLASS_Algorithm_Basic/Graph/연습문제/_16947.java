@@ -5,7 +5,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 /**
@@ -165,25 +167,31 @@ import java.util.StringTokenizer;
 		
 */
 public class _16947 {
-	private static int[]		dx = { -1,1,0,0 }, dy = { 0,0,1,-1 };
-	private static boolean[]	checkM;
+	private static int[]			checkM;
+	private static List<Integer>[] lineList;
+	private static int				cnt;
 	
 	public static void main(String args[]) throws IOException{
-		BufferedReader	br		= new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter	bw		= new BufferedWriter(new OutputStreamWriter(System.out));
-		int				cnt		= Integer.parseInt( br.readLine() );
-		boolean[]		lineM	= new boolean[cnt+1];
-		checkM					= new boolean[cnt+1];
+		BufferedReader	br	= new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter	bw	= new BufferedWriter(new OutputStreamWriter(System.out));
+		cnt					= Integer.parseInt( br.readLine() );
+		lineList			= new ArrayList[cnt+1];
+		checkM				= new int[cnt+1];
+		
 		// 선 연결하기
 		for( int i=1;i<=cnt;i++ ) {
 			StringTokenizer st	= new StringTokenizer( br.readLine() );
-			lineM[Integer.parseInt(st.nextToken())] = true;
+			int value1 = Integer.parseInt( st.nextToken() );
+			int value2 = Integer.parseInt( st.nextToken() );
+			lineList[value1].add( value2 );
+			lineList[value2].add( value1 );
 		}
 		
-		for( int i=1;i<=cnt;i++ ) {
-			BFS()
-		}
-		BFS()
+		// 순환선 찾기
+		BFS( -1, 0 );
+
+		// 순환선으로부터 떨어진 거리 구하기
+		
 		br.close();
 		bw.flush();
 		bw.close();
@@ -191,22 +199,38 @@ public class _16947 {
 
 	private static int cyclePoint = 0;
 	
-	private static boolean BFS( boolean[] lineM, int cnt, int fromPointX, int fromPointY ){
-		if( checkM[fromPointX] ) {
-			return true;
+	private static int BFS( int fromPointX, int toPointX ){
+		// -2 : 방문 O , 싸이클 O 
+		// 1 : 방문 O , 싸이클 X
+		// 0  : 방문 X , 싸이클 X
+		if( checkM[fromPointX]==1 ){
+			return fromPointX;
 		}
-		Queue<POSITION> queue = new LinkedList<POSITION>();
-		queue.add( new POSITION(fromPointX, fromPointY) );
-		checkM[fromPointX]=true;
 		
+		/*
+		Queue<Integer> queue = new LinkedList<Integer>();
+		queue.add( fromPointX2 );
+		checkM[fromPointX2]=true;
 		while( !queue.isEmpty() ){
-			if( lineM[realX] && !checkM[realX] ){
-				queue.add( new POSITION(realX, realY) );
-				checkM[realX][realY] = true;
-				
-			}
+		 */
+		checkM[fromPointX]=1;
+
+		for( int j : lineList[fromPointX] ){
+				int each = lineList[fromPointX].get(j);
+				if( BFS(fromPointX, each)==-2 ){
+					return -2;
+				}else{
+					// TODO 여깅 ㅓ떻게 하는지..해결하기..
+					if( checkM[each]==1 ){
+				}
+					return each;
+					checkM[fromPointX] = -2;
+				}else{
+					return toPointX;
+				}
 		}
+		//}
 		
-		return false;
+		return 0;
 	}
 }
