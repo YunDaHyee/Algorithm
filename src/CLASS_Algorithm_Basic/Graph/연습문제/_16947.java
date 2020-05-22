@@ -171,12 +171,18 @@ public class _16947 {
 	private static List<Integer>[] lineList;
 	private static int				cnt;
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String args[]) throws IOException{
 		BufferedReader	br	= new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter	bw	= new BufferedWriter(new OutputStreamWriter(System.out));
 		cnt					= Integer.parseInt( br.readLine() );
 		lineList			= new ArrayList[cnt+1];
 		checkM				= new int[cnt+1];
+		
+		// 초기화
+		for( int i=1;i<=cnt;i++ ) {
+			lineList[i] = new ArrayList<Integer>();
+		}
 		
 		// 선 연결하기
 		for( int i=1;i<=cnt;i++ ) {
@@ -187,22 +193,20 @@ public class _16947 {
 			lineList[value2].add( value1 );
 		}
 		
-		// 순환선 찾기
-		BFS( -1, 0 );
+		// 순환선 찾아서 checkM에 기록
+		BFS( 1, -1);
 
-		// 순환선으로부터 떨어진 거리 구하기
+		// TODO 순환선으로부터 떨어진 거리 구하기
 		
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 
-	private static int cyclePoint = 0;
-	
+	// -2 : 방문 0 , 싸이클에 포함 X
+	// -1 : 방문 O , 싸이클 X
+	// 0~n-1  : 방문 O , 싸이클 O 그래서 싸이클의 시작점
 	private static int BFS( int fromPointX, int toPointX ){
-		// -2 : 방문 O , 싸이클 O 
-		// 1 : 방문 O , 싸이클 X
-		// 0  : 방문 X , 싸이클 X
 		if( checkM[fromPointX]==1 ){
 			return fromPointX;
 		}
@@ -215,22 +219,19 @@ public class _16947 {
 		 */
 		checkM[fromPointX]=1;
 
-		for( int j : lineList[fromPointX] ){
-				int each = lineList[fromPointX].get(j);
-				if( BFS(fromPointX, each)==-2 ){
+		for( int each : lineList[fromPointX] ){
+			if( each!=toPointX ) { // 어차피 그 쪽으로 가는 거라서 
+				int result = BFS( each, fromPointX ); // result == -2 : 싸이클 찾은 후의 방문점/ 2 : 방문 O, 싸이클 찾 O / 0 : 방문 O, 싸이클 X
+				if( result==-2 ){
 					return -2;
-				}else{
-					// TODO 여깅 ㅓ떻게 하는지..해결하기..
-					if( checkM[each]==1 ){
+				}else{ //
+					checkM[fromPointX] = 2;
+					return fromPointX == result ? -2 : result; // 이미 방문한거면 -2 표시 해줌.
 				}
-					return each;
-					checkM[fromPointX] = -2;
-				}else{
-					return toPointX;
-				}
+			}
 		}
 		//}
 		
-		return 0;
+		return -1;
 	}
 }
