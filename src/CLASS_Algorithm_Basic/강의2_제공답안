@@ -1,0 +1,4735 @@
+★#브루트포스 ############################################################################################################################################
+2309번 - 일곱 난쟁이------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = 9;
+        int[] a = new int[n];
+        int sum = 0;
+        for (int i=0; i<n; i++) {
+            a[i] = sc.nextInt();
+            sum += a[i];
+        }
+        Arrays.sort(a);
+        for (int i=0; i<n; i++) {
+            for (int j=i+1; j<n; j++) {
+                if (sum - a[i] - a[j] == 100) {
+                    for (int k=0; k<n; k++) {
+                        if (i == k || j == k) continue;
+                        System.out.println(a[k]);
+                    }
+                    System.exit(0);
+                }
+            }
+        }
+    }
+}
+3085번 - 사탕 게임------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static int check(char[][] a) {
+        int n = a.length;
+        int ans = 1;
+        for (int i=0; i<n; i++) {
+            int cnt = 1;
+            for (int j=1; j<n; j++) {
+                if (a[i][j] == a[i][j-1]) {
+                    cnt += 1;
+                } else {
+                    cnt = 1;
+                }
+                if (ans < cnt) ans = cnt;
+            }
+            cnt = 1;
+            for (int j=1; j<n; j++) {
+                if (a[j][i] == a[j-1][i]) {
+                    cnt += 1;
+                } else {
+                    cnt = 1;
+                }
+                if (ans < cnt) ans = cnt;
+            }
+        }
+        return ans;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        char[][] a = new char[n][n];
+        for (int i=0; i<n; i++) {
+            a[i] = sc.next().toCharArray();
+        }
+        int ans = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (j+1 < n) {
+                    char t = a[i][j]; a[i][j] = a[i][j+1]; a[i][j+1] = t;
+                    int temp = check(a);
+                    if (ans < temp) ans = temp;
+                    t = a[i][j]; a[i][j] = a[i][j+1]; a[i][j+1] = t;
+                }
+                if (i+1 < n) {
+                    char t = a[i][j]; a[i][j] = a[i+1][j]; a[i+1][j] = t;
+                    int temp = check(a);
+                    if (ans < temp) ans = temp;
+                    t = a[i][j]; a[i][j] = a[i+1][j]; a[i+1][j] = t;
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+1476번 - 날짜 계산------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int E = sc.nextInt();
+        int S = sc.nextInt();
+        int M = sc.nextInt();
+        int e=1,s=1,m=1;
+        for (int i=1;; i++) {
+            if (e == E && s == S && m == M) {
+                System.out.println(i);
+                break;
+            }
+            e += 1;
+            s += 1;
+            m += 1;
+            if (e == 16) {
+                e = 1;
+            }
+            if (s == 29) {
+                s = 1;
+            }
+            if (m == 20) {
+                m = 1;
+            }
+        }
+    }
+}
+
+2.
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int e = sc.nextInt()-1;
+        int s = sc.nextInt()-1;
+        int m = sc.nextInt()-1;
+        for (int i=0;; i++) {
+            if (i % 15 == e && i % 28 == s && i % 19 == m) {
+                System.out.println(i+1);
+                break;
+            }
+        }
+    }
+}
+
+3.
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int e = sc.nextInt();
+        int s = sc.nextInt();
+        int m = sc.nextInt();
+        System.out.println((6916*e + 4845*s + 4200*m - 1) % (15*28*19) + 1);
+    }
+}
+
+1107번 - 리모컨------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static boolean[] broken = new boolean[10];
+    static int possible(int c) {
+        if (c == 0) {
+            if (broken[0]) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+        int len = 0;
+        while (c > 0) {
+            if (broken[c % 10]) {
+                return 0;
+            }
+            len += 1;
+            c /= 10;
+        }
+        return len;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i = 0; i < m; i++) {
+            int x = sc.nextInt();
+            broken[x] = true;
+        }
+        int ans = n - 100;
+        if (ans < 0) {
+            ans = -ans;
+        }
+        for (int i = 0; i <= 1000000; i++) {
+            int c = i;
+            int len = possible(c);
+            if (len > 0) {
+                int press = c - n;
+                if (press < 0) {
+                    press = -press;
+                }
+                if (ans > len + press) {
+                    ans = len + press;
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+14500번 - 테트로미노------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] a = new int[n][m];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        int ans = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                if (j+3 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i][j+2] + a[i][j+3];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+3 < n) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+2][j] + a[i+3][j];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+1 < n && j+2 < m) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+1][j+1] + a[i+1][j+2];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+2 < n && j+1 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i+1][j] + a[i+2][j];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+1 < n && j+2 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i][j+2] + a[i+1][j+2];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+2 < n && j-1 >= 0) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+2][j] + a[i+2][j-1];
+                    if (ans < temp) ans = temp;
+                }
+                if (i-1 >= 0 && j+2 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i][j+2] + a[i-1][j+2];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+2 < n && j+1 < m) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+2][j] + a[i+2][j+1];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+1 < n && j+2 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i][j+2] + a[i+1][j];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+2 < n && j+1 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i+1][j+1] + a[i+2][j+1];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+1 < n && j+1 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i+1][j] + a[i+1][j+1];
+                    if (ans < temp) ans = temp;
+                }
+                if (i-1 >= 0 && j+2 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i-1][j+1] + a[i-1][j+2];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+2 < n && j+1 < m) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+1][j+1] + a[i+2][j+1];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+1 < n && j+2 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i+1][j+1] + a[i+1][j+2];
+                    if (ans < temp) ans = temp;
+                }
+                if (i+2 < n && j-1 >= 0) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+1][j-1] + a[i+2][j-1];
+                    if (ans < temp) ans = temp;
+                }
+                if (j+2 < m) {
+                    int temp = a[i][j] + a[i][j+1] + a[i][j+2];
+                    if (i-1 >= 0) {
+                        int temp2 = temp + a[i-1][j+1];
+                        if (ans < temp2) ans = temp2;
+                    }
+                    if (i+1 < n) {
+                        int temp2 = temp + a[i+1][j+1];
+                        if (ans < temp2) ans = temp2;
+                    }
+                }
+                if (i+2 < n) {
+                    int temp = a[i][j] + a[i+1][j] + a[i+2][j];
+                    if (j+1 < m) {
+                        int temp2 = temp + a[i+1][j+1];
+                        if (ans < temp2) ans = temp2;
+                    }
+                    if (j-1 >= 0) {
+                        int temp2 = temp + a[i+1][j-1];
+                        if (ans < temp2) ans = temp2;
+                    }
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[][][] block = {
+        {{0,1}, {0,2}, {0,3}},
+        {{1,0}, {2,0}, {3,0}},
+        {{1,0}, {1,1}, {1,2}},
+        {{0,1}, {1,0}, {2,0}},
+        {{0,1}, {0,2}, {1,2}},
+        {{1,0}, {2,0}, {2,-1}},
+        {{0,1}, {0,2}, {-1,2}},
+        {{1,0}, {2,0}, {2,1}},
+        {{0,1}, {0,2}, {1,0}},
+        {{0,1}, {1,1}, {2,1}},
+        {{0,1}, {1,0}, {1,1}},
+        {{0,1}, {-1,1}, {-1,2}},
+        {{1,0}, {1,1}, {2,1}},
+        {{0,1}, {1,1}, {1,2}},
+        {{1,0}, {1,-1}, {2,-1}},
+        {{0,1}, {0,2}, {-1,1}},
+        {{0,1}, {0,2}, {1,1}},
+        {{1,0}, {2,0}, {1,1}},
+        {{1,0}, {2,0}, {1,-1}},
+    };
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] a = new int[n][m];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        int ans = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                for (int k=0; k<19; k++) {
+                    boolean ok = true;
+                    int sum = a[i][j];
+                    for (int l=0; l<3; l++) {
+                        int x = i+block[k][l][0];
+                        int y = j+block[k][l][1];
+                        if (0 <= x && x < n && 0 <= y && y < m) {
+                            sum += a[x][y];
+                        } else {
+                            ok = false;
+                            break;
+                        }
+                    }
+                    if (ok && ans < sum) {
+                        ans = sum;
+                    }
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+3.
+import java.util.*;
+import java.io.*;
+public class Main {
+    static String[][] blocks = {
+        {"1111"},
+        {"11",
+            "11"},
+        {"10",
+            "10",
+            "11"},
+        {"10",
+            "11",
+            "01"},
+        {"111",
+            "010"}
+    };
+    static String[] mirror(String[] b) {
+        String[] ans = new String[b.length];
+        for (int i=0; i<b.length; i++) {
+            ans[i] = new StringBuilder(b[i]).reverse().toString();
+        }
+        return ans;
+    }
+    static String[] rotate(String[] b) {
+        String[] ans = new String[b[0].length()];
+        for (int j=0; j<b[0].length(); j++) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=(int)b.length-1; i>=0; i--) {
+                sb.append(b[i].charAt(j));
+            }
+            ans[j] = sb.toString();
+        }
+        return ans;
+    }
+    static int calc(int[][] a, String[] b, int x, int y) {
+        int n = a.length;
+        int m = a[0].length;
+        int sum = 0;
+        for (int i=0; i<b.length; i++) {
+            for (int j=0; j<b[0].length(); j++) {
+                if (b[i].charAt(j) == '0') continue;
+                int nx = x+i;
+                int ny = y+j;
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    sum += a[nx][ny];
+                } else {
+                    return -1;
+                }
+            }
+        }
+        return sum;
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        String[] line = bf.readLine().split(" ");
+        Scanner sc = new Scanner(System.in);
+        int n = Integer.parseInt(line[0]);
+        int m = Integer.parseInt(line[1]);
+        int[][] a = new int[n][m];
+        for (int i=0; i<n; i++) {
+            line = bf.readLine().split(" ");
+            for (int j=0; j<m; j++) {
+                a[i][j] = Integer.parseInt(line[j]);
+            }
+        }
+        int ans = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                for (String[] block : blocks) {
+                    String[] b = new String[block.length];
+                    System.arraycopy(block, 0, b, 0, block.length);
+                    for (int mir=0; mir<2; mir++) {
+                        for (int rot=0; rot<4; rot++) {
+                            int cur = calc(a, b, i, j);
+                            if (cur != -1 && ans < cur) {
+                                ans = cur;
+                            }
+                            b = rotate(b);
+                        }
+                        b = mirror(b);
+                    }
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+6064번 - 카잉 달력------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+import java.io.*;
+public class Main {
+    public static void main(String args[]) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.valueOf(bf.readLine());
+        while (t-- > 0) {
+            String[] line = bf.readLine().split(" ");
+            int m = Integer.valueOf(line[0]);
+            int n = Integer.valueOf(line[1]);
+            int x = Integer.valueOf(line[2])-1;
+            int y = Integer.valueOf(line[3])-1;
+            boolean ok = false;
+            for (int k=x; k<(n*m); k+=m) {
+                if (k%n == y) {
+                    System.out.println(k+1);
+                    ok = true;
+                    break;
+                }
+            }
+            if (!ok) {
+                System.out.println(-1);
+            }
+        }
+    }
+}
+
+
+1748번 - 수 이어 쓰기 1------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        long ans = 0;
+        for (int start=1, len=1; start<=n; start*=10, len++) {
+            int end = start*10-1;
+            if (end > n) {
+                end = n;
+            }
+            ans += (long)(end - start + 1) * len;
+        }
+        System.out.println(ans);
+    }
+}
+
+9095번 - 1, 2, 3 더하기------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int ans = 0;
+            for (int l1=1; l1<=3; l1++) {
+                if (l1 == n) {
+                    ans += 1;
+                }
+                for (int l2=1; l2<=3; l2++) {
+                    if (l1+l2 == n) {
+                        ans += 1;
+                    }
+                    for (int l3=1; l3<=3; l3++) {
+                        if (l1+l2+l3 == n) {
+                            ans += 1;
+                        }
+                        for (int l4=1; l4<=3; l4++) {
+                            if (l1+l2+l3+l4 == n) {
+                                ans += 1;
+                            }
+                            for (int l5=1; l5<=3; l5++) {
+                                if (l1+l2+l3+l4+l5 == n) {
+                                    ans += 1;
+                                }
+                                for (int l6=1; l6<=3; l6++) {
+                                    if (l1+l2+l3+l4+l5+l6 == n) {
+                                        ans += 1;
+                                    }
+                                    for (int l7=1; l7<=3; l7++) {
+                                        if (l1+l2+l3+l4+l5+l6+l7 == n) {
+                                            ans += 1;
+                                        }
+                                        for (int l8=1; l8<=3; l8++) {
+                                            if (l1+l2+l3+l4+l5+l6+l7+l8 == n) {
+                                                ans += 1;
+                                            }
+                                            for (int l9=1; l9<=3; l9++) {
+                                                if (l1+l2+l3+l4+l5+l6+l7+l8+l9 == n) {
+                                                    ans += 1;
+                                                }
+                                                for (int l0=1; l0<=3; l0++) {
+                                                    if (l1+l2+l3+l4+l5+l6+l7+l8+l9+l0 == n) {
+                                                        ans += 1;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(ans);
+        }
+    }
+}
+#브루트포스 - N과 M #######################################################################################################################################
+15649번 - N과 M (1)------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static void go(int index, int n, int m) {
+        if (index == m) {
+            for (int i=0; i<m; i++) {
+                System.out.print(a[i]);
+                if (i != m-1) System.out.print(' ');
+            }
+            System.out.println();
+            return;
+        }
+        for (int i=1; i<=n; i++) {
+            if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            go(index+1, n, m);
+            c[i] = false;
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        go(0,n,m);
+    }
+}
+15650번 - N과 M (2)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static void go(int index, int start, int n, int m) {
+        if (index == m) {
+            for (int i=0; i<m; i++) {
+                System.out.print(a[i]);
+                if (i != m-1) System.out.print(' ');
+            }
+            System.out.println();
+            return;
+        }
+        for (int i=start; i<=n; i++) {
+            if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            go(index+1, i+1, n, m);
+            c[i] = false;
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        go(0,1,n,m);
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[] a = new int[10];
+    static void go(int index, int selected, int n, int m) {
+        if (selected == m) {
+            for (int i=0; i<m; i++) {
+                System.out.print(a[i]);
+                if (i != m-1) System.out.print(' ');
+            }
+            System.out.println();
+            return;
+        }
+        if (index > n) return;
+        a[selected] = index;
+        go(index+1, selected+1, n, m);
+        a[selected] = 0;
+        go(index+1, selected, n, m);
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        go(1, 0, n, m);
+    }
+}
+15651번 - N과 M (3)------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static StringBuilder go(int index, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(a[i]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=1; i<=n; i++) {
+            // if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        System.out.print(go(0,n,m));
+    }
+}
+
+15652번 - N과 M (4)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static StringBuilder go(int index, int start, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(a[i]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=start; i<=n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, i, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        System.out.print(go(0,1,n,m));
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[] cnt = new int[10];
+    static StringBuilder go(int index, int selected, int n, int m) {
+        if (selected == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=1; i<=n; i++) {
+                for (int j=1; j<=cnt[i]; j++) {
+                    sb.append(i);
+                    sb.append(" ");
+                }
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        if (index > n) return ans;
+        for (int i=m-selected; i>=1; i--) {
+            cnt[index] = i;
+            ans.append(go(index+1, selected+i, n, m));
+        }
+        cnt[index] = 0;
+        ans.append(go(index+1, selected, n, m));
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        System.out.print(go(1, 0, n, m));
+    }
+}
+
+15654번 - N과 M (5)------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=0; i<n; i++) {
+            if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        System.out.print(go(0,n,m));
+    }
+}
+
+15655번 - N과 M (6)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int start, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=start; i<n; i++) {
+            if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, i+1, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        System.out.print(go(0,0,n,m));
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int selected, int n, int m) {
+        if (selected == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        if (index >= n) return ans;
+        a[selected] = index;
+        ans.append(go(index+1, selected+1, n, m));
+        a[selected] = 0;
+        ans.append(go(index+1, selected, n, m));
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        System.out.print(go(0,0,n,m));
+    }
+}
+
+15656번 - N과 M (7)------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=0; i<n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        System.out.print(go(0,n,m));
+    }
+}
+15657번 - N과 M (8)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int start, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=start; i<n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, i, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        System.out.print(go(0,0,n,m));
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[] cnt = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int selected, int n, int m) {
+        if (selected == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<n; i++) {
+                for (int j=1; j<=cnt[i]; j++) {
+                    sb.append(num[i]);
+                    sb.append(" ");
+                }
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        if (index >= n) return ans;
+        for (int i=m-selected; i>=1; i--) {
+            cnt[index] = i;
+            ans.append(go(index+1, selected+i, n, m));
+        }
+        cnt[index] = 0;
+        ans.append(go(index+1, selected, n, m));
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        System.out.print(go(0, 0, n, m));
+    }
+}
+
+15663번 - N과 M (9)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+class Result implements Comparable<Result> {
+    Integer[] a;
+    Result(ArrayList<Integer> a) {
+        this.a = a.toArray(new Integer[a.size()]);
+    }
+    int get(int index) {
+        return (int)this.a[index];
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Result) {
+            Result that = (Result)obj;
+            int n = this.a.length;
+            for (int i=0; i<n; i++) {
+                if (this.a[i] != that.a[i]) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public int compareTo(Result that) {
+        int n = this.a.length;
+        for (int i=0; i<n; i++) {
+            if (this.a[i] == that.a[i]) continue;
+            if (this.a[i] < that.a[i]) return -1;
+            if (this.a[i] > that.a[i]) return 1;
+        }
+        return 0;
+    }
+}
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static ArrayList<Result> d = new ArrayList<>();
+    static void go(int index, int n, int m) {
+        if (index == m) {
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (int i=0; i<m; i++) {
+                temp.add(num[a[i]]);
+            }
+            d.add(new Result(temp));
+            return;
+        }
+        for (int i=0; i<n; i++) {
+            if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            go(index+1, n, m);
+            c[i] = false;
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        go(0, n, m);
+        Collections.sort(d);
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<d.size(); i++) {
+            if (i == 0 || !d.get(i).equals(d.get(i-1))) {
+                for (int j=0; j<m; j++) {
+                    sb.append(d.get(i).get(j));
+                    if (j != m-1) sb.append(' ');
+                }
+                sb.append('\n');
+            }
+        }
+        System.out.print(sb);
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static int[] cnt = new int[10];
+    static void go(int index, int n, int m) {
+        if (index == m) {
+            for (int i=0; i<m; i++) {
+                System.out.print(num[a[i]] + " ");
+            }
+            System.out.println();
+            return;
+        }
+        for (int i=0; i<n; i++) {
+            if (cnt[i] > 0) {
+                cnt[i] -= 1;
+                a[index] = i;
+                go(index+1, n, m);
+                cnt[i] += 1;
+            }
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[] temp = new int[n];
+        for (int i=0; i<n; i++) {
+            temp[i] = sc.nextInt();
+        }
+        Arrays.sort(temp);
+        int k = 0;
+        int x = temp[0];
+        int c = 1;
+        for (int i=1; i<n; i++) {
+            if (x == temp[i]) {
+                c += 1;
+            } else {
+                num[k] = x;
+                cnt[k] = c;
+                k += 1;
+                x = temp[i];
+                c = 1;
+            }
+        }
+        num[k] = x;
+        cnt[k] = c;
+        n = k+1;
+        go(0, n, m);
+    }
+}
+
+15664번 - N과 M (10)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+class Result implements Comparable<Result> {
+    Integer[] a;
+    Result(ArrayList<Integer> a) {
+        this.a = a.toArray(new Integer[a.size()]);
+    }
+    int get(int index) {
+        return (int)this.a[index];
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Result) {
+            Result that = (Result)obj;
+            int n = this.a.length;
+            for (int i=0; i<n; i++) {
+                if (this.a[i] != that.a[i]) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public int compareTo(Result that) {
+        int n = this.a.length;
+        for (int i=0; i<n; i++) {
+            if (this.a[i] == that.a[i]) continue;
+            if (this.a[i] < that.a[i]) return -1;
+            if (this.a[i] > that.a[i]) return 1;
+        }
+        return 0;
+    }
+}
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static ArrayList<Result> d = new ArrayList<>();
+    static void go(int index, int start, int n, int m) {
+        if (index == m) {
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (int i=0; i<m; i++) {
+                temp.add(num[a[i]]);
+            }
+            d.add(new Result(temp));
+            return;
+        }
+        for (int i=start; i<n; i++) {
+            if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            go(index+1, i+1, n, m);
+            c[i] = false;
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        go(0, 0, n, m);
+        Collections.sort(d);
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<d.size(); i++) {
+            if (i == 0 || !d.get(i).equals(d.get(i-1))) {
+                for (int j=0; j<m; j++) {
+                    sb.append(d.get(i).get(j));
+                    if (j != m-1) sb.append(' ');
+                }
+                sb.append('\n');
+            }
+        }
+        System.out.print(sb);
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static int[] cnt = new int[10];
+    static void go(int index, int start, int n, int m) {
+        if (index == m) {
+            for (int i=0; i<m; i++) {
+                System.out.print(num[a[i]] + " ");
+            }
+            System.out.println();
+            return;
+        }
+        for (int i=start; i<n; i++) {
+            if (cnt[i] > 0) {
+                cnt[i] -= 1;
+                a[index] = i;
+                go(index+1, i, n, m);
+                cnt[i] += 1;
+            }
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[] temp = new int[n];
+        for (int i=0; i<n; i++) {
+            temp[i] = sc.nextInt();
+        }
+        Arrays.sort(temp);
+        int k = 0;
+        int x = temp[0];
+        int c = 1;
+        for (int i=1; i<n; i++) {
+            if (x == temp[i]) {
+                c += 1;
+            } else {
+                num[k] = x;
+                cnt[k] = c;
+                k += 1;
+                x = temp[i];
+                c = 1;
+            }
+        }
+        num[k] = x;
+        cnt[k] = c;
+        n = k+1;
+        go(0, 0, n, m);
+    }
+}
+
+15665번 - N과 M (11)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=0; i<n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[] temp = new int[n];
+        for (int i=0; i<n; i++) {
+            temp[i] = sc.nextInt();
+        }
+        Arrays.sort(temp);
+        int k = 0;
+        for (int i=0; i<n; i++) {
+            if (i > 0 && temp[i] == temp[i-1]) continue;
+            num[k++] = temp[i];
+        }
+        n = k;
+        System.out.print(go(0,n,m));
+    }
+}
+
+2.
+import java.util.*;
+class Result implements Comparable<Result> {
+    Integer[] a;
+    Result(ArrayList<Integer> a) {
+        this.a = a.toArray(new Integer[a.size()]);
+    }
+    int get(int index) {
+        return (int)this.a[index];
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Result) {
+            Result that = (Result)obj;
+            int n = this.a.length;
+            for (int i=0; i<n; i++) {
+                if (this.a[i] != that.a[i]) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public int compareTo(Result that) {
+        int n = this.a.length;
+        for (int i=0; i<n; i++) {
+            if (this.a[i] == that.a[i]) continue;
+            if (this.a[i] < that.a[i]) return -1;
+            if (this.a[i] > that.a[i]) return 1;
+        }
+        return 0;
+    }
+}
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static ArrayList<Result> d = new ArrayList<>();
+    static void go(int index, int start, int n, int m) {
+        if (index == m) {
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (int i=0; i<m; i++) {
+                temp.add(num[a[i]]);
+            }
+            d.add(new Result(temp));
+            return;
+        }
+        for (int i=start; i<n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            go(index+1, 0, n, m);
+            c[i] = false;
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        go(0, 0, n, m);
+        Collections.sort(d);
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<d.size(); i++) {
+            if (i == 0 || !d.get(i).equals(d.get(i-1))) {
+                for (int j=0; j<m; j++) {
+                    sb.append(d.get(i).get(j));
+                    if (j != m-1) sb.append(' ');
+                }
+                sb.append('\n');
+            }
+        }
+        System.out.print(sb);
+    }
+}
+
+15666번 - N과 M (12)------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static StringBuilder go(int index, int start, int n, int m) {
+        if (index == m) {
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<m; i++) {
+                sb.append(num[a[i]]);
+                if (i != m-1) sb.append(" ");
+            }
+            sb.append("\n");
+            return sb;
+        }
+        StringBuilder ans = new StringBuilder();
+        for (int i=start; i<n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            ans.append(go(index+1, i, n, m));
+            c[i] = false;
+        }
+        return ans;
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[] temp = new int[n];
+        for (int i=0; i<n; i++) {
+            temp[i] = sc.nextInt();
+        }
+        Arrays.sort(temp);
+        int k = 0;
+        for (int i=0; i<n; i++) {
+            if (i > 0 && temp[i] == temp[i-1]) continue;
+            num[k++] = temp[i];
+        }
+        n = k;
+        System.out.print(go(0,0,n,m));
+    }
+}
+
+2.
+import java.util.*;
+class Result implements Comparable<Result> {
+    Integer[] a;
+    Result(ArrayList<Integer> a) {
+        this.a = a.toArray(new Integer[a.size()]);
+    }
+    int get(int index) {
+        return (int)this.a[index];
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Result) {
+            Result that = (Result)obj;
+            int n = this.a.length;
+            for (int i=0; i<n; i++) {
+                if (this.a[i].intValue() != that.a[i].intValue()) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public int compareTo(Result that) {
+        int n = this.a.length;
+        for (int i=0; i<n; i++) {
+            if (this.a[i] == that.a[i]) continue;
+            if (this.a[i] < that.a[i]) return -1;
+            if (this.a[i] > that.a[i]) return 1;
+        }
+        return 0;
+    }
+}
+public class Main {
+    static boolean[] c = new boolean[10];
+    static int[] a = new int[10];
+    static int[] num = new int[10];
+    static ArrayList<Result> d = new ArrayList<>();
+    static void go(int index, int start, int n, int m) {
+        if (index == m) {
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (int i=0; i<m; i++) {
+                temp.add(num[a[i]]);
+            }
+            d.add(new Result(temp));
+            return;
+        }
+        for (int i=start; i<n; i++) {
+            //if (c[i]) continue;
+            c[i] = true;
+            a[index] = i;
+            go(index+1, i, n, m);
+            c[i] = false;
+        }
+    }   
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            num[i] = sc.nextInt();
+        }
+        Arrays.sort(num, 0, n);
+        /*
+        int k = 1;
+        for (int i=1; i<n; i++) {
+            if (num[i] == num[i-1]) continue;
+            num[k++] = num[i];
+        }
+        n = k;
+        */
+        go(0, 0, n, m);
+        Collections.sort(d);
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<d.size(); i++) {
+            if (i == 0 || !d.get(i).equals(d.get(i-1))) {
+                for (int j=0; j<m; j++) {
+                    sb.append(d.get(i).get(j));
+                    if (j != m-1) sb.append(' ');
+                }
+                sb.append('\n');
+            }
+        }
+        System.out.print(sb);
+    }
+}
+★#브루트 포스 - 재귀 #######################################################################################################################################
+9095번 - 1, 2, 3 더하기------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static int go(int sum, int goal) {
+        if (sum > goal) {
+            return 0;
+        }
+        if (sum == goal) {
+            return 1;
+        }
+        int now = 0;
+        for (int i=1; i<=3; i++) {
+            now += go(sum+i, goal);
+        }
+        return now;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            System.out.println(go(0, n));
+        }
+    }
+}
+1759번 - 암호 만들기------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static boolean check(String password) {
+        int ja = 0;
+        int mo = 0;
+        for (char x : password.toCharArray()) {
+            if (x == 'a' || x == 'e' || x == 'i' || x == 'o' || x == 'u') {
+                mo += 1;
+            } else {
+                ja += 1;
+            }
+        }
+        return ja >= 2 && mo >= 1;
+    }
+    public static void go(int n, String[] alpha, String password, int i) {
+        if (password.length() == n) {
+            if (check(password)) {
+                System.out.println(password);
+            }
+            return;
+        }
+        if (i >= alpha.length) return;
+        go(n, alpha, password+alpha[i], i+1);
+        go(n, alpha, password, i+1);
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        
+        String[] alpha = new String[m];
+        for (int i=0; i<m; i++) {
+            alpha[i] = sc.next();
+        }
+        
+        Arrays.sort(alpha);
+        
+        go(n, alpha, "", 0);
+    }
+}
+14501번 - 퇴사------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    static final int inf = -100000000;
+    static int[] t;
+    static int[] p;
+    static int n;
+    static int ans = 0;
+    static void go(int day, int sum) {
+        if (day == n+1) {
+            if (ans < sum) ans = sum;
+            return;
+        }
+        if (day > n+1) {
+            return;
+        }
+        go(day+1, sum);
+        go(day+t[day], sum+p[day]);
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        t = new int[n+1];
+        p = new int[n+1];
+        for (int i=1; i<=n; i++) {
+            t[i] = sc.nextInt();
+            p[i] = sc.nextInt();
+        }
+        go(1, 0);
+        System.out.println(ans);
+    }
+}
+14889번 - 스타트와 링크------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static int[][] s;
+    static int n;
+    static int go(int index, ArrayList<Integer> first, ArrayList<Integer> second) {
+        if (index == n) {
+            if (first.size() != n/2) return -1;
+            if (second.size() != n/2) return -1;
+            int t1 = 0;
+            int t2 = 0;
+            for (int i=0; i<n/2; i++) {
+                for (int j=0; j<n/2; j++) {
+                    if (i == j) continue;
+                    t1 += s[first.get(i)][first.get(j)];
+                    t2 += s[second.get(i)][second.get(j)];
+                }
+            }
+            int diff = Math.abs(t1-t2);
+            return diff;
+        }
+        int ans = -1;
+        first.add(index);
+        int t1 = go(index+1, first, second);
+        if (ans == -1 || (t1 != -1 && ans > t1)) {
+            ans = t1;
+        }
+        first.remove(first.size()-1);
+        second.add(index);
+        int t2 = go(index+1, first, second);
+        if (ans == -1 || (t2 != -1 && ans > t2)) {
+            ans = t2;
+        }
+        second.remove(second.size()-1);
+        return ans;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        s = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                s[i][j] = sc.nextInt();
+            }
+        }
+        ArrayList<Integer> first = new ArrayList<>();
+        ArrayList<Integer> second = new ArrayList<>();
+        System.out.println(go(0, first, second));
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int[][] s;
+    static int n;
+    static int go(int index, ArrayList<Integer> first, ArrayList<Integer> second) {
+        if (index == n) {
+            if (first.size() != n/2) return -1;
+            if (second.size() != n/2) return -1;
+            int t1 = 0;
+            int t2 = 0;
+            for (int i=0; i<n/2; i++) {
+                for (int j=0; j<n/2; j++) {
+                    if (i == j) continue;
+                    t1 += s[first.get(i)][first.get(j)];
+                    t2 += s[second.get(i)][second.get(j)];
+                }
+            }
+            int diff = Math.abs(t1-t2);
+            return diff;
+        }
+        if (first.size() > n/2) return -1;
+        if (second.size() > n/2) return -1;
+        int ans = -1;
+        first.add(index);
+        int t1 = go(index+1, first, second);
+        if (ans == -1 || (t1 != -1 && ans > t1)) {
+            ans = t1;
+        }
+        first.remove(first.size()-1);
+        second.add(index);
+        int t2 = go(index+1, first, second);
+        if (ans == -1 || (t2 != -1 && ans > t2)) {
+            ans = t2;
+        }
+        second.remove(second.size()-1);
+        return ans;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        s = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                s[i][j] = sc.nextInt();
+            }
+        }
+        ArrayList<Integer> first = new ArrayList<>();
+        ArrayList<Integer> second = new ArrayList<>();
+        System.out.println(go(0, first, second));
+    }
+}
+
+15661번 - 링크와 스타트------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static int[][] s;
+    static int n;
+    static int go(int index, ArrayList<Integer> first, ArrayList<Integer> second) {
+        if (index == n) {
+            if (first.size() == 0) return -1;
+            if (second.size() == 0) return -1;
+            int t1 = 0;
+            int t2 = 0;
+            for (int i=0; i<first.size(); i++) {
+                for (int j=0; j<first.size(); j++) {
+                    if (i == j) continue;
+                    t1 += s[first.get(i)][first.get(j)];
+                }
+            }
+            for (int i=0; i<second.size(); i++) {
+                for (int j=0; j<second.size(); j++) {
+                    if (i == j) continue;
+                    t2 += s[second.get(i)][second.get(j)];
+                }
+            }
+            int diff = Math.abs(t1-t2);
+            return diff;
+        }
+        int ans = -1;
+        first.add(index);
+        int t1 = go(index+1, first, second);
+        if (ans == -1 || (t1 != -1 && ans > t1)) {
+            ans = t1;
+        }
+        first.remove(first.size()-1);
+        second.add(index);
+        int t2 = go(index+1, first, second);
+        if (ans == -1 || (t2 != -1 && ans > t2)) {
+            ans = t2;
+        }
+        second.remove(second.size()-1);
+        return ans;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        s = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                s[i][j] = sc.nextInt();
+            }
+        }
+        ArrayList<Integer> first = new ArrayList<>();
+        ArrayList<Integer> second = new ArrayList<>();
+        System.out.println(go(0, first, second));
+    }
+}
+2529번 - 부등호------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+
+public class Main {
+    static int n;
+    static char[] a = new char[20];
+    static ArrayList<String> ans = new ArrayList<>();
+    static boolean[] check = new boolean[10];
+    static boolean ok(String num) {
+        for (int i=0; i<n; i++) {
+            if (a[i] == '<') {
+                if (num.charAt(i) > num.charAt(i+1)) return false;
+            } else if (a[i] == '>') {
+                if (num.charAt(i) < num.charAt(i+1)) return false;
+            }
+        }
+        return true;
+    }
+    static void go(int index, String num) {
+        if (index == n+1) {
+            if (ok(num)) {
+                ans.add(num);
+            }
+            return;
+        }
+        for (int i=0; i<=9; i++) {
+            if (check[i]) continue;
+            check[i] = true;
+            go(index+1, num+Integer.toString(i));
+            check[i] = false;
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            a[i] = sc.next().toCharArray()[0];
+        }
+        go(0, "");
+        Collections.sort(ans);
+        int m = ans.size();
+        System.out.println(ans.get(m-1));
+        System.out.println(ans.get(0));
+    }
+}
+
+2.
+import java.util.*;
+
+public class Main {
+    static int n;
+    static char[] a = new char[20];
+    static ArrayList<String> ans = new ArrayList<>();
+    static boolean[] check = new boolean[10];
+    static boolean good(char x, char y, char op) {
+        if (op == '<') {
+            if (x > y) return false;
+        }
+        if (op == '>') {
+            if (x < y) return false;
+        }
+        return true;
+    }
+    static void go(int index, String num) {
+        if (index == n+1) {
+            ans.add(num);
+            return;
+        }
+        for (int i=0; i<=9; i++) {
+            if (check[i]) continue;
+            if (index == 0 || good(num.charAt(index-1), (char)(i+'0'), a[index-1])) {
+                check[i] = true;
+                go(index+1, num+Integer.toString(i));
+                check[i] = false;
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            a[i] = sc.next().toCharArray()[0];
+        }
+        go(0, "");
+        Collections.sort(ans);
+        int m = ans.size();
+        System.out.println(ans.get(m-1));
+        System.out.println(ans.get(0));
+    }
+}
+
+1248번 - 맞춰봐------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    static int n;
+    static int[][] sign;
+    static int[] ans;
+    static boolean ok() {
+        for (int i=0; i<n; i++) {
+            int sum = 0;
+            for (int j=i; j<n; j++) {
+                sum += ans[j];
+                if (sign[i][j] == 0) {
+                    if (sum != 0) return false;
+                } else if (sign[i][j] > 0) {
+                    if (sum <= 0) return false;
+                } else if (sign[i][j] < 0) {
+                    if (sum >= 0) return false;
+                }
+            }
+        }
+        return true;
+    }
+    static boolean go(int index) {
+        if (index == n) {
+            return ok();
+        }
+        for (int i=-10; i<=10; i++) {
+            ans[index] = i;
+            if (go(index+1)) return true;
+        }
+        return false;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        ans = new int[n];
+        sign = new int[n][n];
+        String s = sc.next();
+        int cnt = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=i; j<n; j++) {
+                char x = s.charAt(cnt);
+                if (x == '0') {
+                    sign[i][j] = 0;
+                } else if (x == '+') {
+                    sign[i][j] = 1;
+                } else {
+                    sign[i][j] = -1;
+                }
+                cnt += 1;
+            }
+        }
+        go(0);
+        for (int i=0; i<n; i++) {
+            System.out.print(ans[i] + " ");
+        }
+        System.out.println();
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    static int n;
+    static int[][] sign;
+    static int[] ans;
+    static boolean ok() {
+        for (int i=0; i<n; i++) {
+            int sum = 0;
+            for (int j=i; j<n; j++) {
+                sum += ans[j];
+                if (sign[i][j] == 0) {
+                    if (sum != 0) return false;
+                } else if (sign[i][j] > 0) {
+                    if (sum <= 0) return false;
+                } else if (sign[i][j] < 0) {
+                    if (sum >= 0) return false;
+                }
+            }
+        }
+        return true;
+    }
+    static boolean go(int index) {
+        if (index == n) {
+            return ok();
+        }
+        if (sign[index][index] == 0) {
+            ans[index] = 0;
+            return go(index+1);
+        }
+        for (int i=1; i<=10; i++) {
+            ans[index] = sign[index][index]*i;
+            if (go(index+1)) return true;
+        }
+        return false;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        ans = new int[n];
+        sign = new int[n][n];
+        String s = sc.next();
+        int cnt = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=i; j<n; j++) {
+                char x = s.charAt(cnt);
+                if (x == '0') {
+                    sign[i][j] = 0;
+                } else if (x == '+') {
+                    sign[i][j] = 1;
+                } else {
+                    sign[i][j] = -1;
+                }
+                cnt += 1;
+            }
+        }
+        go(0);
+        for (int i=0; i<n; i++) {
+            System.out.print(ans[i] + " ");
+        }
+        System.out.println();
+    }
+}
+
+3.
+import java.util.*;
+public class Main {
+    static int n;
+    static int[][] sign;
+    static int[] ans;
+    static boolean check(int index) {
+        int sum = 0;
+        for (int i=index; i>=0; i--) {
+            sum += ans[i];
+            if (sign[i][index] == 0) {
+                if (sum != 0) return false;
+            } else if (sign[i][index] < 0) {
+                if (sum >= 0) return false;
+            } else if (sign[i][index] > 0) {
+                if (sum <= 0) return false;
+            }
+        }
+        return true;
+    }
+    static boolean go(int index) {
+        if (index == n) {
+            return true;
+        }
+        if (sign[index][index] == 0) {
+            ans[index] = 0;
+            return check(index) && go(index+1);
+        }
+        for (int i=1; i<=10; i++) {
+            ans[index] = sign[index][index]*i;
+            if (check(index) && go(index+1)) return true;
+        }
+        return false;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        ans = new int[n];
+        sign = new int[n][n];
+        String s = sc.next();
+        int cnt = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=i; j<n; j++) {
+                char x = s.charAt(cnt);
+                if (x == '0') {
+                    sign[i][j] = 0;
+                } else if (x == '+') {
+                    sign[i][j] = 1;
+                } else {
+                    sign[i][j] = -1;
+                }
+                cnt += 1;
+            }
+        }
+        go(0);
+        for (int i=0; i<n; i++) {
+            System.out.print(ans[i] + " ");
+        }
+        System.out.println();
+    }
+}
+★#브루트포스 - 순열 #######################################################################################################################################
+10972번 - 다음 순열------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static boolean next_permutation(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] >= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] <= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = sc.nextInt();
+        }
+        if (next_permutation(a)) {
+            for (int i=0; i<n; i++) {
+                System.out.print(a[i] + " ");
+            }
+            System.out.println();
+        } else {
+            System.out.println("-1");
+        }
+    }
+}
+10973번 - 이전 순열------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static boolean prev_permutation(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] <= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] >= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = sc.nextInt();
+        }
+        if (prev_permutation(a)) {
+            for (int i=0; i<n; i++) {
+                System.out.print(a[i] + " ");
+            }
+            System.out.println();
+        } else {
+            System.out.println("-1");
+        }
+    }
+}
+10974번 - 모든 순열------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static boolean next_permutation(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] >= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] <= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = i+1;
+        }
+        do {
+            for (int i=0; i<n; i++) {
+                System.out.print(a[i] + " ");
+            }
+            System.out.println();
+        } while(next_permutation(a));
+    }
+}
+10819번 - 차이를 최대로------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static boolean next_permutation(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] >= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] <= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static int calculate(int a[]) {
+        int sum = 0;
+        for (int i=1; i<a.length; i++) {
+            sum += Math.abs(a[i] - a[i-1]);
+        }
+        return sum;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] a = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = sc.nextInt();
+        }
+        Arrays.sort(a);
+        int ans = 0;
+        do {
+            int temp = calculate(a);
+            ans = Math.max(ans, temp);
+        } while(next_permutation(a));
+
+        System.out.println(ans);
+    }
+}
+
+10971번 - 외판원 순회 2------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+
+public class Main {
+    public static boolean next_permutation(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] >= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] <= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] a = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        int[] d = new int[n];
+        for (int i=0; i<n; i++) {
+            d[i] = i;
+        }
+        int ans = Integer.MAX_VALUE;
+
+        do {
+            boolean ok = true;
+            int sum = 0;
+            for (int i=0; i<n-1; i++) {
+                if (a[d[i]][d[i+1]] == 0) {
+                    ok = false;
+                } else {
+                    sum += a[d[i]][d[i+1]];
+                }
+            }
+            if (ok && a[d[n-1]][d[0]] != 0) {
+                sum += a[d[n-1]][d[0]];
+                if (ans > sum) {
+                    ans = sum;
+                }
+            }
+        } while(next_permutation(d));
+
+        System.out.println(ans);
+    }
+}
+
+2.
+import java.util.*;
+
+public class Main {
+    public static boolean next_permutation(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] >= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] <= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] a = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        int[] d = new int[n];
+        for (int i=0; i<n; i++) {
+            d[i] = i;
+        }
+        int ans = Integer.MAX_VALUE;
+
+        do {
+            if (d[0] != 0) break;
+            boolean ok = true;
+            int sum = 0;
+            for (int i=0; i<n-1; i++) {
+                if (a[d[i]][d[i+1]] == 0) {
+                    ok = false;
+                } else {
+                    sum += a[d[i]][d[i+1]];
+                }
+            }
+            if (ok && a[d[n-1]][d[0]] != 0) {
+                sum += a[d[n-1]][d[0]];
+                if (ans > sum) {
+                    ans = sum;
+                }
+            }
+        } while(next_permutation(d));
+
+        System.out.println(ans);
+    }
+}
+6603번 - 로또------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static boolean next_permutgetion(int[] a) {
+        int i = a.length-1;
+        while (i > 0 && a[i-1] >= a[i]) {
+            i -= 1;
+        }
+
+        if (i <= 0) {
+            return false;
+        }
+
+        int j = a.length-1;
+        while (a[j] <= a[i-1]) {
+            j -= 1;
+        }
+
+        int temp = a[i-1];
+        a[i-1] = a[j];
+        a[j] = temp;
+
+        j = a.length-1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+            i += 1;
+            j -= 1;
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int n = sc.nextInt();
+            if (n == 0) break;
+            int[] a = new int[n];
+            for (int i=0; i<n; i++) {
+                a[i] = sc.nextInt();
+            }
+            int[] d = new int[n];
+            for (int i=0; i<n; i++) {
+                if (i < n-6) d[i] = 0;
+                else d[i] = 1;
+            }
+            ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+            do {
+                ArrayList<Integer> cur = new ArrayList<>();
+                for (int i=0; i<n; i++) {
+                    if (d[i] == 1) {
+                        cur.add(a[i]);
+                    }
+                }
+                ans.add(cur);
+            } while (next_permutgetion(d));
+            Collections.sort(ans, new Comparator<ArrayList<Integer>>() {
+                public int compare(ArrayList<Integer> l1, ArrayList<Integer> l2) {
+                    int n = l1.size();
+                    int m = l2.size();
+                    int i = 0;
+                    while (i < n && i < m) {
+                        int t1 = l1.get(i);
+                        int t2 = l2.get(i);
+                        if (t1 < t2) return -1;
+                        else if (t1 > t2) return 1;
+                        i += 1;
+                    }
+                    if (i == n && i != m) return -1;
+                    else if (i != n && i == m) return 1;
+                    return 0;
+                }
+            });
+            for (ArrayList<Integer> v : ans) {
+                for (int x : v) {
+                    System.out.print(x + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+    }
+}
+★#브루트포스 - 비트마스크 #######################################################################################################################################
+11723번 - 집합------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+import java.io.*;
+public class Main {
+    public static void main(String args[]) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        int n = 20;
+        int m = Integer.valueOf(bf.readLine());
+        int s = 0;
+        StringBuilder sb = new StringBuilder();
+        while (m-- > 0) {
+            String[] line = bf.readLine().split(" ");
+            if (line[0].equals("add")) {
+                int x = Integer.valueOf(line[1]) - 1; 
+                s = (s | (1 << x));
+            } else if (line[0].equals("remove")) {
+                int x = Integer.valueOf(line[1]) - 1; 
+                s = (s & ~(1<<x));
+            } else if (line[0].equals("check")) {
+                int x = Integer.valueOf(line[1]) - 1; 
+                int res = (s & (1 << x));
+                if (res == 0) {
+                    sb.append("0\n");
+                } else {
+                    sb.append("1\n");
+                }
+            } else if (line[0].equals("toggle")) {
+                int x = Integer.valueOf(line[1]) - 1; 
+                s = (s ^ (1 << x));
+            } else if (line[0].equals("all")) {
+                s = (1 << n) - 1;
+            } else if (line[0].equals("empty")) {
+                s = 0;
+            }
+        }
+        System.out.print(sb);
+    }
+}
+1182번 - 부분수열의 합------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int s = sc.nextInt();
+        int[] a = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = sc.nextInt();
+        }
+        int ans = 0;
+        for (int i=1; i<(1<<n); i++) {
+            int sum = 0;
+            for (int k=0; k<n; k++) {
+                if ((i&(1<<k)) != 0) {
+                    sum += a[k];
+                }
+            }
+            if (sum == s) {
+                ans += 1;
+            }
+        }
+        System.out.println(ans);
+    }
+}
+14889번 - 스타트와 링크------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] s = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                s[i][j] = sc.nextInt();
+            }
+        }
+        int ans = -1;
+        for (int i=0; i<(1<<n); i++) {
+            ArrayList<Integer> first = new ArrayList<>();
+            ArrayList<Integer> second = new ArrayList<>();
+            for (int j=0; j<n; j++) {
+                if ((i&(1<<j)) == 0) {
+                    first.add(j);
+                } else {
+                    second.add(j);
+                }
+            }
+            if (first.size() != n/2) continue;
+            int t1 = 0;
+            int t2 = 0;
+            for (int l1=0; l1<n/2; l1++) {
+                for (int l2=0; l2<n/2; l2++) {
+                    if (l1 == l2) continue;
+                    t1 += s[first.get(l1)][first.get(l2)];
+                    t2 += s[second.get(l1)][second.get(l2)];
+                }
+            }
+            int diff = Math.abs(t1-t2);
+            if (ans == -1 || ans > diff) {
+                ans = diff;
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+2.
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] s = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                s[i][j] = sc.nextInt();
+            }
+        }
+        int ans = -1;
+        for (int i=0; i<(1<<n); i++) {
+            int cnt = 0;
+            for (int j=0; j<n; j++) {
+                if ((i&(1<<j)) == 0) {
+                    cnt += 1;
+                }
+            }
+            if (cnt != n/2) continue;
+            ArrayList<Integer> first = new ArrayList<>();
+            ArrayList<Integer> second = new ArrayList<>();
+            for (int j=0; j<n; j++) {
+                if ((i&(1<<j)) == 0) {
+                    first.add(j);
+                } else {
+                    second.add(j);
+                }
+            }
+            int t1 = 0;
+            int t2 = 0;
+            for (int l1=0; l1<n/2; l1++) {
+                for (int l2=0; l2<n/2; l2++) {
+                    if (l1 == l2) continue;
+                    t1 += s[first.get(l1)][first.get(l2)];
+                    t2 += s[second.get(l1)][second.get(l2)];
+                }
+            }
+            int diff = Math.abs(t1-t2);
+            if (ans == -1 || ans > diff) {
+                ans = diff;
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+14391번 - 종이 조각------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] a = new int[n][m];
+        for (int i=0; i<n; i++) {
+            String s = sc.next();
+            for (int j=0; j<m; j++) {
+                a[i][j] = s.charAt(j)-'0';
+            }
+        }
+        int ans = 0;
+        // 0: -, 1 : |
+        for (int s=0; s<(1<<(n*m)); s++) {
+            int sum = 0;
+            for (int i=0; i<n; i++) {
+                int cur = 0;
+                for (int j=0; j<m; j++) {
+                    int k = i*m+j;
+                    if ((s&(1<<k)) == 0) {
+                        cur = cur * 10 + a[i][j];
+                    } else {
+                        sum += cur;
+                        cur = 0;
+                    }
+                }
+                sum += cur;
+            }
+            for (int j=0; j<m; j++) {
+                int cur = 0;
+                for (int i=0; i<n; i++) {
+                    int k = i*m+j;
+                    if ((s&(1<<k)) != 0) {
+                        cur = cur * 10 + a[i][j];
+                    } else {
+                        sum += cur;
+                        cur = 0;
+                    }
+                }
+                sum += cur;
+            }
+            ans = Math.max(ans,sum);
+        }
+        System.out.println(ans);
+    }
+}
+
+★#그래프1 ##########################################################################################################################################
+13023번 - ABCDE------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Edge {
+    int from, to;
+    Edge(int from, int to) {
+        this.from = from;
+        this.to = to;
+    }
+}
+public class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        boolean[][] a = new boolean[n][n];
+        ArrayList<Integer>[] g = (ArrayList<Integer>[]) new ArrayList[n];
+        ArrayList<Edge> edges = new ArrayList<Edge>();
+        for (int i=0; i<n; i++) {
+            g[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<m; i++) {
+            int from = sc.nextInt();
+            int to = sc.nextInt();
+            edges.add(new Edge(from, to));
+            edges.add(new Edge(to, from));
+            a[from][to] = a[to][from] = true;
+            g[from].add(to);
+            g[to].add(from);
+        }
+        m *= 2;
+        for  (int i=0; i<m; i++) {
+            for (int j=0; j<m; j++) {
+                int A = edges.get(i).from;
+                int B = edges.get(i).to;
+                int C = edges.get(j).from;
+                int D = edges.get(j).to;
+                if (A == B || A == C || A == D || B == C || B == D || C == D) {
+                    continue;
+                }
+                if (!a[B][C]) continue;
+                for (int E : g[D]) {
+                    if (A == E || B == E || C == E || D == E) {
+                        continue;
+                    }
+                    System.out.println(1);
+                    System.exit(0);
+                }
+            }
+        }
+        System.out.println(0);
+    }
+}
+1260번 - DFS와 BFS------------------------------------------------------------------------------------------------------------------------------------
+1. 인접리스트 소스
+import java.util.*;
+
+public class Main {
+    static ArrayList<Integer>[] a;
+    static boolean[] c;
+    public static void dfs(int x) {
+        if (c[x]) {
+            return;
+        }
+        c[x] = true;
+        System.out.print(x + " ");
+        for (int y : a[x]) {
+            if (c[y] == false) {
+                dfs(y);
+            }
+        }
+    }
+    public static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(start);
+        c[start] = true;
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            System.out.print(x + " ");
+            for (int y : a[x]) {
+                if (c[y] == false) {
+                    c[y] = true;
+                    q.add(y);
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int start = sc.nextInt();
+        a = (ArrayList<Integer>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<m; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            a[u].add(v);
+            a[v].add(u);
+        }
+        for (int i=1; i<=n; i++) {
+            Collections.sort(a[i]);
+        }
+        c = new boolean[n+1];
+        dfs(start);
+        System.out.println();
+        c = new boolean[n+1];
+        bfs(start);
+        System.out.println();
+    }
+}
+
+2. 간선리스트 소스
+import java.util.*;
+class Edge implements Comparable<Edge> {
+    int from, to;
+    Edge(int from, int to) {
+        this.from = from;
+        this.to = to;
+    }
+    public int compareTo(Edge that) {
+        if (this.from < that.from) {
+            return -1;
+        } else if (this.from == that.from) {
+            if (this.to < that.to) {
+                return -1;
+            } else if (this.to == that.to) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+    }
+}
+public class Main {
+    static Edge[] edge;
+    static int[] cnt;
+    static boolean[] check;
+    static void dfs(int node) {
+        check[node] = true;
+        System.out.print(node + " ");
+        for (int i=cnt[node-1]; i<cnt[node]; i++) {
+            int next = edge[i].to;
+            if (check[next] == false) {
+                dfs(next);
+            }
+        }
+    }
+    static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        check[start] = true;
+        while (!q.isEmpty()) {
+            int node = q.remove();
+            System.out.print(node + " ");
+            for (int i=cnt[node-1]; i<cnt[node]; i++) {
+                int next = edge[i].to;
+                if (check[next] == false) {
+                    check[next] = true;
+                    q.add(next);
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int start = sc.nextInt();
+        edge = new Edge[2*m];
+        cnt = new int[n+1];
+        check = new boolean[n+1];
+        for (int i=0; i<m; i++) {
+            int from = sc.nextInt();
+            int to = sc.nextInt();
+            edge[i] = new Edge(from, to);
+            edge[m+i] = new Edge(to, from);
+        }
+        m *= 2;
+        Arrays.sort(edge);
+        for (int i=0; i<m; i++) {
+            cnt[edge[i].from] += 1;
+        }
+        for (int i=1; i<=n; i++) {
+            cnt[i] += cnt[i-1];
+        }
+        dfs(start);
+        System.out.println();
+        check = new boolean[n+1];
+        bfs(start);
+        System.out.println();
+    }
+}
+
+3. 비재귀 구현 소스
+import java.util.*;
+class Pair {
+    int first, second;
+    Pair(int first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+public class Main {
+    static ArrayList<Integer>[] a;
+    static boolean[] c;
+    public static void dfs(int x) {
+        Stack<Pair> s = new Stack<>();
+        s.add(new Pair(x, 0));
+        c[x] = true;
+        System.out.print(x + " ");
+        while (!s.isEmpty()) {
+            Pair p = s.pop();
+            int node = p.first;
+            int start = p.second;
+            for (int i=start; i<a[node].size(); i++) {
+                int next = a[node].get(i);
+                if (c[next] == false) {
+                    System.out.print(next + " ");
+                    c[next] = true;
+                    s.add(new Pair(node, i+1));
+                    s.add(new Pair(next, 0));
+                    break;
+                }
+            }
+        }
+    }
+    public static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(start);
+        c[start] = true;
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            System.out.print(x + " ");
+            for (int y : a[x]) {
+                if (c[y] == false) {
+                    c[y] = true;
+                    q.add(y);
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int start = sc.nextInt();
+        a = (ArrayList<Integer>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<m; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            a[u].add(v);
+            a[v].add(u);
+        }
+        for (int i=1; i<=n; i++) {
+            Collections.sort(a[i]);
+        }
+        c = new boolean[n+1];
+        dfs(start);
+        System.out.println();
+        c = new boolean[n+1];
+        bfs(start);
+        System.out.println();
+    }
+}
+
+4. 비재귀 구현 소스2
+import java.util.*;
+
+public class Main {
+    static ArrayList<Integer>[] a;
+    static boolean[] c;
+    public static void dfs(int x, int n) {
+        int[] start = new int[n+1];
+        Stack<Integer> s = new Stack<>();
+        s.add(x);
+        c[x] = true;
+        System.out.print(x + " ");
+        while (!s.isEmpty()) {
+            int node = s.pop();
+            for (; start[node]<a[node].size(); start[node]++) {
+                int next = a[node].get(start[node]);
+                if (c[next] == false) {
+                    System.out.print(next + " ");
+                    c[next] = true;
+                    s.add(node);
+                    s.add(next);
+                    break;
+                }
+            }
+        }
+    }
+    public static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(start);
+        c[start] = true;
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            System.out.print(x + " ");
+            for (int y : a[x]) {
+                if (c[y] == false) {
+                    c[y] = true;
+                    q.add(y);
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int start = sc.nextInt();
+        a = (ArrayList<Integer>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<m; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            a[u].add(v);
+            a[v].add(u);
+        }
+        for (int i=1; i<=n; i++) {
+            Collections.sort(a[i]);
+        }
+        c = new boolean[n+1];
+        dfs(start, n);
+        System.out.println();
+        c = new boolean[n+1];
+        bfs(start);
+        System.out.println();
+    }
+}
+11724번 - 연결 요소의 개수------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static void dfs(ArrayList<Integer>[] a, boolean[] c, int x) {
+        if (c[x]) {
+            return;
+        }
+        c[x] = true;
+        for (int y : a[x]) {
+            if (c[y] == false) {
+                dfs(a, c, y);
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        ArrayList<Integer>[] a = (ArrayList<Integer>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<m; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            a[u].add(v);
+            a[v].add(u);
+        }
+        boolean[] check = new boolean[n+1];
+        int ans = 0;
+        for (int i=1; i<=n; i++) {
+            if (check[i] == false) {
+                dfs(a, check, i);
+                ans += 1;
+            }
+        }
+        System.out.println(ans);
+                
+
+    }
+}
+1707번 - 이분 그래프------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+
+public class Main {
+    public static void dfs(ArrayList<Integer>[] a, int[] color, int x, int c) {
+        color[x] = c;
+        for (int y : a[x]) {
+            if (color[y] == 0) {
+                dfs(a, color, y, 3-c);
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+            ArrayList<Integer>[] a = (ArrayList<Integer>[]) new ArrayList[n+1];
+            for (int i=1; i<=n; i++) {
+                a[i] = new ArrayList<Integer>();
+            }
+            for (int i=0; i<m; i++) {
+                int u = sc.nextInt();
+                int v = sc.nextInt();
+                a[u].add(v);
+                a[v].add(u);
+            }
+            int[] color = new int[n+1];
+            boolean ok = true;
+            for (int i=1; i<=n; i++) {
+                if (color[i] == 0) {
+                    dfs(a, color, i, 1);
+                }
+            }
+            for (int i=1; i<=n; i++) {
+                for (int j : a[i]) {
+                    if (color[i] == color[j]) {
+                        ok = false;
+                    }
+                }
+            }
+            if (ok) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
+        }
+
+    }
+}
+
+2.
+import java.util.*;
+
+public class Main {
+    public static boolean dfs(ArrayList<Integer>[] a, int[] color, int x, int c) {
+        color[x] = c;
+        for (int y : a[x]) {
+            if (color[y] == 0) {
+                if (dfs(a, color, y, 3-c) == false) {
+                    return false;
+                }
+            } else if (color[y] == color[x]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+            ArrayList<Integer>[] a = (ArrayList<Integer>[]) new ArrayList[n+1];
+            for (int i=1; i<=n; i++) {
+                a[i] = new ArrayList<Integer>();
+            }
+            for (int i=0; i<m; i++) {
+                int u = sc.nextInt();
+                int v = sc.nextInt();
+                a[u].add(v);
+                a[v].add(u);
+            }
+            int[] color = new int[n+1];
+            boolean ok = true;
+            for (int i=1; i<=n; i++) {
+                if (color[i] == 0) {
+                    if (dfs(a, color, i, 1) == false) {
+                        ok = false;
+                    }
+                }
+            }
+            if (ok) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
+            }
+        }
+
+    }
+}
+2667번 - 단지번호붙이기------------------------------------------------------------------------------------------------------------------------------------
+1. BFS 소스
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
+    public static void bfs(int[][] a, int[][] group, int x, int y, int cnt, int n) {
+        Queue<Pair> q = new LinkedList<Pair>();
+        q.add(new Pair(x, y));
+        group[x][y] = cnt;
+        while (!q.isEmpty()) {
+            Pair p = q.remove();
+            x = p.x;
+            y = p.y;
+            for (int k=0; k<4; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                    if (a[nx][ny] == 1 && group[nx][ny] == 0) {
+                        q.add(new Pair(nx, ny));
+                        group[nx][ny] = cnt;
+                    }
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        int[][] a = new int[n][n];
+        for (int i=0; i<n; i++) {
+            String s = sc.nextLine();
+            for (int j=0; j<n; j++) {
+                a[i][j] = s.charAt(j) - '0';
+            }
+        }
+        int cnt = 0;
+        int[][] group = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (a[i][j] == 1 && group[i][j] == 0) {
+                    bfs(a, group, i, j, ++cnt, n);
+                }
+            }
+        }
+        int[] ans = new int[cnt];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (group[i][j] != 0) {
+                    ans[group[i][j]-1]+=1;
+                }
+            }
+        }
+        Arrays.sort(ans);
+        System.out.println(cnt);
+        for (int i=0; i<cnt; i++) {
+            System.out.println(ans[i]);
+        }
+    }
+}
+
+2. DFS 소스
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
+    public static void dfs(int[][] a, int[][] group, int x, int y, int cnt, int n) {
+        group[x][y] = cnt;
+        for (int k=0; k<4; k++) {
+            int nx = x+dx[k];
+            int ny = y+dy[k];
+            if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                if (a[nx][ny] == 1 && group[nx][ny] == 0) {
+                    dfs(a, group, nx, ny, cnt, n);
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.nextLine();
+        int[][] a = new int[n][n];
+        for (int i=0; i<n; i++) {
+            String s = sc.nextLine();
+            for (int j=0; j<n; j++) {
+                a[i][j] = s.charAt(j) - '0';
+            }
+        }
+        int cnt = 0;
+        int[][] group = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (a[i][j] == 1 && group[i][j] == 0) {
+                    dfs(a, group, i, j, ++cnt, n);
+                }
+            }
+        }
+        int[] ans = new int[cnt];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (group[i][j] != 0) {
+                    ans[group[i][j]-1]+=1;
+                }
+            }
+        }
+        Arrays.sort(ans);
+        System.out.println(cnt);
+        for (int i=0; i<cnt; i++) {
+            System.out.println(ans[i]);
+        }
+    }
+}
+
+4963번 - 섬의 개수------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1, 1, 1, -1, -1};
+    public static final int[] dy = {1, -1, 0, 0, 1, -1, 1, -1};
+    public static void bfs(int[][] a, int[][] group, int x, int y, int cnt, int n, int m) {
+        Queue<Pair> q = new LinkedList<Pair>();
+        q.add(new Pair(x, y));
+        group[x][y] = cnt;
+        while (!q.isEmpty()) {
+            Pair p = q.remove();
+            x = p.x;
+            y = p.y;
+            for (int k=0; k<8; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    if (a[nx][ny] == 1 && group[nx][ny] == 0) {
+                        q.add(new Pair(nx, ny));
+                        group[nx][ny] = cnt;
+                    }
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int m = sc.nextInt();
+            int n = sc.nextInt();
+            if (n == 0 && m == 0) {
+                break;
+            }
+            int[][] a = new int[n][m];
+            for (int i=0; i<n; i++) {
+                for (int j=0; j<m; j++) {
+                    a[i][j] = sc.nextInt();
+                }
+            }
+            int cnt = 0;
+            int[][] group = new int[n][m];
+            for (int i=0; i<n; i++) {
+                for (int j=0; j<m; j++) {
+                    if (a[i][j] == 1 && group[i][j] == 0) {
+                        bfs(a, group, i, j, ++cnt, n, m);
+                    }
+                }
+            }
+            System.out.println(cnt);
+        }
+    }
+}
+
+2178번 - 미로 탐색------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int[][] a = new int[n][m];
+        sc.nextLine();
+        for (int i=0; i<n; i++) {
+            String s = sc.nextLine();
+            for (int j=0; j<m; j++) {
+                a[i][j] = s.charAt(j) - '0';
+            }
+        }
+        int[][] dist = new int[n][m];
+        boolean[][] check = new boolean[n][m];
+        Queue<Pair> q = new LinkedList<Pair>();
+        q.add(new Pair(0, 0));
+        check[0][0] = true;
+        dist[0][0] = 1;
+        while (!q.isEmpty()) {
+            Pair p = q.remove();
+            int x = p.x;
+            int y = p.y;
+            for (int k=0; k<4; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    if (check[nx][ny] == false && a[nx][ny] == 1) {
+                        q.add(new Pair(nx, ny));
+                        dist[nx][ny] = dist[x][y] + 1;
+                        check[nx][ny] = true;
+                    }
+                }
+            }
+        }
+        System.out.println(dist[n-1][m-1]);
+    }
+}
+
+7576번 - 토마토------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        int[][] a = new int[n][m];
+        int[][] dist = new int[n][m];
+        Queue<Pair> q = new LinkedList<Pair>();
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                a[i][j] = sc.nextInt();
+                dist[i][j] = -1;
+                if (a[i][j] == 1) {
+                    q.add(new Pair(i, j));
+                    dist[i][j] = 0;
+                }
+            }
+        }
+        while (!q.isEmpty()) {
+            Pair p = q.remove();
+            int x = p.x;
+            int y = p.y;
+            for (int k=0; k<4; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    if (a[nx][ny] == 0 && dist[nx][ny] == -1) {
+                        q.add(new Pair(nx, ny));
+                        dist[nx][ny] = dist[x][y] + 1;
+                    }
+                }
+            }
+        }
+        int ans = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                if (ans < dist[i][j]) {
+                    ans = dist[i][j];
+                }
+            }
+        }
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                if (a[i][j] == 0 && dist[i][j] == -1) {
+                    ans = -1;
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+7562번 - 나이트의 이동------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static final int[] dx = {-2,-1,1,2,2,1,-1,-2};
+    static final int[] dy = {1,2,2,1,-1,-2,-2,-1};
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int sx = sc.nextInt();
+            int sy = sc.nextInt();
+            int ex = sc.nextInt();
+            int ey = sc.nextInt();
+            int[][] d = new int[n][n];
+            for (int i=0; i<n; i++) {
+                Arrays.fill(d[i],-1);
+            }
+            Queue<Integer> q = new LinkedList<>();
+            q.add(sx); q.add(sy);
+            d[sx][sy] = 0;
+            while (!q.isEmpty()) {
+                int x = q.remove();
+                int y = q.remove();
+                for (int k=0; k<8; k++) {
+                    int nx = x+dx[k];
+                    int ny = y+dy[k];
+                    if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                        if (d[nx][ny] == -1) {
+                            d[nx][ny] = d[x][y] + 1;
+                            q.add(nx); q.add(ny);
+                        }
+                    }
+                }
+            }
+            System.out.println(d[ex][ey]);
+        }
+    }
+}
+
+★#그래프1(연습) #######################################################################################################################################
+- 16929 : Two Dots------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static char[][] a;
+    static boolean[][] check;
+    static int n, m;
+    final static int[] dx = {0,0,1,-1};
+    final static int[] dy = {1,-1,0,0};
+    static boolean go(int x, int y, int px, int py, char color) {
+        if (check[x][y]) {
+            return true;
+        }
+        check[x][y] = true;
+        for (int k=0; k<4; k++) {
+            int nx = x+dx[k];
+            int ny = y+dy[k];
+            if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                if (!(nx == px && ny == py)) {
+                    if (a[nx][ny] == color) {
+                        if (go(nx, ny, x, y, color)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        m = sc.nextInt();
+        a = new char[n][m];
+        check = new boolean[n][m];
+        for (int i=0; i<n; i++) {
+            a[i] = sc.next().toCharArray();
+        }
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                if (check[i][j]) continue;
+                boolean ok = go(i, j, -1, -1, a[i][j]);
+                if (ok) {
+                    System.out.println("Yes");
+                    System.exit(0);
+                }
+            }
+        }
+        System.out.println("No");
+    }
+}
+
+- 16947 : 서울지하철 2호선------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    static ArrayList<Integer>[] a;
+    static int[] check;
+    static int[] dist;
+    static int go(int x, int p) {
+        // -2: found cycle and not included
+        // -1: not found cycle
+        // 0~n-1: found cycle and start index
+        if (check[x] == 1) {
+            return x;
+        }
+        check[x] = 1;
+        for (int y : a[x]) {
+            if (y == p) continue;
+            int res = go(y, x);
+            if (res == -2) return -2;
+            if (res >= 0) {
+                check[x] = 2;
+                if (x == res) return -2;
+                else return res;
+            }
+        }
+        return -1;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        a = new ArrayList[n];
+        dist = new int[n];
+        check = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = new ArrayList<>();
+        }
+        for (int i=0; i<n; i++) {
+            int u = sc.nextInt()-1;
+            int v = sc.nextInt()-1;
+            a[u].add(v);
+            a[v].add(u);
+        }
+        go(0, -1);
+        Queue<Integer> q = new LinkedList<>();
+        for (int i=0; i<n; i++) {
+            if (check[i] == 2) {
+                dist[i] = 0;
+                q.add(i);
+            } else {
+                dist[i] = -1;
+            }
+        }
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            for (int y : a[x]) {
+                if (dist[y] == -1) {
+                    q.add(y);
+                    dist[y] = dist[x]+1;
+                }
+            }
+        }
+        for (int i=0; i<n; i++) {
+            System.out.print(dist[i] + " ");
+        }
+        System.out.println();
+    }
+}
+
+★#그래프1(도전) ##############################################################################################################################################
+16940번 : BFS 스페셜 저지------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ArrayList<Integer>[] a = new ArrayList[n];
+        int[] b = new int[n];
+        int[] order = new int[n];
+        boolean[] check = new boolean[n];
+        for (int i=0; i<n; i++) {
+            a[i] = new ArrayList<>();
+        }
+        for (int i=0; i<n-1; i++) {
+            int u = sc.nextInt()-1;
+            int v = sc.nextInt()-1;
+            a[u].add(v);
+            a[v].add(u);
+        }
+        for (int i=0; i<n; i++) {
+            b[i] = sc.nextInt()-1;
+            order[b[i]] = i;
+        }
+        for (int i=0; i<n; i++) {
+            Collections.sort(a[i], new Comparator<Integer>() {
+                public int compare(Integer u, Integer v) {
+                    if (order[u] < order[v]) {
+                        return -1;
+                    } else if (order[u] == order[v]) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
+        }
+        Queue<Integer> q = new LinkedList<>();
+        q.add(0);
+        check[0] = true;
+        ArrayList<Integer> bfs_order = new ArrayList<>();
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            bfs_order.add(x);
+            for (int y : a[x]) {
+                if (check[y] == false) {
+                    check[y] = true;
+                    q.add(y);
+                }
+            }
+        }
+        boolean ok = true;
+        for (int i=0; i<n; i++) {
+            if (bfs_order.get(i) != b[i]) {
+                ok = false;
+            }
+        }
+        if (ok) {
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------
+16964번 - DFS 스페셜 저지
+import java.util.*;
+public class Main {
+    static ArrayList<Integer>[] a;
+    static ArrayList<Integer> dfs_order = new ArrayList<>();
+    static boolean[] check;
+    static void dfs(int x) {
+        if (check[x]) return;
+        dfs_order.add(x);
+        check[x] = true;
+        for (int y : a[x]) {
+            dfs(y);
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        a = new ArrayList[n];
+        check = new boolean[n];
+        int[] b = new int[n];
+        int[] order = new int[n];
+        for (int i=0; i<n; i++) {
+            a[i] = new ArrayList<>();
+        }
+        for (int i=0; i<n-1; i++) {
+            int u = sc.nextInt()-1;
+            int v = sc.nextInt()-1;
+            a[u].add(v);
+            a[v].add(u);
+        }
+        for (int i=0; i<n; i++) {
+            b[i] = sc.nextInt()-1;
+            order[b[i]] = i;
+        }
+        for (int i=0; i<n; i++) {
+            Collections.sort(a[i], new Comparator<Integer>() {
+                public int compare(Integer u, Integer v) {
+                    if (order[u] < order[v]) {
+                        return -1;
+                    } else if (order[u] == order[v]) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
+        }
+        dfs(0);
+        boolean ok = true;
+        for (int i=0; i<n; i++) {
+            if (dfs_order.get(i) != b[i]) {
+                ok = false;
+            }
+        }
+        if (ok) {
+            System.out.println(1);
+        } else {
+            System.out.println(0);
+        }
+    }
+}
+2146번 - 다리 만들기------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] a = new int[n][n];
+        int[][] d = new int[n][n];
+        int[][] g = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        int cnt = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (a[i][j] == 1 && g[i][j] == 0) {
+                    Queue<Pair> q = new LinkedList<Pair>();
+                    g[i][j] = ++cnt;
+                    q.add(new Pair(i, j));
+                    while (!q.isEmpty()) {
+                        Pair p = q.remove();
+                        int x = p.x;
+                        int y = p.y;
+                        for (int k=0; k<4; k++) {
+                            int nx = x+dx[k];
+                            int ny = y+dy[k];
+                            if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                                if (a[nx][ny] == 1 && g[nx][ny] == 0) {
+                                    q.add(new Pair(nx, ny));
+                                    g[nx][ny] = cnt;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        int ans = -1;
+        for (int l=1; l<=cnt; l++) {
+            Queue<Pair> q = new LinkedList<Pair>();
+            for (int i=0; i<n; i++) {
+                for (int j=0; j<n; j++) {
+                    d[i][j] = -1;
+                    if (g[i][j] == l) {
+                        q.add(new Pair(i,j));
+                        d[i][j] = 0;
+                    }
+                }
+            }
+            while (!q.isEmpty()) {
+                Pair p = q.remove();
+                int x = p.x;
+                int y = p.y;
+                for (int k=0; k<4; k++) {
+                    int nx = x+dx[k];
+                    int ny = y+dy[k];
+                    if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                        if (d[nx][ny] == -1) {
+                            d[nx][ny] = d[x][y] + 1;
+                            q.add(new Pair(nx,ny));
+                        }
+                    }
+                }
+            }
+            for (int i=0; i<n; i++) {
+                for (int j=0; j<n; j++) {
+                    if (a[i][j] == 1 && g[i][j] != l) {
+                        if (ans == -1 || d[i][j]-1 < ans) {
+                            ans = d[i][j]-1;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+2. 좀 더 빠른 방법
+import java.util.*;
+
+class Pair {
+    int x;
+    int y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class Main {
+    public static final int[] dx = {0, 0, 1, -1};
+    public static final int[] dy = {1, -1, 0, 0};
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] a = new int[n][n];
+        int[][] d = new int[n][n];
+        int[][] g = new int[n][n];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                a[i][j] = sc.nextInt();
+            }
+        }
+        int cnt = 0;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                if (a[i][j] == 1 && g[i][j] == 0) {
+                    Queue<Pair> q = new LinkedList<Pair>();
+                    g[i][j] = ++cnt;
+                    q.add(new Pair(i, j));
+                    while (!q.isEmpty()) {
+                        Pair p = q.remove();
+                        int x = p.x;
+                        int y = p.y;
+                        for (int k=0; k<4; k++) {
+                            int nx = x+dx[k];
+                            int ny = y+dy[k];
+                            if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                                if (a[nx][ny] == 1 && g[nx][ny] == 0) {
+                                    q.add(new Pair(nx, ny));
+                                    g[nx][ny] = cnt;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Queue<Pair> q = new LinkedList<Pair>();
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                d[i][j] = -1;
+                if (a[i][j] == 1) {
+                    q.add(new Pair(i,j));
+                    d[i][j] = 0;
+                }
+            }
+        }
+        while (!q.isEmpty()) {
+            Pair p = q.remove();
+            int x = p.x;
+            int y = p.y;
+            for (int k=0; k<4; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < n) {
+                    if (d[nx][ny] == -1) {
+                        d[nx][ny] = d[x][y] + 1;
+                        g[nx][ny] = g[x][y];
+                        q.add(new Pair(nx,ny));
+                    }
+                }
+            }
+        }
+        int ans = -1;
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<n; j++) {
+                for (int k=0; k<4; k++) {
+                    int x = i+dx[k];
+                    int y = j+dy[k];
+                    if (0 <= x && x < n && 0 <= y && y < n) {
+                        if (g[i][j] != g[x][y]) {
+                            if (ans == -1 || ans > d[i][j] + d[x][y]) {
+                                ans = d[i][j] + d[x][y];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+★#BFS ################################################################################################################################################
+1697번 : 숨바꼭질------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static final int MAX = 1000000;
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        boolean[] check = new boolean[MAX];
+        int[] dist = new int[MAX];
+        check[n] = true;
+        dist[n] = 0;
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(n);
+        while (!q.isEmpty()) {
+            int now = q.remove();
+            if (now-1 >= 0) {
+                if (check[now-1] == false) {
+                    q.add(now-1);
+                    check[now-1] = true;
+                    dist[now-1] = dist[now] + 1;
+                }
+            }
+            if (now+1 < MAX) {
+                if (check[now+1] == false) {
+                    q.add(now+1);
+                    check[now+1] = true;
+                    dist[now+1] = dist[now] + 1;
+                }
+            }
+            if (now*2 < MAX) {
+                if (check[now*2] == false) {
+                    q.add(now*2);
+                    check[now*2] = true;
+                    dist[now*2] = dist[now] + 1;
+                }
+            }
+        }
+        System.out.println(dist[m]);
+    }
+}
+13913번 - 숨바꼭질 4------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static final int MAX = 1000000;
+    static void print(int[] from, int n, int m) {
+        if (n != m) {
+            print(from, n, from[m]);
+        }
+        System.out.print(m + " ");
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        boolean[] check = new boolean[MAX];
+        int[] dist = new int[MAX];
+        int[] from = new int[MAX];
+        check[n] = true;
+        dist[n] = 0;
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(n);
+        while (!q.isEmpty()) {
+            int now = q.remove();
+            if (now-1 >= 0) {
+                if (check[now-1] == false) {
+                    q.add(now-1);
+                    check[now-1] = true;
+                    dist[now-1] = dist[now] + 1;
+                    from[now-1] = now;
+                }
+            }
+            if (now+1 < MAX) {
+                if (check[now+1] == false) {
+                    q.add(now+1);
+                    check[now+1] = true;
+                    dist[now+1] = dist[now] + 1;
+                    from[now+1] = now;
+                }
+            }
+            if (now*2 < MAX) {
+                if (check[now*2] == false) {
+                    q.add(now*2);
+                    check[now*2] = true;
+                    dist[now*2] = dist[now] + 1;
+                    from[now*2] = now;
+                }
+            }
+        }
+        System.out.println(dist[m]);
+        print(from, n, m);
+        /* print with stack
+        Stack<Integer> ans = new Stack<>();
+        for (int i=m; i!=n; i=from[i]) {
+            ans.push(i);
+        }
+        ans.push(n);
+        while (!ans.isEmpty()) {
+            System.out.print(ans.pop() + " ");
+        }
+        */
+        System.out.println();
+    }
+}
+
+14226번 - 이모티콘------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[][] d = new int[n+1][n+1];
+        for (int i=0; i<=n; i++) {
+            Arrays.fill(d[i], -1);
+        }
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(1);
+        q.add(0);
+        d[1][0] = 0;
+        while (!q.isEmpty()) {
+            int s = q.remove();
+            int c = q.remove();
+            if (d[s][s] == -1) {
+                d[s][s] = d[s][c] + 1;
+                q.add(s); q.add(s);
+            }
+            if (s+c <= n && d[s+c][c] == -1) {
+                d[s+c][c] = d[s][c] + 1;
+                q.add(s+c); q.add(c);
+            }
+            if (s-1 >= 0 && d[s-1][c] == -1) {
+                d[s-1][c] = d[s][c] + 1;
+                q.add(s-1); q.add(c);
+            }
+        }
+        int ans = -1;
+        for (int i=0; i<=n; i++) {
+            if (d[n][i] != -1) {
+                if (ans == -1 || ans > d[n][i]) {
+                    ans = d[n][i];
+                }
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+13549번 - 숨바꼭질 3------------------------------------------------------------------------------------------------------------------------------------
+1. 큐 소스
+import java.util.*;
+
+public class Main {
+    public static final int MAX = 1000000;
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        boolean[] c = new boolean[MAX];
+        int[] d = new int[MAX];
+        c[n] = true;
+        d[n] = 0;
+        Queue<Integer> q = new LinkedList<Integer>();
+        Queue<Integer> next_queue = new LinkedList<Integer>();
+        q.add(n);
+        while (!q.isEmpty()) {
+            int now = q.remove();
+            for (int next : new int[]{now*2, now-1, now+1}) {
+                if (next >= 0 && next < MAX) {
+                    if (c[next] == false) {
+                        c[next] = true;
+                        if (now*2 == next) {
+                            q.add(next);
+                            d[next] = d[now];
+                        } else {
+                            next_queue.add(next);
+                            d[next] = d[now] + 1;
+                        }                    
+                    }
+                }  
+            }
+            if (q.isEmpty()) {
+                q = next_queue;
+                next_queue = new LinkedList<Integer>();
+            }
+        }
+        System.out.println(d[m]);
+    }
+}
+2. 덱 소스
+import java.util.*;
+
+public class Main {
+    public static final int MAX = 1000000;
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        boolean[] c = new boolean[MAX];
+        int[] d = new int[MAX];
+        c[n] = true;
+        d[n] = 0;
+        ArrayDeque<Integer> q = new ArrayDeque<Integer>();
+        q.add(n);
+        while (!q.isEmpty()) {
+            int now = q.poll();
+            for (int next : new int[]{now*2, now-1, now+1}) {
+                if (next >= 0 && next < MAX) {
+                    if (c[next] == false) {
+                        c[next] = true;
+                        if (next == now*2) {
+                            q.addFirst(next);
+                            d[next] = d[now];
+                        } else {
+                            q.addLast(next);
+                            d[next] = d[now] + 1;
+                        }
+                    }
+                }  
+            }
+        }
+        System.out.println(d[m]);
+    }
+}
+1261번 - 알고스팟------------------------------------------------------------------------------------------------------------------------------------
+1.
+import java.util.*;
+class Pair {
+    int x, y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        sc.nextLine();
+        int[][] a = new int[n][m];
+        for (int i=0; i<n; i++) {
+            String s = sc.nextLine();
+            for (int j=0; j<m; j++) {
+                a[i][j] = s.charAt(j) - '0';
+            }
+        }
+        int[] dx = {0,0,1,-1};
+        int[] dy = {1,-1,0,0};
+        int[][] d = new int [n][m];
+        Queue<Pair> q = new LinkedList<Pair>();
+        Queue<Pair> next_queue = new LinkedList<Pair>();
+        q.offer(new Pair(0, 0));
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                d[i][j] = -1;
+            }
+        }
+        d[0][0] = 0;
+        while (!q.isEmpty()) {
+            Pair p = q.remove();
+            int x = p.x;
+            int y = p.y;
+            for (int k=0; k<4; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    if (d[nx][ny] == -1) {
+                        if (a[nx][ny] == 0) {
+                            d[nx][ny] = d[x][y];
+                            q.offer(new Pair(nx, ny));
+                        } else {
+                            d[nx][ny] = d[x][y]+1;
+                            next_queue.offer(new Pair(nx, ny));
+                        }
+                    }
+                }
+            }
+            if (q.isEmpty()) {
+                q = next_queue;
+                next_queue = new LinkedList<Pair>();
+            }
+        }
+        System.out.println(d[n-1][m-1]);
+    }
+}
+
+2. 덱 사용
+import java.util.*;
+class Pair {
+    int x, y;
+    Pair(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();
+        sc.nextLine();
+        int[][] a = new int[n][m];
+        for (int i=0; i<n; i++) {
+            String s = sc.nextLine();
+            for (int j=0; j<m; j++) {
+                a[i][j] = s.charAt(j) - '0';
+            }
+        }
+        int[] dx = {0,0,1,-1};
+        int[] dy = {1,-1,0,0};
+        int[][] d = new int [n][m];
+        ArrayDeque<Pair> deque = new ArrayDeque<Pair>();
+        deque.add(new Pair(0, 0));
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                d[i][j] = -1;
+            }
+        }
+        d[0][0] = 0;
+        while (!deque.isEmpty()) {
+            Pair p = deque.poll();
+            int x = p.x;
+            int y = p.y;
+            for (int k=0; k<4; k++) {
+                int nx = x+dx[k];
+                int ny = y+dy[k];
+                if (0 <= nx && nx < n && 0 <= ny && ny < m) {
+                    if (d[nx][ny] == -1) {
+                        if (a[nx][ny] == 0) {
+                            d[nx][ny] = d[x][y];
+                            deque.addFirst(new Pair(nx, ny));
+                        } else {
+                            d[nx][ny] = d[x][y]+1;
+                            deque.addLast(new Pair(nx, ny));
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(d[n-1][m-1]);
+    }
+}
+
+★# 트리 1 ############################################################################################################################################
+1991번 - 트리 순회------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Node {
+    int left, right;
+    Node(int left, int right) {
+        this.left = left;
+        this.right = right;
+    }
+}
+public class Main {
+    static void preorder(Node[] a, int x) {
+        if (x == -1) return;
+        System.out.print((char)(x+'A'));
+        preorder(a,a[x].left);
+        preorder(a,a[x].right);
+    }
+    static void inorder(Node[] a, int x) {
+        if (x == -1) return;
+        inorder(a,a[x].left);
+        System.out.print((char)(x+'A'));
+        inorder(a,a[x].right);
+    }
+    static void postorder(Node[] a, int x) {
+        if (x == -1) return;
+        postorder(a,a[x].left);
+        postorder(a,a[x].right);
+        System.out.print((char)(x+'A'));
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        Node[] a = new Node[26];
+        for (int i=0; i<n; i++) {
+            int x = sc.next().charAt(0) - 'A';
+            char y = sc.next().charAt(0);
+            char z = sc.next().charAt(0);
+            int left = -1;
+            int right = -1;
+            if (y != '.') {
+                left = y-'A';
+            }
+            if (z != '.') {
+                right = z-'A';
+            }
+            a[x] = new Node(left, right);
+        }
+        preorder(a,0);
+        System.out.println();
+        inorder(a,0);
+        System.out.println();
+        postorder(a,0);
+        System.out.println();
+    }
+}
+2250번 - 트리의 높이와 너비------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+class Node {
+    int left, right;
+    public int order, depth;
+    Node(int left, int right) {
+        this.left = left;
+        this.right = right;
+    }
+}
+public class Main {
+    static Node[] a = new Node[10001];
+    static int[] left = new int[10001];
+    static int[] right = new int[10001];
+    static int[] cnt = new int[10001];
+    static int order = 0;
+    static void inorder(int node, int depth) {
+        if (node == -1) return;
+        inorder(a[node].left, depth+1);
+        a[node].order = ++order;
+        a[node].depth = depth;
+        inorder(a[node].right, depth+1);
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        for (int i=0; i<n; i++) {
+            int x = sc.nextInt();
+            int y = sc.nextInt();
+            int z = sc.nextInt();
+            a[x] = new Node(y, z);
+            if (y != -1) cnt[y] += 1;
+            if (z != -1) cnt[z] += 1;
+        }
+        int root = 0;
+        for (int i=1; i<=n; i++) {
+            if (cnt[i] == 0) {
+                root = i;
+            }
+        }
+        inorder(root, 1);
+        int maxdepth = 0;
+        for (int i=1; i<=n; i++) {
+            int depth = a[i].depth;
+            int order = a[i].order;
+            if (left[depth] == 0) {
+                left[depth] = order;
+            } else {
+                left[depth] = Math.min(left[depth], order);
+            }
+            right[depth] = Math.max(right[depth], order);
+            maxdepth = Math.max(maxdepth, depth);
+        }
+        int ans = 0;
+        int ans_level = 0;
+        for (int i=1; i<=maxdepth; i++) {
+            if (ans < right[i]-left[i]+1) {
+                ans = right[i]-left[i]+1;
+                ans_level = i;
+            }
+        }
+        System.out.println(ans_level + " " + ans);
+    }
+}
+11725번 - 트리의 부모 찾기------------------------------------------------------------------------------------------------------------------------------------
+import java.util.*;
+
+public class Main {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        ArrayList<Integer>[] a = (ArrayList<Integer>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Integer>();
+        }
+        for (int i=0; i<n-1; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            a[u].add(v);
+            a[v].add(u);
+        }
+        boolean[] check = new boolean[n+1];
+        int[] parent = new int[n+1];
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(1);
+        check[1] = true;
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            for (int y : a[x]) {
+                if (check[y] == false) {
+                    check[y] = true;
+                    parent[y] = x;
+                    q.add(y);
+                }
+            }
+        }
+        for (int i=2; i<=n; i++) {
+            System.out.println(parent[i]);
+        }
+    }
+}
+
+1167번 - 트리의 지름1------------------------------------------------------------------------------------------------------------------------------------
+1. 탐색 2번 이용한 소스
+import java.util.*;
+class Edge {
+    public int to;
+    public int cost;
+    Edge(int to, int cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
+public class Main {
+    public static int[] bfs(int n, List<Edge>[] a, int start) {
+        boolean[] check = new boolean[n+1];
+        int[] dist = new int[n+1];
+        Queue<Integer> q = new LinkedList<Integer>();
+        check[start] = true;
+        q.add(start);
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            for (Edge e : a[x]) {
+                int y = e.to;
+                int cost = e.cost;
+                if (check[y] == false) {
+                    dist[y] = dist[x] + cost;
+                    q.add(y);
+                    check[y] = true;
+                }
+            }
+        }
+        return dist;
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        List<Edge>[] a = (List<Edge>[]) new List[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Edge>();
+        }
+        for (int i=1; i<=n; i++) {
+            int x = sc.nextInt();
+            while (true) {
+                int y = sc.nextInt();
+                if (y == -1) break;
+                int z = sc.nextInt();
+                a[x].add(new Edge(y,z));
+            }
+        }
+        int[] dist = bfs(n, a,1);
+        int start = 1;
+        for (int i=2; i<=n; i++) {
+            if (dist[i] > dist[start]) {
+                start = i;
+            }
+        }
+        dist = bfs(n, a, start);
+        int ans = dist[1];
+        for (int i=2; i<=n; i++) {
+            if (ans < dist[i]) {
+                ans = dist[i];
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+2. 포스트 오더 이용한 소스
+import java.util.*;
+class Edge {
+    public int to;
+    public int cost;
+    Edge(int to, int cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
+class Pair {
+    public int diameter;
+    public int height;
+    Pair(int diameter, int height) {
+        this.diameter = diameter;
+        this.height = height;
+    }
+}
+public class Main {
+    static List<Edge>[] a;
+    static boolean[] check;
+    static Pair dfs(int x) {
+        check[x] = true;
+        ArrayList<Integer> heights = new ArrayList<>();
+        int ans = 0;
+        for (Edge e : a[x]) {
+            int y = e.to;
+            int cost = e.cost;
+            if (check[y] == false) {
+                Pair p = dfs(y);
+                if (ans < p.diameter) ans = p.diameter;
+                heights.add(p.height+cost);
+            }
+        }
+        int height = 0;
+        Collections.sort(heights, Collections.reverseOrder());
+        if (heights.size() >= 1) {
+            height = heights.get(0);
+            if (ans < height) {
+                ans = height;
+            }
+        }
+        if (heights.size() >= 2) {
+            int temp = heights.get(0) + heights.get(1);
+            if (ans < temp) {
+                ans = temp;
+            }
+        }
+        return new Pair(ans, height);
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        a = (List<Edge>[]) new List[n+1];
+        check = new boolean[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Edge>();
+        }
+        for (int i=1; i<=n; i++) {
+            int x = sc.nextInt();
+            while (true) {
+                int y = sc.nextInt();
+                if (y == -1) break;
+                int z = sc.nextInt();
+                a[x].add(new Edge(y,z));
+            }
+        }
+        Pair ans = dfs(1);
+        System.out.println(ans.diameter);
+    }
+}
+
+1967번 - 트리의 지름2------------------------------------------------------------------------------------------------------------------------------------
+1. 탐색 2번 이용한 소스
+import java.util.*;
+class Edge {
+    int to, cost;
+    Edge(int to, int cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
+public class Main {
+    static ArrayList<Edge>[] a;
+    static boolean[] check = new boolean[10001];
+    static int[] dist = new int[10001];
+    static void bfs(int start) {
+        Arrays.fill(dist, 0);
+        Arrays.fill(check, false);
+        Queue<Integer> q = new LinkedList<>();
+        check[start] = true;
+        q.add(start);
+        while (!q.isEmpty()) {
+            int x = q.remove();
+            for (Edge e : a[x]) {
+                if (check[e.to] == false) {
+                    dist[e.to] = dist[x] + e.cost;
+                    q.add(e.to);
+                    check[e.to] = true;
+                }
+            }
+        }
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        a = (ArrayList<Edge>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Edge>();
+        }
+        for (int i=0; i<n-1; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+            a[u].add(new Edge(v, w));
+            a[v].add(new Edge(u, w));
+        }
+        bfs(1);
+        int start = 1;
+        for (int i=2; i<=n; i++) {
+            if (dist[i] > dist[start]) {
+                start = i;
+            }
+        }
+        bfs(start);
+        int ans = dist[1];
+        for (int i=2; i<=n; i++) {
+            if (ans < dist[i]) {
+                ans = dist[i];
+            }
+        }
+        System.out.println(ans);
+    }
+}
+
+2. 포스트 오더 이용한 소스
+import java.util.*;
+class Edge {
+    int to, cost;
+    Edge(int to, int cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
+class Pair {
+    public int diameter;
+    public int height;
+    Pair(int diameter, int height) {
+        this.diameter = diameter;
+        this.height = height;
+    }
+}
+public class Main {
+    static ArrayList<Edge>[] a;
+    static boolean[] check = new boolean[10001];
+    static Pair dfs(int x) {
+        check[x] = true;
+        ArrayList<Integer> heights = new ArrayList<>();
+        int ans = 0;
+        for (Edge e : a[x]) {
+            int y = e.to;
+            int cost = e.cost;
+            if (check[y] == false) {
+                Pair p = dfs(y);
+                if (ans < p.diameter) ans = p.diameter;
+                heights.add(p.height+cost);
+            }
+        }
+        int height = 0;
+        Collections.sort(heights, Collections.reverseOrder());
+        if (heights.size() >= 1) {
+            height = heights.get(0);
+            if (ans < height) {
+                ans = height;
+            }
+        }
+        if (heights.size() >= 2) {
+            int temp = heights.get(0) + heights.get(1);
+            if (ans < temp) {
+                ans = temp;
+            }
+        }
+        return new Pair(ans, height);
+    }
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        a = (ArrayList<Edge>[]) new ArrayList[n+1];
+        for (int i=1; i<=n; i++) {
+            a[i] = new ArrayList<Edge>();
+        }
+        for (int i=0; i<n-1; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+            a[u].add(new Edge(v, w));
+            a[v].add(new Edge(u, w));
+        }
+        Pair ans = dfs(1);
+        System.out.println(ans.diameter);
+    }
+}
+
