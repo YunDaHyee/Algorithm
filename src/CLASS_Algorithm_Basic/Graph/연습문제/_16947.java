@@ -169,15 +169,16 @@ import java.util.StringTokenizer;
 public class _16947 {
 	private static int[]			checkM;
 	private static List<Integer>[] lineList;
-	private static int				cnt;
 	
 	@SuppressWarnings("unchecked")
 	public static void main(String args[]) throws IOException{
 		BufferedReader	br	= new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter	bw	= new BufferedWriter(new OutputStreamWriter(System.out));
-		cnt					= Integer.parseInt( br.readLine() );
+		int cnt					= Integer.parseInt( br.readLine() );
 		lineList			= new ArrayList[cnt+1];
 		checkM				= new int[cnt+1];
+		Queue<Integer> queue= new LinkedList<Integer>();
+		boolean[]		checkM2 = new boolean[cnt+1];
 		
 		// 초기화
 		for( int i=1;i<=cnt;i++ ) {
@@ -196,7 +197,25 @@ public class _16947 {
 		// 순환선 찾아서 checkM에 기록
 		BFS( 1, -1);
 
-		// TODO 순환선으로부터 떨어진 거리 구하기
+		// TODO 순환선으로부터 떨어진 거리 구하기 -- 무한루프;;
+		queue.add(1);
+		checkM2[1] = true;
+		int distance = 0;
+		while( !queue.isEmpty() ){
+			distance = 0;
+			int x = queue.poll();
+			for( int i=0;i<lineList[x].size();i++ ){
+				int value = lineList[x].get(i);
+				if( checkM[value]==2 && !checkM2[value] ){
+					bw.write( String.valueOf(distance) );
+					queue.add(i+1);
+					checkM2[i+1] = true;
+				}else {
+					distance++;
+				}
+			}
+			
+		}
 		
 		br.close();
 		bw.flush();
@@ -217,11 +236,11 @@ public class _16947 {
 		checkM[fromPointX2]=true;
 		while( !queue.isEmpty() ){
 		 */
-		checkM[fromPointX]=1;
+		checkM[fromPointX]=1; // 방문 표시
 
 		for( int each : lineList[fromPointX] ){
 			if( each!=toPointX ) { // 어차피 그 쪽으로 가는 거라서 
-				int result = BFS( each, fromPointX ); // result == -2 : 싸이클 찾은 후의 방문점/ 2 : 방문 O, 싸이클 찾 O / 0 : 방문 O, 싸이클 X
+				int result = BFS( each, fromPointX ); // result == -2 : 싸이클 찾은 후의 방문점/ 2 : 방문 O, 싸이클 찾 O / 1 : 방문 O, 싸이클 X
 				if( result==-2 ){
 					return -2;
 				}else{ //
