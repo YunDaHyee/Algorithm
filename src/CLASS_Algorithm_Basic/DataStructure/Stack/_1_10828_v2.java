@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Stack;
 
 /**
 	@문제
@@ -74,6 +75,7 @@ import java.io.OutputStreamWriter;
 		-1
 		
 	@HISTORY
+	모듈화를 하는 게 좋은건지 아닌건지는 잘 모르겠지만 모듈화 하지 않는 거로 작성함
  */
 
 public class _1_10828_v2 {
@@ -82,10 +84,11 @@ public class _1_10828_v2 {
 		BufferedWriter	bw			= new BufferedWriter( new OutputStreamWriter(System.out) );
 		
 		int				commandCnt	= Integer.parseInt( br.readLine() );
-		int				size		= 0;
-		int[]			stack		= new int[commandCnt];
 		String[]		command		= null;
 		
+		// 1. 스택 직접 구현
+		int[]			stack		= new int[commandCnt];
+		int				size		= 0;
 		for( int i=0;i<commandCnt;i++ ) {
 			command = br.readLine().split(" ");
 			switch( command[0] ) {
@@ -93,16 +96,40 @@ public class _1_10828_v2 {
 					stack[size++] = Integer.parseInt(command[1]);
 					break;
 				case "pop":
-					stack[size--] = 0;
+					bw.write( String.valueOf(size-1==-1 ? -1 : stack[--size])+"\n" );
 					break;
 				case "size":
-					bw.write( String.valueOf(size-1) );
+					bw.write( String.valueOf(size-1==-1 ? 0 : size)+"\n" );
 					break;
 				case "empty":
-					int result = size=
+					bw.write( String.valueOf(size-1==-1 ? 1 : 0)+"\n" );
 					break;
 				case "top":
+					bw.write( String.valueOf(size-1==-1 ? -1 : stack[size-1])+"\n" );
 					break;
+			}
+		}
+		
+		// 2. Stack 라이브러리 이용
+		Stack<Integer> stack2 = new Stack<Integer>();
+		for( int i=0;i<commandCnt;i++ ) {
+			command = br.readLine().split(" ");
+			switch( command[0] ) {
+			case "push":
+				stack2.add( Integer.parseInt(command[1]) );
+				break;
+			case "pop":
+				bw.write( String.valueOf( stack2.empty() ? -1 : stack2.pop() )+"\n" );
+				break;
+			case "size":
+				bw.write( String.valueOf( stack2.size() ) +"\n" );
+				break;
+			case "empty":
+				bw.write( String.valueOf( stack2.empty() ? 1 : 0 )+"\n" );
+				break;
+			case "top":
+				bw.write( String.valueOf( stack2.empty() ? -1 : stack2.peek() )+"\n" );
+				break;
 			}
 		}
 		
