@@ -8,10 +8,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.PortUnreachableException;
 import java.util.Stack;
 import java.util.StringTokenizer;
-
-import sun.util.locale.StringTokenIterator;
 
 /**
 	@문제
@@ -34,19 +33,49 @@ import sun.util.locale.StringTokenIterator;
 		eW tnaw ot niw eht tsrif ezirpv
 		
 	@HISTORY
+		n^3이 나오니까 3중 반복문을 피하고 싶었는데 어쩔 수가 없다..
  */
 public class _2_9093_v2 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader	br		= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw		= new BufferedWriter( new OutputStreamWriter(System.out) );
-		Stack<Character>stack	= new Stack<Character>();
 		int				testCase= Integer.parseInt( br.readLine() );
 		StringTokenizer st		= null;
 		
-		for( int i=0;i<testCase;i++ ) {
+		// 1. 문자열로 구현 - Stack을 선언해놓고 안씀;;
+		/*
+		StringBuilder 	sb		= new StringBuilder();
+		
+		while( testCase-->0 ) {
 			st = new StringTokenizer(br.readLine());
-			while( st.hasMoreTokens() ) {
-				for( int )
+			while( st.hasMoreTokens() ){
+				String[] eachStr = st.nextToken().split("{1}");
+				for( int i=eachStr.length-1;i>=0;i-- ){
+					sb.append( eachStr[i] );
+				}
+				sb.append(" ");
+			}
+			sb.append("\n");
+		}
+		
+		bw.write( sb.toString() );
+		*/
+		// 2. Stack으로 구현
+		while( testCase-->0 ){
+			st = new StringTokenizer(br.readLine()); // i, am, happy, today
+			Stack<String>	stack	= new Stack<String>();
+			Stack<String>	stack2	= new Stack<String>();
+			
+			String[] str = new String[st.countTokens()];
+			for( int i=0;i<str.length;i++ ){
+				str[i] = st.nextToken(); // i -> am -> happy -> today
+				stack.push( str[str.length-1-i] );
+			} // today -> happy -> am i
+			
+			
+			
+			while( stack.isEmpty() ){
+				bw.write( stack.pop() );
 			}
 		}
 		
