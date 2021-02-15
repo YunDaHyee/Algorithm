@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.PortUnreachableException;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -30,10 +29,17 @@ import java.util.StringTokenizer;
 	@출력
 		각 테스트 케이스에 대해서, 입력으로 주어진 문장의 단어를 모두 뒤집어 출력한다.
 		I ma yppah yadot
-		eW tnaw ot niw eht tsrif ezirpv
+		eW tnaw ot niw eht tsrif ezirp
 		
 	@HISTORY
-		n^3이 나오니까 3중 반복문을 피하고 싶었는데 어쩔 수가 없다..
+		n^3이 나오니까 3중 반복문을 피하려고 반복문을 몇개나 돌린건지..
+		하지만 단어 자체를 뒤집으려면 3중반복문을 피할 순 없다..ㅠㅠ.. 
+		아 근데 너무 오래 걸려서 수정을 함..;;;
+		StringTokenizer로 분리한 단어들을 다시 문자열 배열에 넣는 건 효율에 어긋나는 것 같아서 지웠다.
+		1년 전 풀이를 참고하려고 봤더니 거기선 입력을 받아서 그 자체에서 공백이나 EOF를 처리 했었다.
+		그 작업은 StringTokenizer로 처리하면
+		
+		
  */
 public class _2_9093_v2 {
 	public static void main(String args[]) throws IOException {
@@ -63,24 +69,22 @@ public class _2_9093_v2 {
 		// 2. Stack으로 구현
 		while( testCase-->0 ){
 			st = new StringTokenizer(br.readLine()); // i, am, happy, today
-			Stack<String>	stack	= new Stack<String>();
-			Stack<String>	stack2	= new Stack<String>();
+			Stack<Character>	stack	= new Stack<Character>();
 			
-			String[] str = new String[st.countTokens()];
-			for( int i=0;i<str.length;i++ ){
-				str[i] = st.nextToken(); // i -> am -> happy -> today
-				stack.push( str[str.length-1-i] );
-			} // today -> happy -> am i
-			
-			
-			
-			while( stack.isEmpty() ){
-				bw.write( stack.pop() );
+			while( st.hasMoreTokens() ){
+				for( char c : st.nextToken().toCharArray() ) {
+					stack.push( c ); // 각 단어 뒤집기
+				}
+				while( !stack.isEmpty() ){
+					bw.write( stack.pop() );
+				} // today -> happy -> am -> i
+				bw.write( ' ' );
 			}
+			bw.write( '\n' );
 		}
 		
-		br.close();
 		bw.flush();
+		br.close();
 		bw.close();
 	}
 }
