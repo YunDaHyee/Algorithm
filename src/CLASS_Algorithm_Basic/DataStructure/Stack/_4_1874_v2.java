@@ -66,6 +66,56 @@ public class _4_1874_v2 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader	br			= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw			= new BufferedWriter( new OutputStreamWriter(System.out) );
+		Stack<Character>stack		= new Stack<Character>();
+		
+		int 			goalNum		= Integer.parseInt(br.readLine());
+		int				cnt			= goalNum;
+		int				sum			= 0;
+		boolean			printFlag	= false;
+		
+		int				idx			= 0;
+		
+		while( cnt-->0 ){
+			int inputNum = Integer.parseInt(br.readLine());
+			int tempSum = sum + inputNum;
+			
+			if( tempSum<goalNum ) {
+				sum += inputNum;
+				stack.push('+');
+			}else if( tempSum>goalNum ){
+				sum -= inputNum;
+				stack.push('-');
+			}else{
+				printFlag = true;
+				break;
+			}
+		}
+		
+		while( cnt-->0 ){
+			int inputNum = Integer.parseInt(br.readLine());
+			int tempSum = sum + inputNum;
+			
+			if( tempSum<goalNum ) {
+				sum += inputNum;
+				stack.push('+');
+			}else if( tempSum>goalNum ){
+				sum -= inputNum;
+				stack.push('-');
+			}else{
+				printFlag = true;
+				break;
+			}
+		}
+		
+		if( printFlag ) {
+			while( !stack.isEmpty() ){
+				bw.write( stack.pop() );
+			}
+		}else {
+			bw.write("NO");
+			bw.flush();
+			System.exit(0);
+		}
 		
 		bw.flush();
 		br.close();
