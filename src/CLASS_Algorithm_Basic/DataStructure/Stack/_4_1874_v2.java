@@ -60,66 +60,51 @@ import java.util.Stack;
 		
 		NO
 	@HISTORY
+		초반에 문제 이해를 못해서 조금 몇 시간을 헤맸다..ㅠㅠ;
+		하지만 자꾸 짤수록 엉키길래 다 지우고 새로 짰더니 해결..!
+		1년 전 : 전체적으로 flag로 돌아가게끔 해놓고
+		또 그 안의 무한루프 속에서
+		stack이 비어있는지의 여부와 바로 pop한 값과 inputNum를 가지고 비교하는 식으로 풀어놨다.
+		효율은 비슷한데 오늘 짠 것이 가독성이 높고 이해하기도 쉽다!
+	@Date
+		2021/02/18
 		
  */
 public class _4_1874_v2 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader	br			= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw			= new BufferedWriter( new OutputStreamWriter(System.out) );
-		Stack<Character>stack		= new Stack<Character>();
+		Stack<Integer> 	numStack	= new Stack<Integer>();
+		StringBuilder 	signSb		= new StringBuilder();
 		
 		int 			goalNum		= Integer.parseInt(br.readLine());
-		int				cnt			= goalNum;
-		int				sum			= 0;
-		boolean			printFlag	= false;
-		
-		int				idx			= 0;
+		int 			cnt			= goalNum;
+		int				idx			= 1;
 		
 		while( cnt-->0 ){
 			int inputNum = Integer.parseInt(br.readLine());
-			int tempSum = sum + inputNum;
 			
-			if( tempSum<goalNum ) {
-				sum += inputNum;
-				stack.push('+');
-			}else if( tempSum>goalNum ){
-				sum -= inputNum;
-				stack.push('-');
-			}else{
-				printFlag = true;
-				break;
+			if( idx<=goalNum ){
+				while( idx<=inputNum ){
+					numStack.push(idx++);
+					signSb.append("+\n");
+				}
+			}
+			
+			if( numStack.peek()==inputNum ){
+				numStack.pop();
+				signSb.append("-\n");
 			}
 		}
 		
-		while( cnt-->0 ){
-			int inputNum = Integer.parseInt(br.readLine());
-			int tempSum = sum + inputNum;
-			
-			if( tempSum<goalNum ) {
-				sum += inputNum;
-				stack.push('+');
-			}else if( tempSum>goalNum ){
-				sum -= inputNum;
-				stack.push('-');
-			}else{
-				printFlag = true;
-				break;
-			}
-		}
-		
-		if( printFlag ) {
-			while( !stack.isEmpty() ){
-				bw.write( stack.pop() );
-			}
+		if( numStack.isEmpty() ) {
+			bw.write( signSb.toString() );
 		}else {
 			bw.write("NO");
-			bw.flush();
-			System.exit(0);
 		}
 		
 		bw.flush();
 		br.close();
 		bw.close();
-	
     }
 }
