@@ -5,9 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.StringTokenizer;
+import java.util.Stack;
 
 /**
  * 
@@ -42,7 +40,7 @@ import java.util.StringTokenizer;
 	    P x
 	    L
 	    P y
-	    OR
+
 	    abc
 	    9
 	    L
@@ -54,7 +52,7 @@ import java.util.StringTokenizer;
 	    L
 	    B
 	    P y
-	    OR
+
 	    dmih
 	    11
 	    B
@@ -71,9 +69,9 @@ import java.util.StringTokenizer;
 	@Output
 		첫째 줄에 모든 명령어를 수행하고 난 후 편집기에 입력되어 있는 문자열을 출력한다.
 	    abcdyx
-	    OR
+	    
 	    yxabc
-	    OR
+
 	    yxz
 	@History
 		
@@ -83,9 +81,55 @@ public class _5_1406_v2 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader br = new BufferedReader( new InputStreamReader(System.in) );
 	    BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
-
-	    br.close();
+	    Stack<String> left	= new Stack<String>();
+	    Stack<String> right	= new Stack<String>();
+	    
+	    String[]		orgStr	= br.readLine().split("{1}");
+	    int			commandCnt	= Integer.parseInt(br.readLine());
+	    StringBuilder resultSb	= new StringBuilder();
+	
+	    for( int i=0;i<orgStr.length;i++ ) {
+	    	left.push(orgStr[i]);
+	    }
+	    
+	    while( commandCnt-->0 ) {
+	    	String[] cmd = br.readLine().split(" ");
+	    	switch( cmd[0] ){
+	    		case "L" :
+	    			if( !left.isEmpty() ){
+	    				right.push( left.pop() );
+	    			}
+	    			break;
+	    		case "D" :
+	    			if( !right.isEmpty() ){
+	    				left.push( right.pop() );
+	    			}
+	    			break;
+	    		case "B" :
+	    			if( !left.isEmpty() ){
+	    				left.pop();
+	    			}
+	    			break;
+	    		case "P" :
+	    			left.push( cmd[1] );
+	    			break;
+	    	}
+	    }
+	    
+	    while( !right.isEmpty() ) {
+	    	resultSb.append( right.pop() );
+	    }
+	    
+	    while( !left.isEmpty() ) {
+	    	resultSb.append( left.pop() );
+	    }
+	    
+	    for( int i=resultSb.length()-1;i>=0;i-- ){
+	    	bw.write( resultSb.charAt(i) );
+	    }
+	    
 	    bw.flush();
+	    br.close();
 	    bw.close();
 	}
 }
