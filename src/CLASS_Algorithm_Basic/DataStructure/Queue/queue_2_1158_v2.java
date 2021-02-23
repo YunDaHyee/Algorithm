@@ -31,8 +31,11 @@ import java.util.StringTokenizer;
 		예제와 같이 요세푸스 순열을 출력한다.
 		<3, 6, 2, 7, 5, 1, 4>
 	@History
-		
-		
+		처음에는 배열에 K 개수만큼 보다 적게 남으면
+		반복문을 나와서 남은 거를 빌 때까지 pop해주는 거로 했었음
+		근데 자꾸 틀리길래 가만 보니까 그게 아니라
+		남은 것도 K 차례로 출력되게 해야되는 것 같음..
+		역시 맞았다..
  *
  */
 public class queue_2_1158_v2 {
@@ -40,12 +43,55 @@ public class queue_2_1158_v2 {
 		BufferedReader br = new BufferedReader(	new InputStreamReader(System.in) );
 		BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
 		
-		StringTokenizer st = new StringTokenizer( br.readLine() );
+		Queue<Integer>		queue		= new LinkedList<Integer>();
+		StringBuilder		resultSb	= new StringBuilder();
+
+		StringTokenizer		st			= new StringTokenizer( br.readLine() );
 		
+		int					cnt			= Integer.parseInt(st.nextToken());
+		int					multiples	= Integer.parseInt(st.nextToken());
 		
-		br.close();
+		for( int i=1;i<=cnt;i++ ){
+			queue.offer( i );
+		}
+
+		resultSb.append( "<" );
+		
+		for( int i=1;;i++ ) {
+			if( i==multiples ){
+				i = 0;
+				resultSb.append( queue.poll() );
+				if( queue.size()!=0 ) {
+					resultSb.append(", ");
+				}else {
+					break;
+				}
+			}else{
+				queue.offer( queue.poll() );
+			}
+		}
+		
+		resultSb.append( ">" );
+		
+		/*
+		// 가져올 인덱스를 수식으로 구하고 get함수로 가져오는 것.
+		// 시간이 진짜 훨 적게 걸리긴 하는데
+		// queue를 구현하기 위한 방법인지는 잘 모르겠따...
+		int temp = 0;
+		LinkedList<Integer> link = new LinkedList<>();
+		resultSb.append( "<" );
+		while( cnt>1 ){
+			temp = temp+multiples-1%(cnt--);
+			resultSb.append(link.get(temp)).append(", ");
+			link.remove(temp);
+		}
+		resultSb.append(link.get(0)).append(">");
+		*/
+		
+		bw.write( resultSb.toString() );
+		
 		bw.flush();
 		bw.close();
-		
+		br.close();
 	}
 }
