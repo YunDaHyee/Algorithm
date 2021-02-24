@@ -62,6 +62,9 @@ import java.util.LinkedList;
 			역시나 이걸 수정해주니 됐다.
 			
 		2. Queue 클래스를 활용해서 구현
+			근데..deque의 기능이라 한 건 고쳐줬따.
+			addLast(),pollFrist() : offer,poll()로 고쳐줬고 
+			peekLast()는 queue의 사이즈-1의 인덱스의 값으로 가져오는 식으로 대체했다.
  *
  */
 public class queue_1_10845_v2 {
@@ -141,12 +144,12 @@ public class queue_1_10845_v2 {
 */
 	
 	public static void push(String num) {
-		queue2.addLast( Integer.parseInt(num) );
+		queue2.offer( Integer.parseInt(num) );
 	}
 	public static String pop() {
 		int reuslt = 0;
 		if( queue2.size()!=0 ) {
-			reuslt = queue2.pollFirst();
+			reuslt = queue2.poll(); 
 		}else {
 			reuslt = -1;
 		}
@@ -159,9 +162,9 @@ public class queue_1_10845_v2 {
 		return queue2.isEmpty() ? "1" : "0";
 	}
 	public static String front() {
-		return empty()=="1" ? "-1" : String.valueOf( queue2.peekFirst() );
+		return empty()=="1" ? "-1" : String.valueOf( queue2.peek() );
 	}
 	public static String back() {
-		return empty()=="1" ? "-1" : String.valueOf( queue2.peekLast() );
+		return empty()=="1" ? "-1" : String.valueOf( queue2.get(queue2.size()-1) );
 	}
 }
