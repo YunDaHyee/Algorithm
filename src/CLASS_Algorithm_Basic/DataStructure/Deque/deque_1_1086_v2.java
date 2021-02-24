@@ -1,10 +1,9 @@
 package DataStructure.Deque;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 /**
@@ -60,81 +59,78 @@ import java.util.StringTokenizer;
 */
 
 public class deque_1_1086_v2 {
-	static int[]	deque	= null;
-	static int		front	= 0;
-	static int		back	= 0;
-	
 	public static void main(String args[]) throws IOException {
-		BufferedReader br = new BufferedReader(	new InputStreamReader(System.in) );
-		BufferedWriter bw = new BufferedWriter( new OutputStreamWriter(System.out) );
+		BufferedReader 	br	= new BufferedReader(	new InputStreamReader(System.in) );
+		StringBuilder	sb	= new StringBuilder();
+		String tempResult	= "";
 		
 		int cnt = Integer.parseInt( br.readLine() );
 		
-		deque	= new int[cnt];
+		// 1. LinkedList로 구현
+		/*
+			 ArrayDeque VS LinkedList 성능 차이
+			- 양 끝의 데이터를 add / remove할 때 : ArrayDeque > LinkedList
+			- 반복 작업에서 현재 요소를 삭제할 때 : ArrayDeque < LinkedList
+		 */
+		LinkedList<String> deque = new LinkedList<String>();
 		
 		while( cnt-->0 ){
 			StringTokenizer cmd = new StringTokenizer( br.readLine() );
 			switch( cmd.nextToken() ){
 				case "push_front" :
+					deque.offerFirst( cmd.nextToken() );
 					break;
 				case "push_back" :
+					deque.offerLast( cmd.nextToken() );
 					break;
 				case "pop_front" :
+					if( deque.isEmpty() ) {
+						tempResult = "-1";
+					}else {
+						tempResult = deque.pollFirst();
+					}
+					sb.append( tempResult+"\n" );
 					break;
 				case "pop_back" :
+					if( deque.isEmpty() ) {
+						tempResult = "-1";
+					}else {
+						tempResult = deque.pollLast();
+					}
+					sb.append( tempResult+"\n" );
 					break;
 				case "size" :
+					sb.append( deque.size()+"\n" );
 					break;
 				case "empty" :
+					if( deque.isEmpty() ) {
+						tempResult = "1";
+					}else {
+						tempResult = "0";
+					}
+					sb.append( tempResult+"\n" );
 					break;
 				case "front" :
+					if( deque.isEmpty() ) {
+						tempResult = "-1";
+					}else {
+						tempResult = deque.peekFirst();
+					}
+					sb.append( tempResult+"\n" );
 					break;
 				case "back" :
+					if( deque.isEmpty() ) {
+						tempResult = "-1";
+					}else {
+						tempResult = deque.peekLast();
+					}
+					sb.append( tempResult+"\n" );
 					break;
 			}
 		}
 		
-		bw.flush();
-		bw.close();
+		System.out.print( sb );
+		
 		br.close();
-	}
-	
-	public static void push_front(String num) {
-		deque[front] = Integer.parseInt(num);
-	}
-	public static void push_back(String num) {
-		deque[back] = Integer.parseInt(num);
-	}
-	public static String pop_front(){
-		int reuslt = 0;
-		if( size()!="0" ) {
-			reuslt = deque[front];
-			deque[front++] = 0;
-		}else {
-			reuslt = -1;
-		}
-		return String.valueOf(reuslt);
-	}
-	public static String pop_back() {
-		int reuslt = 0;
-		if( size()!="0" ) {
-			reuslt = deque[back];
-			deque[back--] = 0;
-		}else {
-			reuslt = -1;
-		}
-		return String.valueOf(reuslt);
-	}
-	public static String size() {
-		return String.valueOf(deque.length);
-	}
-	public static String empty() {
-		return front==back ? "1" : "0";
-	}
-	public static String front() {
-		return empty()=="1" ? "-1" : String.valueOf( deque[front] );
-	}
-	public static String back() {
-		return empty()=="1" ? "-1" : String.valueOf( deque[back] );
 	}
 }
