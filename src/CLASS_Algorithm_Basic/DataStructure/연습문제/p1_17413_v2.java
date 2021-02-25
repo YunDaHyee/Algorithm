@@ -35,7 +35,12 @@ import java.util.Stack;
 	<   space   >ecaps ecaps ecaps<    spa   c e>
 	
 @HISTORY
-	각 단어의 순서만 뒤집는 것임..
+	처음에 또 문제 제대로 이해 못해서는 전체를 뒤집게 구현했더니 틀렸다고 해서 수정..
+	while문이 3번 들어가는 식으로 구현했는데
+	아니나다를까 1년 전에도 그렇게 구현했더라.
+	너무 중복되는 게 싫어서 다르게 구현해본 게 flag 이용하는 것이다.
+	흠..중복된 코드는 줄였지만 막 좋다 이런 느낌은 아닌 것 같은데
+	어쩄든 뭐...다르게 구현해본 것에 의의를 둔다..
 */
 public class p1_17413_v2 {
 	public static void main(String args[]) throws IOException {
@@ -45,26 +50,42 @@ public class p1_17413_v2 {
 		
 		Stack<String>	stack	= new Stack<String>();
 		StringBuilder	sb  	= new StringBuilder();
-		boolean 		flag	= false;
+		boolean 		tagFlag	= false;
+		boolean 		wordFlag= false;
 		
 		for( int i=0;i<st.length;i++ ){
 			String str = st[i];
-			if( str.equals("<") ){
+			
+			if( wordFlag ){
 				while( !stack.isEmpty() ){
 					sb.append(stack.pop());
 				}
-				sb.append(str);
-				flag = true;
+				if( !tagFlag && wordFlag ) {
+					sb.append(" ");
+				}
+				if( tagFlag ){
+					sb.append("<");
+				}
+				wordFlag = false;
+			}
+			
+			if( str.equals("<") ){
+				wordFlag = true;
+				tagFlag = true;
 				continue;
 			}else if( str.equals(">") ){
 				sb.append(str);
-				flag = false;
+				tagFlag = false;
 				continue;
 			}
 			
-			if( flag ){
+			if( tagFlag ){
 				sb.append(str);
 			}else{
+				if( str.equals(" ") ) {
+					wordFlag = true;
+					continue;
+				}
 				stack.push(str);
 			}
 		}
