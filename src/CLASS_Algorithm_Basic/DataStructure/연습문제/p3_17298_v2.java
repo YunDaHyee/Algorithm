@@ -43,25 +43,55 @@ public class p3_17298_v2 {
 		
 		int				cnt		= Integer.parseInt( br.readLine() );
 		
-		int[] 			arr 	= new int[cnt];
-		int[] 			newArr 	= new int[cnt];
+		String[] 		arr 	= new String[cnt];
+		StringBuilder	sb		= new StringBuilder();
 		Stack<Integer>	stack	= new Stack<Integer>();
 		
-		for( int i=0;i<arr.length;i++ ){
-			for( int ;j<arr.length;j++ ){
-				if( arr[i]<arr[j] ){
-					stack.push(arr[j]);
-					break;
+		arr = br.readLine().split(" ");
+		
+		int curNum = Integer.parseInt(arr[0]);
+		stack.push(curNum);
+		
+		while(stack.isEmpty()){
+			
+		};
+		
+		for( int i=0;i<cnt;i++ ){
+			curNum = Integer.parseInt(arr[i]);
+			boolean flag = false;
+			for( int j=i+1;j<cnt;j++ ){
+				int pushNum = 0;
+				int peekNum = Integer.parseInt(arr[j]);
+				if( curNum < peekNum ){
+					pushNum = peekNum;
+				}else {
+					if( !stack.isEmpty() ){
+						stack.pop();
+					}
+					stack.push(curNum);
+					pushNum = curNum;
 				}
+				sb.append( pushNum+" " );
 			}
-			if( newArr[i]==0 ){
-				newArr[i] = -1;
+			if( i!=cnt-1 ){
+				int peekNum = stack.peek();
+				int pushNum = 0;
+				if( curNum < peekNum ){
+					pushNum = peekNum;
+				}else{
+					stack.pop();
+					stack.push(curNum);
+					pushNum = curNum;
+				}
+				sb.append( pushNum+" " );
+			}else{
+				sb.append(-1);
 			}
 		}
 		
+		System.out.println(sb);
+		
 		br.close();
-		bw.flush();
-		bw.close();
 	}
 }
 
