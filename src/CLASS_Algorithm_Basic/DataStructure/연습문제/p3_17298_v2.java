@@ -39,55 +39,95 @@ import java.util.StringTokenizer;
 public class p3_17298_v2 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader	br = new BufferedReader( new InputStreamReader(System.in) );
-		BufferedWriter	bw = new BufferedWriter( new OutputStreamWriter(System.out) );
 		
 		int				cnt		= Integer.parseInt( br.readLine() );
 		
 		String[] 		arr 	= new String[cnt];
 		StringBuilder	sb		= new StringBuilder();
-		Stack<Integer>	stack	= new Stack<Integer>();
 		
 		arr = br.readLine().split(" ");
 		
-		int curNum = Integer.parseInt(arr[0]);
-		stack.push(curNum);
-		
-		while(stack.isEmpty()){
-			
-		};
-		
-		for( int i=0;i<cnt;i++ ){
-			curNum = Integer.parseInt(arr[i]);
+		/*
+		// 1. 배열로만 풀기
+		for( int i=0;i<=cnt-1;i++ ){
+			int curNum = Integer.parseInt(arr[i]); // 현재 숫자 - 3 5
 			boolean flag = false;
-			for( int j=i+1;j<cnt;j++ ){
-				int pushNum = 0;
-				int peekNum = Integer.parseInt(arr[j]);
+			for( int j=i+1;j<=cnt-1;j++ ){
+				int peekNum = Integer.parseInt(arr[j]); // 5 2
 				if( curNum < peekNum ){
-					pushNum = peekNum;
-				}else {
-					if( !stack.isEmpty() ){
-						stack.pop();
-					}
-					stack.push(curNum);
-					pushNum = curNum;
+					flag = true;
+ 					sb.append( peekNum );
+					break;
 				}
-				sb.append( pushNum+" " );
 			}
+			if( !flag ){
+				sb.append( -1 );
+			}
+			
 			if( i!=cnt-1 ){
-				int peekNum = stack.peek();
-				int pushNum = 0;
-				if( curNum < peekNum ){
-					pushNum = peekNum;
-				}else{
-					stack.pop();
-					stack.push(curNum);
-					pushNum = curNum;
+				sb.append(" ");
+			}
+		}
+		*/
+		
+		// 2. Stack 이용해서 풀기
+		Stack<Integer> stack = new Stack<Integer>();
+		
+		for( int i=arr.length-1;i>=0;i-- ){
+			stack.push( Integer.parseInt(arr[i]) );
+		}
+		int idx = 1;
+		// 전체 수 자체는 스택으로 풀 수 있찌만 안에 숫자들을 접근할 떄는 배열로 해야한다..
+		// pop을 해서 숫자가 없는데 어떻게 비교를 해요!!
+		// 근데 결국 stack을 써도 idx를 쓰는데 의미가 있느가 싶다ㅠ
+		// TODO 인덱스 넣는거로 방식 확인하기
+		while( !stack.isEmpty() ){
+			int popNum = stack.pop(); // 5
+			boolean flag = false;
+			for( int i=idx;i<cnt;i++ ){
+				int peekNum = Integer.parseInt(arr[i]); // 5 2
+				if( popNum < peekNum ){
+					flag = true;
+ 					sb.append( peekNum );
+					break;
 				}
-				sb.append( pushNum+" " );
+			}
+			if( !flag ){
+				sb.append( -1 );
+			}
+			
+			if( !stack.isEmpty() ){
+				sb.append(" ");
+			}
+			idx++;
+		} // while
+		
+		/*
+		int dupleCnt = 1;
+		if( stack.size()!=0 ){
+			int peekNum = stack.peek();
+			while( true ){
+				dupleCnt++;
+				stack.pop(); // 5
+				if( stack.size()!=0 ){
+					peekNum = stack.peek();
+				}else{
+					break;
+				}
+				if( popNum < peekNum ){
+					flag = true;
+					break;
+				}
+			}
+			if( flag ){
+				for( int i=0;i<dupleCnt;i++ ) {
+					sb.append( peekNum+" " );
+				}
 			}else{
 				sb.append(-1);
 			}
 		}
+		*/
 		
 		System.out.println(sb);
 		
