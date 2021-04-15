@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -36,75 +38,87 @@ import java.util.StringTokenizer;
 	처음에는 방문 여부 배열을 써서 반복문이 처리되는 횟수를 줄이려고 했는데
 	오히려 인덱스를 조회해서 값을 가져오는 시간이 더 걸리나보다..
 	그것도 아녔음..
+	횟수 배열 F 구하는 반복문 안에서 현재 인덱스 이후의 요소 탐색 반복문 + 중복된 인덱스 담는 스택 비우는 반복문
+	두가지를 해서 그런지 자꾸 시간초과가 났따..
+	하루 내내 고민을 해봐도 답이 안나오길래 rawArr의 위치마다 횟수를 입력시키는 배열은 무리인 것 같아서
+	그냥 해당 값을 인덱스로 쓰는 cntArr2를 만듦(지금은 cntArr로 바꿈)
  */	
 public class p4_17299_v2 {
 	public static void main(String args[]) throws IOException {
 		BufferedReader 	br	= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw	= new BufferedWriter( new OutputStreamWriter(System.out) );
 		
+		long beforeTime = System.currentTimeMillis();
+		
 		int				cnt = Integer.parseInt( br.readLine() );
 		
 		StringTokenizer st	= new StringTokenizer( br.readLine() );
 		
-		int[]			rawArr	= new int[cnt];
+		List<Integer>	rawArr	= new LinkedList<Integer>();
 		int[]			cntArr	= new int[cnt];
 		boolean[]		flagArr	= new boolean[cnt];
-		Stack<Integer>	idxStack= new Stack<Integer>();
+
 		
 		for( int i=0;i<cnt;i++ ){
-			rawArr[i] = Integer.parseInt( st.nextToken() );
+			rawArr.add( Integer.parseInt(st.nextToken()) );
 		}
 		
-		idxStack.push(0);
-		
 		// 횟수 배열 F 구하기
-		for( int i=1;i<cnt;i++ ){
+		for( int i=0;i<cnt;i++ ){
 			if( !flagArr[i] ) {
-				idxStack		= new Stack<Integer>();
-				int	targetNum	= rawArr[i];
+				int	targetNum	= rawArr.get(i);
 				int	targetCnt	= 1;
 				
-				idxStack.push(i);
-				
 				for( int j=i+1;j<cnt;j++ ){
-					if( targetNum == rawArr[j] ){
+					if( targetNum == rawArr.get(j) ){
 						targetCnt++;
 						flagArr[j] = true;
-						idxStack.push(j);
 					}
 				}
 				
-				while( !idxStack.isEmpty() ){
-					cntArr[idxStack.pop()]=targetCnt;
-				}
+				cntArr[targetNum] = targetCnt;
 			}
 		}
+		
 		
 		// 오등큰수 구하기
-		Stack<Integer>	stack	= new Stack<Integer>();
-		int[]			NGF		= new int[cnt];
+		Stack<Integer>	stack	= new Stack<Integer>(); // Ai 조회하는 Stack
+		Stack<Integer>	stack2	= new Stack<Integer>(); // Ai의 인덱스 Stack
+		int[]			NGF		= new int[cnt]; // 오등큰수 배열
 		
-		stack.push(0);
+		stack.push(rawArr.get(0)); // rawArr[0]의 값을 인덱스로 쓴다. 그러면 cntArr2[값]에서 값에 해당되는 횟수를 바로 가져옴 
+		stack2.push(0); // rawArr[0]의 값을 가진 인덱스. 즉, 0
 		
 		for( int i=1;i<cnt;i++ ){
-			int curCnt = cntArr[i];
+			int curValue = rawArr.get(i);
+			int curCnt = cntArr[curValue];
 			while( !stack.isEmpty() && curCnt > cntArr[stack.peek()] ){
-				NGF[stack.pop()] = rawArr[i];
+				NGF[stack2.pop()] = curValue;
+				stack.pop();
 			}
-			stack.push(i);               
+			stack.push(curValue);
+			stack2.push(i);  
 		}
 		
-		while( !stack.isEmpty() ){
-			NGF[stack.pop()] = -1;
+		while( !stack2.isEmpty() ){
+			NGF[stack2.pop()] = -1;
 		}
 		
 		for( int i : NGF ){
 			bw.write( i + " ");
 		}
 		
-		br.close();
+		
 		bw.flush();
+		
+		long estimatedTime = System.currentTimeMillis() - beforeTime;
+		System.out.println();
+		System.out.println("걸린 시간 : " + estimatedTime/1000.0 + " milli seconds");
+		
 		bw.close();
+		br.close();
+		
+		
 	}
 }
 
