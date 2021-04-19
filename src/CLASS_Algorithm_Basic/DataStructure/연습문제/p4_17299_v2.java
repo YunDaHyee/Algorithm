@@ -5,8 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -42,57 +42,58 @@ import java.util.StringTokenizer;
 	두가지를 해서 그런지 자꾸 시간초과가 났따..
 	하루 내내 고민을 해봐도 답이 안나오길래 rawArr의 위치마다 횟수를 입력시키는 배열은 무리인 것 같아서
 	그냥 해당 값을 인덱스로 쓰는 cntArr2를 만듦(지금은 cntArr로 바꿈)
+	시간초과가 계쏙 난다..
+	아.. 회수 배열 F 구하는 거에서 이중 포문말고 그 값을 인덱스로 씀으로써 해결!
+	
+	시행착오 2> 런타임 에러 (ArrayIndexOutOfBounds)
+	시간초과는 해결했는데 인덱스 초과 에러가 났따..
+	cntArr의 크기를 cnt만큼했는데 나는 cntArr의 인덱스로 해당 인덱스의 값으로 쓰도록 했었는데
+	생각해보니까 수열의 값으로 cnt 보다 큰 숫자를 입력할 수 있으므로 cnt 보다 더 큰 인덱스로 줘야했음..!!!
+	
+	시행착오 3> 메모리 초과
+	cntArr 배열의 크기를 Integer.MAX_VALUE로 줬었는데 너무 커서 그랬나보다
+	문제에 주어진 범위인 1000000보다 큰 1000001로 줌으로써 해결
+	
+	코드리뷰 >
+	오른쪽에 있는 수가 기준이니까 Stack 2개를 쓸 필요 없이 deque로 풀면 더 간단하겠다..
+	
  */	
 public class p4_17299_v2 {
 	public static void main(String args[]) throws IOException {
-		BufferedReader 	br	= new BufferedReader( new InputStreamReader(System.in) );
-		BufferedWriter	bw	= new BufferedWriter( new OutputStreamWriter(System.out) );
+		BufferedReader 	br		= new BufferedReader( new InputStreamReader(System.in) );
+		BufferedWriter	bw		= new BufferedWriter( new OutputStreamWriter(System.out) );
 		
-		long beforeTime = System.currentTimeMillis();
+		int				cnt		= Integer.parseInt( br.readLine() );
 		
-		int				cnt = Integer.parseInt( br.readLine() );
+		StringTokenizer st		= new StringTokenizer( br.readLine() );
 		
-		StringTokenizer st	= new StringTokenizer( br.readLine() );
-		
-		List<Integer>	rawArr	= new LinkedList<Integer>();
-		int[]			cntArr	= new int[cnt];
-		boolean[]		flagArr	= new boolean[cnt];
-
+		int[]			rawArr	= new int[cnt];
+		int[]			cntArr	= new int[1000001];
+		int[]			NGF		= new int[cnt]; // 오등큰수 배열
 		
 		for( int i=0;i<cnt;i++ ){
-			rawArr.add( Integer.parseInt(st.nextToken()) );
+			rawArr[i]=Integer.parseInt( st.nextToken() );
 		}
 		
 		// 횟수 배열 F 구하기
 		for( int i=0;i<cnt;i++ ){
-			if( !flagArr[i] ) {
-				int	targetNum	= rawArr.get(i);
-				int	targetCnt	= 1;
-				
-				for( int j=i+1;j<cnt;j++ ){
-					if( targetNum == rawArr.get(j) ){
-						targetCnt++;
-						flagArr[j] = true;
-					}
-				}
-				
-				cntArr[targetNum] = targetCnt;
-			}
+			cntArr[rawArr[i]]++;
 		}
 		
 		
 		// 오등큰수 구하기
+		
+		/*
+		// 1. Stack 2개로 구현  ----------------------------------------------------------------
 		Stack<Integer>	stack	= new Stack<Integer>(); // Ai 조회하는 Stack
 		Stack<Integer>	stack2	= new Stack<Integer>(); // Ai의 인덱스 Stack
-		int[]			NGF		= new int[cnt]; // 오등큰수 배열
-		
-		stack.push(rawArr.get(0)); // rawArr[0]의 값을 인덱스로 쓴다. 그러면 cntArr2[값]에서 값에 해당되는 횟수를 바로 가져옴 
-		stack2.push(0); // rawArr[0]의 값을 가진 인덱스. 즉, 0
-		
-		for( int i=1;i<cnt;i++ ){
-			int curValue = rawArr.get(i);
-			int curCnt = cntArr[curValue];
-			while( !stack.isEmpty() && curCnt > cntArr[stack.peek()] ){
+
+		//stack.push(rawArr[0]); // rawArr[0]의 값을 인덱스로 쓴다. 그러면 cntArr2[값]에서 값에 해당되는 횟수를 바로 가져옴 
+		//stack2.push(0); // rawArr[0]의 값을 가진 인덱스. 즉, 0
+
+		for( int i=0;i<cnt;i++ ){
+			int curValue = rawArr[i];
+			while( !stack.isEmpty() && cntArr[curValue] > cntArr[stack.peek()] ){
 				NGF[stack2.pop()] = curValue;
 				stack.pop();
 			}
@@ -103,18 +104,38 @@ public class p4_17299_v2 {
 		while( !stack2.isEmpty() ){
 			NGF[stack2.pop()] = -1;
 		}
+		*/
+		// -------------------------------------------------------------------------------------
 		
-		for( int i : NGF ){
-			bw.write( i + " ");
+		
+		// 2. deque로 구현 ---------------------------------------------------------------------
+		Deque<Integer>	deque	= new LinkedList<Integer>();
+		
+		deque.offer(rawArr[cnt-1]);
+		NGF[cnt-1] = -1;
+		
+		for( int i=cnt-2;i>=0;i-- ){
+			int curValue = rawArr[i];
+			while( !deque.isEmpty() && cntArr[curValue] >= cntArr[deque.getLast()] ){
+				deque.pollLast();
+			}
+			
+			if( deque.isEmpty() ){
+				NGF[i] = -1;
+			}else{
+				NGF[i] = deque.getLast();
+			}
+			
+			deque.offer( curValue );
 		}
 		
+		// -------------------------------------------------------------------------------------
+		
+		for( int i : NGF ){
+			bw.write( i + " " );
+		}
 		
 		bw.flush();
-		
-		long estimatedTime = System.currentTimeMillis() - beforeTime;
-		System.out.println();
-		System.out.println("걸린 시간 : " + estimatedTime/1000.0 + " milli seconds");
-		
 		bw.close();
 		br.close();
 		
