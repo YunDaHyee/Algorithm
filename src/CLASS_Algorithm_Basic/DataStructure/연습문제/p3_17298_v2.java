@@ -47,12 +47,15 @@ public class p3_17298_v2 {
 		BufferedReader	br		= new BufferedReader( new InputStreamReader(System.in) );
 		BufferedWriter	bw		= new BufferedWriter( new OutputStreamWriter(System.out) );
 		
+		
 		int				cnt		= Integer.parseInt( br.readLine() ); // 횟수
 		
 		int[] 			arr 	= new int[cnt]; // 숫자 배열
 		//String[] 		arr 	= new String[cnt]; // 숫자 배열
 		
 		StringTokenizer st		= new StringTokenizer( br.readLine() );
+		
+		long beforeTime = System.currentTimeMillis();
 		
 		for(int i = 0;i<cnt;i++ ){
 			arr[i] = Integer.parseInt(st.nextToken());
@@ -80,6 +83,10 @@ public class p3_17298_v2 {
 		for( int i : NGE ){
 			bw.write(i +" ");
 		}
+		
+		long estimatedTime = System.currentTimeMillis() - beforeTime;
+		System.out.println();
+		System.out.println("걸린 시간 : " + estimatedTime/1000.0 + " milli seconds");
 		
 		/*
 		// 1. 배열로만 풀기
