@@ -45,23 +45,23 @@ import java.util.Stack;
 	
 @HISTORY
 	
- */	
+ */
 public class p6_1918 {
 	public static void main(String args[]) throws IOException {
-		BufferedReader 	br	= new BufferedReader( new InputStreamReader(System.in) );
-		BufferedWriter	bw	= new BufferedWriter( new OutputStreamWriter(System.out) );
-		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
 		String[] rawExpress = br.readLine().split("{0}");
 		StringBuilder result = new StringBuilder();
 		Stack<String> operand = new Stack<String>();
-		
-		for( int i=0;i<rawExpress.length;i++ ) {
+
+		for (int i = 0; i < rawExpress.length; i++) {
 			String currentString = rawExpress[i];
-			
+			/*
 			if( currentString.matches("[a-zA-Z]") ){
 				result.append(currentString);
 			}else{
-				if( currentString.equals(")")|currentString.equals("(") ){
+				if( currentString.equals(")") ){
 					while( !operand.isEmpty() ){
 						String popString = operand.pop();
 						if( popString.equals("(") ){
@@ -76,66 +76,37 @@ public class p6_1918 {
 					}
 					operand.push(currentString);                      
 				}
+			}*/
+			switch(currentString) {
+				case ")" :
+					while( !operand.isEmpty() ){
+						String popString = operand.pop();
+						if( popString.equals("(") ){
+							break;
+						}
+						result.append(popString);
+					}
+					break;
+				case "(" :
+				case "+" :
+				case "-" :
+				case "*" :
+				case "/" :
+					operand.push(currentString);
+					break;
+				default :
+					result.append(currentString);
+					break;
 			}
 		}
-		
-		bw.write(result+operand.pop());
-		
+
+		bw.write(result.toString());
+		if (!operand.isEmpty()) {
+			bw.write(operand.pop());
+		}
+
 		br.close();
 		bw.flush();
 		bw.close();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
