@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -53,34 +56,40 @@ public class p6_1918 {
 
 		String[] rawExpress = br.readLine().split("{0}");
 		StringBuilder result = new StringBuilder();
-		Stack<String> operand = new Stack<String>();
-
+		Stack<Character> operator = new Stack<Character>();
+		
 		for (int i = 0; i < rawExpress.length; i++) {
 			String currentString = rawExpress[i];
-			/*
+			
 			if( currentString.matches("[a-zA-Z]") ){
 				result.append(currentString);
 			}else{
 				if( currentString.equals(")") ){
-					while( !operand.isEmpty() ){
-						String popString = operand.pop();
-						if( popString.equals("(") ){
+					while( !operator.isEmpty() ){
+						Character popOperate = operator.pop();
+						if( popOperate.equals('(') ){
 							break;
 						}
-						result.append(popString);
+						result.append(popOperate);
 					}
 				}else{
-					// TODO 연산자 우선순위를 적용해야 될 것 같다 ㅠ
-					if( !operand.isEmpty() && operand.peek().charAt(0)>currentString.charAt(0) ){
-						result.append(operand.pop());
+					if( !currentString.equals("(") ){
+						while( !operator.isEmpty() ){
+							if( !Arrays.asList('(','+','-').contains(operator.peek()) ){
+								result.append(operator.pop());
+							}else {
+								break;
+							}
+						}
 					}
-					operand.push(currentString);                      
+					operator.push(currentString.charAt(0));                      
 				}
-			}*/
+			}
+			/*
 			switch(currentString) {
 				case ")" :
-					while( !operand.isEmpty() ){
-						String popString = operand.pop();
+					while( !operator.isEmpty() ){
+						String popString = operator.pop();
 						if( popString.equals("(") ){
 							break;
 						}
@@ -92,17 +101,21 @@ public class p6_1918 {
 				case "-" :
 				case "*" :
 				case "/" :
-					operand.push(currentString);
+					operator.push(currentString);
 					break;
 				default :
 					result.append(currentString);
 					break;
 			}
+			*/
 		}
 
 		bw.write(result.toString());
-		if (!operand.isEmpty()) {
-			bw.write(operand.pop());
+		if (!operator.isEmpty()) {
+			//Character popOperate = operator.pop();
+			//if( !popOperate.equals('(') ){
+				bw.write(operator.pop());
+			//}
 		}
 
 		br.close();
