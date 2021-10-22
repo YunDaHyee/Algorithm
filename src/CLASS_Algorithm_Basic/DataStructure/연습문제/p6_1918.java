@@ -55,67 +55,34 @@ public class p6_1918 {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
 		String[] rawExpress = br.readLine().split("{0}");
-		StringBuilder result = new StringBuilder();
 		Stack<Character> operator = new Stack<Character>();
 		
 		for (int i = 0; i < rawExpress.length; i++) {
 			String currentString = rawExpress[i];
 			
 			if( currentString.matches("[a-zA-Z]") ){
-				result.append(currentString);
-			}else{
-				if( currentString.equals(")") ){
-					while( !operator.isEmpty() ){
-						Character popOperate = operator.pop();
-						if( popOperate.equals('(') ){
-							break;
-						}
-						result.append(popOperate);
+				bw.write(currentString);
+			}else if( currentString.equals(")") ){
+				while( !operator.isEmpty() ){
+					Character popOperate = operator.pop();
+					if( popOperate.equals('(') ){
+						break;
 					}
-				}else{
-					if( !currentString.equals("(") ){
-						while( !operator.isEmpty() ){
-							if( !Arrays.asList('(','+','-').contains(operator.peek()) ){
-								result.append(operator.pop());
-							}else {
-								break;
-							}
-						}
-					}
-					operator.push(currentString.charAt(0));                      
+					bw.write(currentString);
 				}
-			}
-			/*
-			switch(currentString) {
-				case ")" :
-					while( !operator.isEmpty() ){
-						String popString = operator.pop();
-						if( popString.equals("(") ){
-							break;
-						}
-						result.append(popString);
+			}else{
+				char currentChar = currentString.charAt(0);
+				if( currentChar!='(' ){
+					if( !Arrays.asList('(').contains(operator.peek())){
+						bw.write(operator.pop());
 					}
-					break;
-				case "(" :
-				case "+" :
-				case "-" :
-				case "*" :
-				case "/" :
-					operator.push(currentString);
-					break;
-				default :
-					result.append(currentString);
-					break;
+				}
+				operator.push(currentChar);
 			}
-			*/
 		}
 
-		bw.write(result.toString());
-		if (!operator.isEmpty()) {
-			//Character popOperate = operator.pop();
-			//if( !popOperate.equals('(') ){
-				bw.write(operator.pop());
-			//}
+		while(!operator.isEmpty()) {
+			bw.write(operator.pop());
 		}
 
 		br.close();
