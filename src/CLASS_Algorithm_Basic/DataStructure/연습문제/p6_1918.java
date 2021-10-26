@@ -56,31 +56,33 @@ public class p6_1918 {
 
 		String[] rawExpress = br.readLine().split("{0}");
 		Stack<Character> operator = new Stack<Character>();
+		StringBuilder result = new StringBuilder();
 		
 		for (int i = 0; i < rawExpress.length; i++) {
 			String currentString = rawExpress[i];
 			
 			if( currentString.matches("[a-zA-Z]") ){
-				bw.write(currentString);
+				result.append(currentString);
 			}else if( currentString.equals(")") ){
 				while( !operator.isEmpty() ){
 					Character popOperate = operator.pop();
 					if( popOperate.equals('(') ){
 						break;
 					}
-					bw.write(currentString);
+					result.append(currentString);
 				}
 			}else{
 				char currentChar = currentString.charAt(0);
-				if( currentChar!='(' ){
-					if( !Arrays.asList('(').contains(operator.peek())){
-						bw.write(operator.pop());
+				// TODO 연산자 우선순위를 적용
+				if( !operator.isEmpty()&&currentChar!='(' ){
+					if( isPriority(operator.peek(),currentChar) ){
+						result.append(operator.pop());
 					}
 				}
 				operator.push(currentChar);
 			}
 		}
-
+		bw.write(result.toString());
 		while(!operator.isEmpty()) {
 			bw.write(operator.pop());
 		}
@@ -89,4 +91,24 @@ public class p6_1918 {
 		bw.flush();
 		bw.close();
 	}
+	
+	public static boolean isPriority(char peekOperator, char currentOperator) {
+		int peekOperatorResult		= 0;
+		int currentOperatorResult	= 0;
+		
+		if( peekOperator=='+'||peekOperator=='-' ){
+			peekOperatorResult = 1;
+		}else if( peekOperator=='*'||peekOperator=='/' ){
+			peekOperatorResult = 2;
+		}
+		
+		if( currentOperator=='+'||currentOperator=='-' ) {
+			currentOperator = 1;
+		}else if( currentOperator=='*'||currentOperator=='/' ){
+			currentOperator = 2;
+		}
+		
+		return peekOperatorResult<=currentOperatorResult;
+	}
 }
+
