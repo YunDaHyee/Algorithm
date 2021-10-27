@@ -103,12 +103,12 @@ public class p6_1918 {
 		}
 		
 		if( currentOperator=='+'||currentOperator=='-' ) {
-			currentOperator = 1;
+			currentOperatorResult = 1;
 		}else if( currentOperator=='*'||currentOperator=='/' ){
-			currentOperator = 2;
+			currentOperatorResult = 2;
 		}
 		
-		return peekOperatorResult<=currentOperatorResult;
+		return peekOperatorResult>=currentOperatorResult;
 	}
 }
 
