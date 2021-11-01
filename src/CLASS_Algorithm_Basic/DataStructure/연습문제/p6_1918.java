@@ -5,9 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -45,8 +42,12 @@ import java.util.Stack;
 	첫째 줄에 후위 표기식으로 바뀐 식을 출력하시오
 	ABC+*
 	
-	
 @HISTORY
+	- 분리자
+		StringTokenizer : 단순 분리자만을 사용하여 분리할 경우
+		split : 복잡한 문자열을 정규표현식을 이용하여 분리할 경우
+	- 문자만을 추출하는 경우
+		정규식보다는 아스키코드값으로 64~91 사이의 값일 때로 하는 것이 더 빠름
 	
  */
 public class p6_1918 {
@@ -54,29 +55,30 @@ public class p6_1918 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		String[] rawExpress = br.readLine().split("{0}");
+		String[] rawExpress = br.readLine().split("");
 		Stack<Character> operator = new Stack<Character>();
 		StringBuilder result = new StringBuilder();
 		
 		for (int i = 0; i < rawExpress.length; i++) {
-			String currentString = rawExpress[i];
+			char currentChar = rawExpress[i].charAt(0);
 			
-			if( currentString.matches("[a-zA-Z]") ){
-				result.append(currentString);
-			}else if( currentString.equals(")") ){
+			if( isAlpabet(currentChar) ){
+				result.append(currentChar);
+			}else if( currentChar==')' ){
 				while( !operator.isEmpty() ){
 					Character popOperate = operator.pop();
 					if( popOperate.equals('(') ){
 						break;
 					}
-					result.append(currentString);
+					result.append(popOperate);
 				}
 			}else{
-				char currentChar = currentString.charAt(0);
 				// TODO 연산자 우선순위를 적용
-				if( !operator.isEmpty()&&currentChar!='(' ){
-					if( isPriority(operator.peek(),currentChar) ){
+				while( !operator.isEmpty()&&currentChar!='(' ){
+					if(isPriorityThanCur(operator.peek(),currentChar)){
 						result.append(operator.pop());
+					}else {
+						break;
 					}
 				}
 				operator.push(currentChar);
@@ -92,7 +94,7 @@ public class p6_1918 {
 		bw.close();
 	}
 	
-	public static boolean isPriority(char peekOperator, char currentOperator) {
+	public static boolean isPriorityThanCur(char peekOperator, char currentOperator) {
 		int peekOperatorResult		= 0;
 		int currentOperatorResult	= 0;
 		
@@ -109,6 +111,13 @@ public class p6_1918 {
 		}
 		
 		return peekOperatorResult>=currentOperatorResult;
+	}
+	
+	public static boolean isAlpabet(char currentChracter) {
+		if( 64 < currentChracter && currentChracter < 91 ) {
+			return true;
+		}
+		return false;
 	}
 }
 
