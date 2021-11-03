@@ -31,27 +31,11 @@ public class p7_10808 {
 		String[]				rawWord		= br.readLine().split("{0}");
 		Map<Character, Integer> wordCount	= new HashMap<Character, Integer>(25);
 		
-		/*
-		for( int i=97;i<122;i++ ) {
-			wordCount.put((char) i, 0);
-		}
-		
+		// Map 버전 -----------------------------------------------------------------------
 		for( int i=0;i<rawWord.length;i++ ) {
 			char charWord	= rawWord[i].charAt(0);
-			int beforeCount = wordCount.get(charWord);
-			wordCount.put( charWord, ++beforeCount );
-		}
-		 */
-		
-		// 스택 버전
-		Stack<Character> stack = new Stack<Character>();
-		for( int i=0;i<rawWord.length;i++ ) {
-			stack.push(rawWord[i].charAt(0));
-		}
-		while(!stack.isEmpty()) {
-			char charWord	= stack.pop();
 			if( wordCount.get(charWord)==null ) {
-				wordCount.put(charWord,0);
+				wordCount.put(charWord,1);
 			}else {
 				int beforeCount = wordCount.get(charWord);
 				wordCount.put( charWord, ++beforeCount );
@@ -60,19 +44,40 @@ public class p7_10808 {
 
 		for( char i=97;i<123;i++ ) {
 			if( wordCount.get(i)==null ) {
-				bw.write(i,0);
+				bw.write("0");
 			}else {
-				int beforeCount = wordCount.get(charWord);
-				wordCount.put( charWord, ++beforeCount );
+				bw.write( wordCount.get(i).toString() );
 			}
-			
-			bw.write(wordCount.get((char)i).toString());
 			if( i==122 ) {
 				break;
 			}
 			bw.write(" ");
 		}
 		
+		// Stack 버전 ---------------------------------------------------------------------
+		Stack<Character> stack = new Stack<Character>();
+		for( int i=0;i<rawWord.length;i++ ) {
+			stack.push(rawWord[i].charAt(0));
+		}
+		while(!stack.isEmpty()) {
+			char charWord	= stack.pop();
+			int beforeCount = wordCount.get(charWord)==null?0:wordCount.get(charWord);
+			wordCount.put( charWord, ++beforeCount );
+		}
+
+		for( int i=97;i<123;i++ ) {
+			if( wordCount.get((char)i)!=null ) {
+				bw.write(wordCount.get((char)i).toString());
+			}else {
+				bw.write("0");
+			}
+			if( i==122 ) {
+				break;
+			}
+			bw.write(" ");
+		}
+		// --------------------------------------------------------------------------------
+
 		br.close();
 		bw.flush();
 		bw.close();
