@@ -28,11 +28,24 @@ public class p7_10808 {
 		BufferedReader	br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter	bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		
-		String[]				rawWord		= br.readLine().split("{0}");
-		Map<Character, Integer> wordCount	= new HashMap<Character, Integer>(25);
-		
+		//String[]				rawWord		= br.readLine().split("{0}");
+		//Map<Character, Integer> wordCount	= new HashMap<Character, Integer>(25);
+
+		// 남 거 참고한 버전 --------------------------------------------------------------
+		char[]					rawWord2	= br.readLine().toCharArray();
+		int[]					alphabet	= new int[26];
+
+        for (int i = 0; i < rawWord2.length; i++) {
+        	int dd = rawWord2[i] - 97; // 소문자가 98~121 이니까 거기서 뺴면 0이 되니까!
+            alphabet[dd]++;
+        }
+        
+        for (int i : alphabet) {
+        	bw.write(i);
+        	bw.write(" ");
+        }
 		// Map 버전 -----------------------------------------------------------------------
-		for( int i=0;i<rawWord.length;i++ ) {
+		/*for( int i=0;i<rawWord.length;i++ ) {
 			char charWord	= rawWord[i].charAt(0);
 			if( wordCount.get(charWord)==null ) {
 				wordCount.put(charWord,1);
@@ -41,7 +54,7 @@ public class p7_10808 {
 				wordCount.put( charWord, ++beforeCount );
 			}
 		}
-
+		
 		for( char i=97;i<123;i++ ) {
 			if( wordCount.get(i)==null ) {
 				bw.write("0");
@@ -52,10 +65,10 @@ public class p7_10808 {
 				break;
 			}
 			bw.write(" ");
-		}
+		}*/
 		
 		// Stack 버전 ---------------------------------------------------------------------
-		Stack<Character> stack = new Stack<Character>();
+		/*Stack<Character> stack = new Stack<Character>();
 		for( int i=0;i<rawWord.length;i++ ) {
 			stack.push(rawWord[i].charAt(0));
 		}
@@ -64,7 +77,7 @@ public class p7_10808 {
 			int beforeCount = wordCount.get(charWord)==null?0:wordCount.get(charWord);
 			wordCount.put( charWord, ++beforeCount );
 		}
-
+		
 		for( int i=97;i<123;i++ ) {
 			if( wordCount.get((char)i)!=null ) {
 				bw.write(wordCount.get((char)i).toString());
@@ -75,7 +88,7 @@ public class p7_10808 {
 				break;
 			}
 			bw.write(" ");
-		}
+		}*/
 		// --------------------------------------------------------------------------------
 
 		br.close();
