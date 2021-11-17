@@ -36,7 +36,8 @@ import java.util.StringTokenizer;
 		0과 1은 소수가 아닌 거로 초기화 해주는 게 중요했다.
 		그걸 고쳐주니 됐다.
 		휴 하루종일 이것만 풀었네ㅠ
-		-20211117- 
+	@Date
+		2021. 11. 17.
  */
 
 public class _5_1929 {
