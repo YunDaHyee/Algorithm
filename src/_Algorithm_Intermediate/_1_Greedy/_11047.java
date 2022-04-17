@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -86,10 +85,10 @@ import java.util.List;
 		..
 		최소값은 12
 		
-		근데 최소값 구하기니까
-		1. 오름차순으로 정렬하고
-		2. 제일 큰 값부터 처리한다면은 제일 첫 번째 단계에서 행하는 결과값이 답 아닐까..?
+		근데 최소값 구하기에다가 오름차순으로 주어진다면
+		제일 큰 값부터 처리한다면은 제일 첫 번째 단계에서 행하는 결과값이 답 아닐까..?
 		라는 생각으로 접근함.
+		(처음에는 문제에 오름차순으로 주어진다는 내용을 못봐서 오름차순 정렬을 추가했었다.)
 		
 		N개의 동전 중 가장 큰 가치를 지닌 동전부터 탐색하여,
 		동전의 가치가 K보다 클 경우는 넘어가고 아닐경우는 최대 구성 가능한 개수를 더해줌
@@ -109,14 +108,22 @@ public class _11047 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String[] raw = br.readLine().split(" ");
 		int N = Integer.parseInt(raw[0]), K = Integer.parseInt(raw[1]);
+		int result = 0;
 		
 		while( N-->0 ) {
 			Ai.add(Integer.parseInt(br.readLine()));
 		}
 		
-		Arrays.sort(Ai.toArray()); // 가치를 오름차순으로 정렬
+		System.out.println( greedy(K) ); // 1. 재귀
 		
-		System.out.println( greedy(K) );
+		for( int i=Ai.size()-1; (i>=0 && K>0) ;i-- ) {
+			int currentValue = Ai.get(i);
+			result += K/currentValue;
+			K = K%currentValue;
+		}
+		
+		System.out.println( result ); // 2. 반복문
+		
 		br.close();
 	}
 	
