@@ -1,4 +1,4 @@
-package _1_DataStructure.Queue;
+package Basic_Level._1_DataStructure.Queue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

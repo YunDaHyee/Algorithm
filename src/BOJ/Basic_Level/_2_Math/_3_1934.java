@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _2_Math;
+package Basic_Level._2_Math;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

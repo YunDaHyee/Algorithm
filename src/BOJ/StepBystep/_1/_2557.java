@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _1;
+package StepBystep._1;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

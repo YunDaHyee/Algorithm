@@ -1,4 +1,4 @@
-package _4;
+package StepBystep._4;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

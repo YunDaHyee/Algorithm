@@ -1,13 +1,11 @@
-package _1_DataStructure.연습문제;
+package Basic_Level._1_DataStructure.연습문제;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
 

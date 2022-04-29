@@ -1,4 +1,4 @@
-package _1_DataStructure.Deque;
+package Basic_Level._1_DataStructure.Deque;
 
 import java.io.BufferedReader;
 import java.io.IOException;

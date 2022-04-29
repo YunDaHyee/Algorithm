@@ -1,4 +1,4 @@
-package _5;
+package StepBystep._5;
 /*package step_by_step_problem._5;
 
 import java.io.BufferedReader;

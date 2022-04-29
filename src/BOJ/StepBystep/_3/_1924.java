@@ -1,4 +1,4 @@
-package _3;
+package StepBystep._3;
 
 import java.util.Calendar;
 import java.util.Scanner;

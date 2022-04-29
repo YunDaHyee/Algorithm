@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _4_BruteForce;
+package Basic_Level._4_BruteForce;
 
 import java.io.BufferedReader;
 import java.io.IOException;

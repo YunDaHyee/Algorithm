@@ -1,4 +1,4 @@
-package _5;
+package StepBystep._5;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

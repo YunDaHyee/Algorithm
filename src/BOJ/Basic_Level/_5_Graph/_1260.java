@@ -1,4 +1,4 @@
-package _5_Graph;
+package Basic_Level._5_Graph;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

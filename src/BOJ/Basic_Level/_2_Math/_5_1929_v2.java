@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _2_Math;
+package Basic_Level._2_Math;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -53,7 +53,7 @@ public class _5_1929_v2 {
 		for( int i=2;i<=max;i++ ) {
 			if( !check[i] ) {
 				//result[primeCount++] = i;
-				for( int j=i+2;j<=max;j+=i ) {
+				for( int j=i*2;j<=max;j+=i ) {
 					check[j] = true;
 				}
 			}

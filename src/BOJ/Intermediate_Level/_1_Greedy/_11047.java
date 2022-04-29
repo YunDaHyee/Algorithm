@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _1_Greedy;
+package Intermediate_Level._1_Greedy;
 
 import java.io.BufferedReader;
 import java.io.IOException;

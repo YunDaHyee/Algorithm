@@ -1,4 +1,4 @@
-package _5_Graph.연습문제;
+package Basic_Level._5_Graph.연습문제;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

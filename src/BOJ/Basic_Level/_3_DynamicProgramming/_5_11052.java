@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _3_DynamicProgramming;
+package Basic_Level._3_DynamicProgramming;
 
 import java.io.BufferedReader;
 import java.io.IOException;

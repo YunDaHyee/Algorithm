@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _3_DynamicProgramming;
+package Basic_Level._3_DynamicProgramming;
 
 import java.awt.event.TextEvent;
 import java.io.BufferedReader;

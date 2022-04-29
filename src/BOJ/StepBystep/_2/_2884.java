@@ -1,7 +1,7 @@
 /**
  * 
  */
-package _2;
+package StepBystep._2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
