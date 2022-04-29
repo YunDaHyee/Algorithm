@@ -90,7 +90,7 @@ public class _13023 {
 		int M = Integer.parseInt( raw[1] ); // 간선 = 관계 수
 		
 		boolean[][]				adjacencyMatrix	= new boolean[N][N];		// 인접행렬. A[i]이니까 i만큼. 즉 사람 수 만큼임
-		List<Integer>[]			adjacencyList	= new ArrayList[N];			// 인접리스트. 기록3 - 배열의 초기화를 첨 깨닫다;;ㅅㅂ;; 근데 해줘도 인덱스 접근이 안됨..ㅠ 배열로 이요하고자 할 떄는 리스트 함수를 쓰더라도 배열을 쓰자. List<Integer>[] 일케. 그러면 사이즈를 지정함과 동시에 인덱스로의 접근이 가능해진다!! 나는 int/string 이런것만 해야할줄알았는데 미처 생각을 그까지 못했다!꿀팁이다!!
+		List<Integer>[]			adjacencyList	= new ArrayList[N];			// 인접리스트. 기록3 - 배열의 초기화를 첨 깨닫다; 근데 해줘도 인덱스 접근이 안됨..ㅠ 배열로 이요하고자 할 떄는 리스트 함수를 쓰더라도 배열을 쓰자. List<Integer>[] 일케. 그러면 사이즈를 지정함과 동시에 인덱스로의 접근이 가능해진다!! 나는 int/string 이런것만 해야할줄알았는데 미처 생각을 그까지 못했다!꿀팁이다!!
 		List<Edge> edgeList						= new ArrayList<Edge>();	// 간선리스트
 
 		// 기록4. 초기화를 간단하게 할 수 있는 함수는 없다. 반복문은 돌려줘야만함.. 어쩔 수 없다.
@@ -124,7 +124,7 @@ public class _13023 {
 		// 2. 관계 구하기
 		for( int i=0;i<M;i++ ){
 			for( int j=0;j<M;j++ ){
-				 // 키가 1.. 하시발 맵으로 하면 키가 겹치는데 어떻게 함?ㅋㅋㅋㅋㅋㅋㅋ
+				 // 키가 1.. 하 맵으로 하면 키가 겹치는데 어떻게 함?
 				//--> 기록1: 처음에 Map으로 했었는데 키의 중복을 처리할 수 없어서 Pair라는 클래스를 처음 써봄..근데 클래스 직접 만들어서 하는 방식으로 하는 게 코테 직접 할 때 더 현실성 있는 듯..?
 				int A = edgeList.get(i).from;
 				int B = edgeList.get(i).to;
