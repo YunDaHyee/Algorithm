@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Level_2.BruteForce;
+package BruteForce.LEVLE_2;
 
 import java.io.IOException;
 import java.util.HashSet;

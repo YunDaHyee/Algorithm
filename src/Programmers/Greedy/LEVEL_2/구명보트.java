@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Level_2.Greedy;
+package Greedy.LEVEL_2;
 
 import java.io.IOException;
 import java.util.ArrayDeque;

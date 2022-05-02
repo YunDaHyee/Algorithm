@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Level_2.BruteForce;
+package BruteForce.LEVEL_1;
 
 import java.io.IOException;
 import java.util.ArrayList;
