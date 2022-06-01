@@ -66,7 +66,7 @@ import java.util.Queue;
         return Arrays.stream(dayOfend).filter(i -> i!=0).toArray();
 		
 		2. 100퍼가 되는 완료일을 미리 계산해서 peek보다 크면 q 사이즈만큼 정답리스트에 넣고 큐 비워주는 방법.
-		Queue<Integer> q = new Practice<>();
+		Queue<Integer> q = new LinkedList<>();
         List<Integer> answerList = new ArrayList<>();
 
         for (int i = 0; i < speeds.length; i++) {
@@ -105,8 +105,8 @@ public class 기능개발 {
 		List<Integer>	days				= new ArrayList<Integer>();
 		
 		/* 첨 시도 코드*/
-		/*Deque<Integer>	deque				= new Practice<Integer>(); //프로세스큐
-		Deque<Integer>	speedsDeque			= new Practice<Integer>(); // 시간큐
+		/*Deque<Integer>	deque				= new LinkedList<Integer>(); //프로세스큐
+		Deque<Integer>	speedsDeque			= new LinkedList<Integer>(); // 시간큐
 		int				progressesCount		= 0;
 		
 		for( int progress : progresses ) {
