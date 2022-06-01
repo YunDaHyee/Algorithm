@@ -81,7 +81,7 @@ public class _4_1212 {
         }
 		
 		for( int i=0;i<raws.length();i++ ){
-			String binary = binarys[raws.charAt(i)-'0'];
+			String binary = binarys[raws.charAt(i)-'0']; // CharAt(int i) - '0'을 통해 char형의 문자들을 int형으로 변환시킬 수 있다.
 			result.append( i==0? binary.replaceFirst("0*|00*", ""):binary );
 		}
 		
