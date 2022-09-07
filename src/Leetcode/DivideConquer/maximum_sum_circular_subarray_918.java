@@ -1,4 +1,5 @@
-package DivideConquer;
+package Leetcode.DivideConquer;
+
 /**
  * 
  */
@@ -45,7 +46,7 @@ package DivideConquer;
 		2022. 7. 25.
  */
 
-public class Maximum_Sum_Circular_Subarray_918 {
+public class maximum_sum_circular_subarray_918 {
 	static int result = (int)(-3*Math.pow(10, 4));//ㅈㄱ
 	public static void main(String[] args) {
 		int[] nums = 

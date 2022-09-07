@@ -1,4 +1,5 @@
-package DivideConquer;
+package Leetcode.DivideConquer;
+
 /**
  * 
  */
@@ -31,11 +32,12 @@ package DivideConquer;
 		
 	@history
 		N = 가장 큰 합을 갖는 연속적인 하위 배열을 찾고 그 요소간의 합
+		
 	@Date
 		2022. 8. 1.
  */
 
-public class Maximum_Subarray_53 {
+public class maximum_subarray_53 {
 	public static void main(String[] args) {
 		int[] nums = 
 		{-2,1,-3,4,-1,2,1,-5,4};
