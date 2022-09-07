@@ -13,7 +13,7 @@ import java.util.List;
 		  B	  C         1     2
 		D	 E	F    3      4   5
 				 G               6
-		예를 들어 위와 같은 이진 트리가 입력되면,
+		예를 들어 위와 같은 이진 트리가 입력되면, 
 		
 		전위 순회한 결과 : ABDCEFG // (루트) (왼쪽 자식) (오른쪽 자식)
 		중위 순회한 결과 : DBAECFG // (왼쪽 자식) (루트) (오른쪽 자식)
@@ -35,9 +35,9 @@ import java.util.List;
 	@Output
 		첫째 줄에 전위 순회, 둘째 줄에 중위 순회, 셋째 줄에 후위 순회한 결과를 출력한다.
 		각 줄에 N개의 알파벳을 공백 없이 출력하면 된다.
-		ABDCEFG
+		ABD CEFG
 		DBA ECFG
-		DBEGFCA
+		DBE GFCA
 	@history
 		숫자로 바꿔야함;; 아스키코드값으로 바꿔줌
 		- 전위 : 노드 방문 -> 왼 -> 오 (전위는 DFS랑 같음)
@@ -99,25 +99,106 @@ import java.util.List;
 			그랬더니 훨씬 깔끔해지고 인접리스트로의 구현이 완성됨. -^^-
 			
 		< node 객체 구현 >
+		- 1차 시도
+			nodes를 List<NODE>로 두게 함.
+			root 역할을 currentNode가 담당하게 했는데
+			알파벳 순서대로 들어오는 게 아니고 무작위로 들어오는 거라서 List의 인덱스로 접근하는 게 안되는 상황..
+			ex) D면 아스키 코드로 바꿨을 때 3이 되어야 하는데 인덱스 3에는 E가 있음..
+			nodes<NODE>[] 이건 결국엔 인접리스트 꼴인데;;
+			뭔가 높이로 해야할 것 같은데..
+		
+		- 2차 시도
+			- nodes를 NODE[]로 두게 함.
+			- 배열로 뒀기 때문에 NODE 객체에 값을 넣어줄 때 해당되는 알파벳의 인덱스에 값이 꽂히도록 함 
+			- check 배열 관련 로직을 뺐다.
+			아래 로직 때문에 인덱스를 신경썼는데 check 배열은 인접리스트 쓸 때만 쓰는 것 같아서 뺐다.
+			int currentNodeIndex = currentNode.charAt(0)-65;
+			check[currentNodeIndex] = true;
+			
+		
+		
+		
 		
 
 			
 	@Date
 		2022. 8. 15.
  */
+class NODE {
+	public String left;
+	public String right;
+}
 
 public class _1991 {
+	/* 1번 전용 전역변수*/
 	static List<Integer>[] aList;
 	static boolean flag;
 
+	/* 2번 전용 전역변수*/
+	static NODE[] nodes;// NODE 클래스를 담을 리스트
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		int N = Integer.parseInt(br.readLine());
 
-		// 트리 저장 방식
-		/* 1. 그래프이므로 그래프와 같은 방식 */
+		// 트리 저장 방식 차이
+		//adjacencyListMethod(N, br); // 1. 그래프이므로 그래프와 같은 방식
+		//System.out.println();
+		nodeMethod(br); // 2. 트리만의 방식 - 객체 활용
 		
+		br.close();
+	}
+
+	private static void nodeMethod(BufferedReader br) throws IOException {
+		int N = Integer.parseInt(br.readLine());
+		
+		nodes = new NODE[N];
+		
+		// 트리 저장 - NODE 객체에 값 넣기
+		for( int i=0;i<N;i++ ){
+			String[] info = br.readLine().split(" ");
+			NODE temp = new NODE();
+			temp.left = info[1];
+			temp.right = info[2]; 
+			nodes[info[0].charAt(0)-'A'] = temp;
+		}
+		
+		// 트리 순회
+		DFS2("A", "PRE");
+		System.out.println();
+		DFS2("A", "IN");
+		System.out.println();
+		DFS2("A", "POST");
+		
+	}
+
+	private static void DFS2(String currentNode, String order) {
+		if( currentNode.equals(".") ){
+			return;
+		}
+		
+		NODE pair = nodes[currentNode.charAt(0)-'A']; // 현재 노드의 왼,오 쌍
+		
+		switch (order) {
+			case "PRE":
+				System.out.print(currentNode);
+				DFS2(pair.left, "PRE");
+				DFS2(pair.right, "PRE");
+				break;
+			case "IN":
+				DFS2(pair.left, "IN");
+				System.out.print(currentNode);
+				DFS2(pair.right, "IN");
+				break;
+			case "POST":
+				DFS2(pair.left, "POST");
+				DFS2(pair.right, "POST");
+				System.out.print(currentNode);
+				break;
+		}
+	}
+	
+	private static void adjacencyListMethod(int N, BufferedReader br) throws IOException {
 		aList = new ArrayList[N];
 		boolean[] check1 = new boolean[N];
 		boolean[] check2 = new boolean[N];
@@ -146,8 +227,6 @@ public class _1991 {
 		DFS(0, "IN", check2);	// 중. 사이즈 끝에서 거슬러올라가야하나 하면서 aList.length()-1이렇게도 해봄..
 		System.out.println();
 		DFS(0, "POST", check3); // 후
-
-		br.close();
 	}
 
 	private static void DFS(int node, String order, boolean[] check) {
