@@ -115,7 +115,7 @@ public class min_cost_to_connect_all_points_1584 {
 		// 2번 방법 - 인접리스트 만들고 우선순위 큐로 BFS
 		List<Edge>[] coordinates = new ArrayList[points.length];
 		
-		// 인접리스트에 초기화
+		// 인접리스트에 초기화 
 		for (int i = 0; i < points.length; i++) {
 			coordinates[i] = new ArrayList<>();
 		}
