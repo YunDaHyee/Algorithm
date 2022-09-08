@@ -45,7 +45,7 @@ import javax.swing.text.Position;
 		BFS
 		바뀌면 안되는 곳
 		1.	가쪽
-		2.	뒤집으면 안되는 'O'에 인접해있는 곳
+		2.	뒤집으면 안되는 'O'에 인접해있는 곳 - X로 둘러싸여있는 곳
 			처음엔 이해가 안갔는데 생각해보니 양 방향이 다 가쪽이어서 중심인 곳인 듯 하다.
 		 	근데 X/O로 이미 다 둘러싸여있으면은 중심이어도 바꿀 수 있나봄;;
 		 	뒤집으면 안되는 '0'에 대해 테케 하면서 알아가는 중;;;
@@ -66,6 +66,14 @@ import javax.swing.text.Position;
 		xCount		= 0,
 		oCount		= 0;
 		centerCount는 4인데 0부터 도니까 -1, 다 O 아니어야하니까 3 미만
+		// 모든 길이 X로 둘러 싸여있을 때
+		if( (current.X!=0&&current.X!=M-1)&&(current.Y!=0&&current.Y!=N-1) ){ // 가쪽아닐 때
+			if( pathCount==xCount&&pathCount!=oCount ){
+				if( !check[current.X][current.Y] ){
+					board[current.X][current.Y] = 'X';
+				}
+			}
+		}
 		이런식으로 o,x 별 카운트 해서 마지막에 뭔가 해주려고 했는데
 		if( centerCount==3 && xCount!=0 && oCount==0 ){ // centerCount는 4인데 0부터 도니까 -1, 다 O 아니어야하니까 3 미만
 				board[N/2][M/2] = 'X';
@@ -76,8 +84,11 @@ import javax.swing.text.Position;
 		중간에 바뀐 좌표값에 대해 list에 추가하고
 		추가한 좌표들에 대해서 2차로 검사하는 식으로 진행
 		
-	@Date
+		단순히 o 하나가 4방면에 둘러싸여있는 것만 생각하고 풀었는데
+		o 집단이 둘러싸여있는 걸 고려해야하는 문제였다.
 		
+   @Date
+      2022. 9. 8.
  */
 class Coordinate2 {
 	int X,Y;
@@ -90,6 +101,10 @@ class Coordinate2 {
 }
 
 public class surrounded_regions_130 {
+	static int M,N;
+	static boolean[][]	check;
+	static int[][]		group;
+
 	public static void main(String[] args) {
 		char[][]			board =  
 		//{{'X','X','X','X'},{'X','O','O','X'},{'X','X','O','X'},{'X','O','X','X'}}; //=> [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
@@ -99,145 +114,114 @@ public class surrounded_regions_130 {
 		//{{'X','X','X'},{'X','O','X'},{'X','X','X'}}; // => [["X","X","X"],["X","X","X"],["X","X","X"]]
 		//{{'O','O','O'},{'O','X','O'},{'O','O','O'}};
 		//{{'X','O','X'},{'X','O','X'},{'X','O','X'}}; // => [["X","O","X"],["X","O","X"],["X","O","X"]]//틀
-		// 가쪽에 X가 있으면 뒤집을 수 있지만 가쪽에 O가 있으면 인접해있으니까 못뒤집어서 그대로 출력해야함.
-		// 4방면으로 둘러싸여있어야돼
-		// 중간에 X이지만 O들이 가쪽에 있어서 
-		// 중간에 O이지만
 		//{{'O','X','O'},{'X','O','X'},{'O','X','O'}}; //=>[["O","X","O"],["X","X","X"],["O","X","O"]]
-		{{'X','O','X','O','X','O'},{'O','X','O','X','O','X'},{'X','O','X','O','X','O'},{'O','X','O','X','O','X'}};
+		//{{'X','O','X','O','X','O'},{'O','X','O','X','O','X'},{'X','O','X','O','X','O'},{'O','X','O','X','O','X'}};
 		//=> [["X","O","X","O","X","O"],["O","X","X","X","X","X"],["X","X","X","X","X","O"],["O","X","O","X","O","X"]]
-		/**
-		원래
-		X','O','X','O','X','O
-		O','X','O','X','O','X
-		X','O','X','O','X','O
-		O','X','O','X','O','X
-		 
-		 *중간
-		 X, O, X, O, X, O
-		 O, X, X, X, X, X
-		 X, X, X, X, X, O
-		 O, X, X, X, X, X
-		 
-		 X, O, X, O, X, O 맞
-		 O, X, O, X, O, X
-		 X, O, X, O, X, O
-		 O, X, O, X, O, X 맞
-		  
-		 */
-		/** 답
-		 X","O","X","O","X","O
-		 O","X","X","X","X","X
-		 X","X","X","X","X","O
-		 O","X","O","X","O","X
-		 */
+		//{{'O','X','X','O','X'},{'X','O','O','X','O'},{'X','O','X','O','X'},{'O','X','O','O','O'},{'X','X','O','X','O'}};
+		//=>[["O","X","X","O","X"],["X","X","X","X","O"],["X","X","X","O","X"],["O","X","O","O","O"],["X","X","O","X","O"]]
+		{{'X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'},{'X','X','X','X','X','X','X','X','X','O','O','O','X','X','X','X','X','X','X','X'},{'X','X','X','X','X','O','O','O','X','O','X','O','X','X','X','X','X','X','X','X'},{'X','X','X','X','X','O','X','O','X','O','X','O','O','O','X','X','X','X','X','X'},{'X','X','X','X','X','O','X','O','O','O','X','X','X','X','X','X','X','X','X','X'},{'X','X','X','X','X','O','X','X','X','X','X','X','X','X','X','X','X','X','X','X'}};
+		//=>[["X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X","X"],["X","X","X","X","X","X","X","X","X","O","O","O","X","X","X","X","X","X","X","X"],["X","X","X","X","X","O","O","O","X","O","X","O","X","X","X","X","X","X","X","X"],["X","X","X","X","X","O","X","O","X","O","X","O","O","O","X","X","X","X","X","X"],["X","X","X","X","X","O","X","O","O","O","X","X","X","X","X","X","X","X","X","X"],["X","X","X","X","X","O","X","X","X","X","X","X","X","X","X","X","X","X","X","X"]]
 
+		M = board.length;
+		N = board[0].length;
 		
+		check = new boolean[M][N];
+		group	= new int[M][N];
+		
+		int	groupNo	= 0;
+		
+		// 그룹번호 묶기
+		for( int i=0;i<M;i++ ){
+			for( int j=0;j<N;j++ ){
+				if( check[i][j] ){
+					continue;
+				}
+				if( board[i][j]=='O' ){
+					if( (i!=0&&i!=M-1)&&(j!=0&&j!=N-1) ){ // 가쪽아닐 때
+						BFS(board, ++groupNo, i, j);
+						continue;
+					}
+					group[i][j] = -1;
+				}else {
+					group[i][j] = -2;
+				}
+			}
+		}
+		
+		// 그룹번호 별 값 바꾸기
+		for( int i=1;i<=groupNo;i++ ) {
+			for( int j=0;j<M;j++ ){
+				for( int k=0;k<N;k++ ){
+					int targetGroupNo = group[j][k];
+					if( targetGroupNo>0 && i==targetGroupNo ){
+						board[j][k] = 'X';
+					}
+				}
+			}
+		}
+	}
+	
+	private static void BFS(char[][] board, int groupNo, int i, int j) {
 		// COORDINATE
 		int[] dx = {-1,1,0,0};
 		int[] dy = {0,0,-1,1};
 		
-		int M = board.length,
-			N = board[0].length;
+		Queue<Coordinate2>	queue		= new LinkedList<Coordinate2>();
+		List<Coordinate2> negativeList	= new ArrayList<Coordinate2>(); // 가쪽 목록
+		List<Coordinate2> groupList		= new ArrayList<Coordinate2>(); // 같은 그룹 번호 목록
 		
-		boolean[][]			check	= new boolean[M][N];
-		Queue<Coordinate2>	queue	= new LinkedList<Coordinate2>();
-		List<Coordinate2>	list	= new ArrayList<Coordinate2>();
+		// 값 초기화
+		group[i][j] = groupNo;
+		queue.offer( new Coordinate2(i, j) );
 		
-		queue.offer( new Coordinate2(0, 0) );
-		
-		
-		// 기본 룰대로
+		// 각 그룹번호별 집의 수 세기
 		while( !queue.isEmpty() ){
-			int	centerCount = 0,
-				xCount		= 0,
-				oCount		= 0;
 			Coordinate2 current		= queue.poll();
-			boolean flag = false;
-			for( int i=0;i<4;i++ ){
-				int nextX		= current.X+dx[i],
-					nextY		= current.Y+dy[i];
+			for( int k=0;k<4;k++ ){
+				int nextX		= current.X+dx[k],
+					nextY		= current.Y+dy[k];
+				
 				if( nextX>-1 && nextX<M && nextY>-1 && nextY<N ){
-					if( !check[nextX][nextY] ){
-						Coordinate2 c= new Coordinate2(nextX,nextY);
+					if( check[nextX][nextY] ) {
+						continue;
+					}
+					
+					check[nextX][nextY] = true;
+					
+					Coordinate2 nextTarget = new Coordinate2(nextX,nextY);
+					
+					if( (nextX!=0&&nextX!=M-1)&&(nextY!=0&&nextY!=N-1) ){ // 가쪽 아닐 때
 						if( board[nextX][nextY]=='O' ){
-							list.add( c );
-							flag = true;
+							group[nextX][nextY] = groupNo;
+							groupList.add( nextTarget );
+							queue.offer( nextTarget );
 						}
-						centerCount++;
-						queue.offer( c );
+						continue;
 					}
+					
+					// 가쪽일 떄
+					negativeList.add(nextTarget);
+					
+					if( board[nextX][nextY]=='O' ){
+						group[nextX][nextY] = -1;
+						continue;
+					}
+					
+					group[nextX][nextY] = -2;
 				}
 			}
-			if( !check[current.X][current.Y] && !flag ) {
-				check[current.X][current.Y] = true;
-				board[current.X][current.Y] = 'X';
-			}
 		}
 		
-		for( Coordinate2 changedC : list ){
-			queue.add( changedC );
-		}
-		
-		check = new boolean[M][N];
-		
-		while( !queue.isEmpty() ){
-			Coordinate2 current		= queue.poll();
-			boolean oFlag = false;
-			for( int i=0;i<4;i++ ){
-				int nextX		= current.X+dx[i],
-					nextY		= current.Y+dy[i];
-				if( nextX>-1 && nextX<M && nextY>-1 && nextY<N ){
-					if( !check[nextX][nextY] ){
-						if( (nextX!=0&&nextX!=N-1)&&(nextY!=0&&nextY!=N-1) ){ // // 가쪽일 때
-						}else {
-							if( board[nextX][nextY]=='O' ){
-								oFlag = true;
-							}
-						}
-						check[nextX][nextY] = true;
-					}
+		// 그룹 다 돌고나서 그룹 근처 숫자들 체크 - -2가 아닌 게 있으면 바뀔 대상이 아닌 것
+		for( Coordinate2 c : negativeList ){
+			if( group[c.X][c.Y]!=-2 ){
+				group[i][j] = 0; // 자기자신 외에는 안담길 수 있으므로 자기자신을 넣어줌
+				for( Coordinate2 cc : groupList ){ // 그룹 내 모든 숫자들이 다 바껴야함.
+					group[cc.X][cc.Y] = 0;
 				}
+				break;
 			}
-			if( oFlag ) {
-				board[current.X][current.Y] = 'O';
-			}
-		}
-		
-		for( char[] t : board ){
-			for( char tt : t ){
-				System.out.print(tt);
-			}
-			System.out.println();
 		}
 	}
 	
-	/*public void BFS() {
-		// 기본 룰대로
-		while( !queue.isEmpty() ){
-			int	centerCount = 0,
-				xCount		= 0,
-				oCount		= 0;
-			Coordinate2 current		= queue.poll();
-			
-			for( int i=0;i<4;i++ ){
-				int nextX		= current.X+dx[i],
-					nextY		= current.Y+dy[i];
-				if( nextX>-1 && nextX<N && nextY>-1 && nextY<M ){
-					if( !check[nextX][nextY] ){
-						Coordinate2 c= new Coordinate2(nextX,nextY);
-						if( (nextX!=0&&nextX!=N-1)&&(nextY!=0&&nextY!=N-1) ){ // 가쪽이 아닐 때만
-							if( board[nextX][nextY]=='O' ){
-								board[nextX][nextY] = 'X';
-								list.add( c );
-							}
-						}
-						centerCount++;
-						check[nextX][nextY] = true;
-						queue.offer( c );
-					}
-				}
-			}
-		}
-	}*/
 }
