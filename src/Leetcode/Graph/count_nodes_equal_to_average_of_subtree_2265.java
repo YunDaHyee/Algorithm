@@ -1,8 +1,5 @@
 package Leetcode.Graph;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  	https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree/
 
@@ -38,52 +35,66 @@ import java.util.List;
 		
 	@history
 		N = 각 루트의 값과 서브트리의 합의 평균이 같을 때를 카운트한 값
-	
-	@Date
+		
+		원래 왼,오별로 전역변수를 아래와 같게 두고 하려고 했는데 연결이 된 게 없어서..답이 나오지 않는다.
+		static int leftSubNodeSum;
+		static int leftSubNodeCount;
+		static int rightSubNodeSum;
+		static int rightSubNodeCount;
+		모르겠어서 답을 봤는데 count와 sum을 묶어서 하나의 배열(또는 객체로)을 리턴해주는 방식으로 처리했다.  
+ 
+   @Date
+      2022. 9. 9.
  */
-
 public class count_nodes_equal_to_average_of_subtree_2265 {
 	static Integer[] list =
 		{4,8,5,0,1,null,6};
 		//{1};
-	static boolean[] check = new boolean[list.length];
-	static int index;
 	static int answer;
-	static int subNodeCount;
 	// 서브 트리마다 서브트리의 값들과 개수를 리턴해야함.
 	static TreeNode mainNodes = null; // 루트 기준으로 초기화
 	public static void main(String[] args) {
-		initialization();			// 1. 트리의 값 초기화
+		initialization();		// 1. 트리의 값 초기화
 		setValue(mainNodes);	// 2. 인덱스가 아닌 원래 값으로 다시 넣기
 		
-		traversal(mainNodes, 0, 0);
+		traversal(mainNodes);
+		
+		System.out.println( answer );
 	}
 	
 	// 루트노드가 현재 값과 같을 떄
-	private static int traversal(TreeNode node, int root, int subNodeSum) {
+	private static int[] traversal(TreeNode node) {
+		/* 내 풀이
+		// 이렇게 되어버리면 마지막에 받는애가 node==null로 들어간 상태에서 값을 받는거라서 아무것도 없음..
 		if( node==null ){
-			subNodeCount=0;
-			subNodeSum=0;
+			return;
+		}
+		if( node.left==null && node.right==null ){
+			if( direct.equals("left") ){
+				leftSubNodeSum += node.val;
+				leftSubNodeCount++;
+			}else {
+				rightSubNodeSum += node.val;
+				rightSubNodeCount++;
+			}
 			return 0;
 		}
-		
-		subNodeSum += traversal( node.left, node.val, subNodeSum );
-		
-		subNodeCount++;
-		subNodeSum += node.val; // 루트 포함 수..
-		
-		if( node.left==null && node.right==null ){
-			return subNodeSum;
+		*/
+		if( node==null ){
+			return new int[] {0,0};
 		}
 		
-		subNodeSum += traversal( node.right, node.val, subNodeSum );
-		subNodeCount++;
+		int[] left	= traversal( node.left );
+		int[] right = traversal( node.right );
 		
-		if( subNodeSum/subNodeCount == root ) {
+		int currentSubSum	= left[0] + right[0] + node.val;// 루트 포함해야돼서 루트값 더해줌
+		int currentSubCount	= left[1] + right[1] + 1;		// 루트 포함해야돼서 1 더해줌
+		
+		if( currentSubSum/currentSubCount == node.val ) {
 			answer++;
 		}
 		
-		return answer;
+		return new int[] {currentSubSum,currentSubCount}; // 현재 서브트리의 합과 카운트를 리턴 시켜줌
 	}
 
 	private static void setValue(TreeNode node) {
