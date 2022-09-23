@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ETC;
+package ETC.KAKAO;
 
 /**
  	@Question

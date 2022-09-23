@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ETC;
+package ETC.KAKAO;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
