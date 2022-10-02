@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Basic_Level._2_Math.연습문제;
+package BASIC_LEVEL._2_Math.연습문제;
 
 import java.io.BufferedReader;
 import java.io.IOException;

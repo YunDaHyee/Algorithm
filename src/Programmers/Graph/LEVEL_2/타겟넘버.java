@@ -1,7 +1,7 @@
 /**
  * 
  */
-package DFS_BFS.LEVEL_2;
+package Graph.LEVEL_2;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package Basic_Level._5_Graph;
+package BASIC_LEVEL._5_Graph;
 
 import java.io.BufferedReader;
 import java.io.IOException;

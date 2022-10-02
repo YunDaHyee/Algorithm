@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Basic_Level._1_DataStructure.Stack;
+package BASIC_LEVEL._1_DataStructure.Stack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

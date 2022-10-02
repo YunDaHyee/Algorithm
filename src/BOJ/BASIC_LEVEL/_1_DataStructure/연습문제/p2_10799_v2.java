@@ -1,4 +1,4 @@
-package Basic_Level._1_DataStructure.연습문제;
+package BASIC_LEVEL._1_DataStructure.연습문제;
 
 import java.io.BufferedReader;
 import java.io.IOException;

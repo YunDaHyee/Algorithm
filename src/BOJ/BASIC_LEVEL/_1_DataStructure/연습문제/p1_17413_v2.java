@@ -1,4 +1,4 @@
-package Basic_Level._1_DataStructure.연습문제;
+package BASIC_LEVEL._1_DataStructure.연습문제;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Stack;
 	
 	먼저, 문자열 S는 아래와과 같은 규칙을 지킨다.
 	
-	알파벳 소문자('a'-'z'), 숫자('0'-'9'), 공백(' '), 특수 문자('<', '>')로만 이루어져 있다.
+	알파벳 소문자('a'-'_2638'), 숫자('0'-'9'), 공백(' '), 특수 문자('<', '>')로만 이루어져 있다.
 	문자열의 시작과 끝은 공백이 아니다.
 	'<'와 '>'가 문자열에 있는 경우 번갈아가면서 등장하며, '<'이 먼저 등장한다.
 	또, 두 문자의 개수는 같다.

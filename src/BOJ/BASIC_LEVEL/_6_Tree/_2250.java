@@ -1,4 +1,4 @@
-package Basic_Level._6_Tree;
+package BASIC_LEVEL._6_Tree;
 
 import java.io.BufferedReader;
 import java.io.IOException;

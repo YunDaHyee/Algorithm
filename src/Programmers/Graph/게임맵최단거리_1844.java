@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ETC;
+package Graph;
 
 import java.util.LinkedList;
 import java.util.Queue;

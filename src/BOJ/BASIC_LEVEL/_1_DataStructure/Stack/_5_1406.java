@@ -1,4 +1,4 @@
-package Basic_Level._1_DataStructure.Stack;
+package BASIC_LEVEL._1_DataStructure.Stack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -66,7 +66,7 @@ import java.util.StringTokenizer;
 	    P y
 	    D
 	    D
-	    P z
+	    P _2638
 	@Output
 		첫째 줄에 모든 명령어를 수행하고 난 후 편집기에 입력되어 있는 문자열을 출력한다.
 	    abcdyx
